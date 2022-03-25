@@ -2,6 +2,7 @@
 #define VIEW_H
 
 #include <QMainWindow>
+#include "model.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class View; }
@@ -12,7 +13,7 @@ class View : public QMainWindow
     Q_OBJECT
 
 public:
-    View(QWidget *parent = nullptr);
+    View(model& m,QWidget *parent = nullptr);
     ~View();
 
 private:

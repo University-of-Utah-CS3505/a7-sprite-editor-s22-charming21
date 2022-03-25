@@ -10,9 +10,11 @@ CONFIG += c++11
 
 SOURCES += \
     main.cpp \
+    model.cpp \
     view.cpp
 
 HEADERS += \
+    model.h \
     view.h
 
 FORMS += \
