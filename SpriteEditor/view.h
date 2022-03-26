@@ -2,6 +2,7 @@
 #define VIEW_H
 
 #include <QMainWindow>
+#include <QColorDialog>
 #include "model.h"
 
 QT_BEGIN_NAMESPACE
@@ -22,6 +23,7 @@ public:
 signals:
     void addFrame();
     void setTool(std::string);
+    void updateColor(QColor);
 
 public slots:
 
@@ -41,5 +43,8 @@ private:
     void updateColorWheel(QColor);
     void updateToolSize(int); //No Need, done in ui?
     void saveProject(QList<QImage>);
+
+private slots:
+    void pushColorButton();
 };
 #endif // VIEW_H
