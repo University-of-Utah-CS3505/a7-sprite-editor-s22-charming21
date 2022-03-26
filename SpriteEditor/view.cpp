@@ -1,6 +1,7 @@
 #include "view.h"
 #include "ui_view.h"
 #include <QtWidgets>
+#include <QPixmap>
 
 #include <iostream> // delete later
 
@@ -8,6 +9,14 @@ View::View(model& model, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::View)
 {
+
+    ui->setupUi(this);
+    disableDeleteButton();
+
+    //connections
+
+    // add new frame
+    connect(ui->addFrameButton, &QPushButton::clicked, &model, &model::addNewFrame);
     ui->setupUi(this);   
 
 
@@ -79,7 +88,20 @@ View::View(model& model, QWidget *parent)
 //                &model,
 //                &model::undo);
 
+    // delete frame
+    connect(ui->deleteFrameButton, &QPushButton::clicked, &model, &model::deleteFrame);
+
+    // disable and enable delete button
+    connect(&model, &model::disableDeleteButton, this, &View::disableDeleteButton);
+    connect(&model, &model::enableDeleteButton, this, &View::enableDeleteButton);
+
+    // change frame
+    connect(&model, &model::goToFrame, this, &View::displayFrame);
+
     //ColorUpdate
+    connect(ui->colorButton, &QPushButton::clicked, this, &View::pushColorButton);
+    connect(this, &View::updateColor, &model, &model::updateColor);
+
         connect(ui->colorButton, &QPushButton::clicked, this, &View::pushColorButton);
         connect(this, &View::updateColor, &model, &model::updateColor);
 
@@ -128,6 +150,18 @@ void View::pushColorButton(){
     }
     //TODO : testing
     //1. when we click cancel , changes color to black by default
+}
+
+void View::displayFrame(QPixmap map){
+    ui->canvasLabel->setPixmap(map);
+}
+
+void View::disableDeleteButton(){
+    ui->deleteFrameButton->setEnabled(false);
+}
+
+void View::enableDeleteButton(){
+    ui->deleteFrameButton->setEnabled(true);
 }
 
 

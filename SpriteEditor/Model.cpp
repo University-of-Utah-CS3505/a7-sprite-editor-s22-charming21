@@ -1,10 +1,13 @@
 #include "model.h"
 #include <QImage>
+#include <QPixmap>
 #include <iostream>
 model::model(QObject *parent)
     : QObject{parent}
 {
     // default values to be determined
+    frames.append(QImage (canvasHeight, canvasWidth, QImage::Format_ARGB32));
+
     penColor.setRgb(255, 255, 255, 255);
     canvasHeight = 10;
     canvasWidth = 10;
@@ -18,18 +21,30 @@ void model::addNewFrame(){
     // new QImage?
     QImage frame(canvasHeight, canvasWidth, QImage::Format_ARGB32);
     frames.insert(currentFrame, frame);
-    emit goToFrame(++currentFrame);
+    currentFrame++;
+
+    emit enableDeleteButton();
+
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame));
+    emit goToFrame(map);
 }
 
 void model::deleteFrame(){
     frames.removeAt(currentFrame);
 
+    if(frames.size() == 1){
+        emit disableDeleteButton();
+    }
+
     // if the last frame is deleted,
     if(currentFrame == frames.size()){
-        emit goToFrame(--currentFrame);
+        currentFrame--;
+        QPixmap map = QPixmap::fromImage(frames.at(currentFrame));
+        emit goToFrame(map);
     }
     else{
-        emit goToFrame(currentFrame);
+        QPixmap map = QPixmap::fromImage(frames.at(currentFrame));
+        emit goToFrame(map);
     }
 }
 

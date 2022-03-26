@@ -39,7 +39,7 @@ public:
     QLabel *actualSizeLabel;
     QPushButton *previewButton;
     QSlider *playBackSpeedSlider;
-    QPushButton *pushButton;
+    QPushButton *colorButton;
     QWidget *verticalLayoutWidget_4;
     QVBoxLayout *toolBarAndFrame;
     QVBoxLayout *toolBarVerticalLayout;
@@ -101,14 +101,14 @@ public:
 
         previewLayout->addWidget(playBackSpeedSlider);
 
-        pushButton = new QPushButton(verticalLayoutWidget_2);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+        colorButton = new QPushButton(verticalLayoutWidget_2);
+        colorButton->setObjectName(QString::fromUtf8("colorButton"));
 
-        previewLayout->addWidget(pushButton);
+        previewLayout->addWidget(colorButton);
 
         verticalLayoutWidget_4 = new QWidget(centralwidget);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
-        verticalLayoutWidget_4->setGeometry(QRect(0, 20, 121, 491));
+        verticalLayoutWidget_4->setGeometry(QRect(0, 20, 162, 491));
         toolBarAndFrame = new QVBoxLayout(verticalLayoutWidget_4);
         toolBarAndFrame->setObjectName(QString::fromUtf8("toolBarAndFrame"));
         toolBarAndFrame->setContentsMargins(0, 0, 0, 0);
@@ -175,7 +175,7 @@ public:
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 24));
+        menubar->setGeometry(QRect(0, 0, 800, 22));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuAbout = new QMenu(menubar);
@@ -218,7 +218,7 @@ public:
         canvasLabel->setText(QCoreApplication::translate("View", "CANVAS", nullptr));
         actualSizeLabel->setText(QCoreApplication::translate("View", "Actual Size Preview", nullptr));
         previewButton->setText(QCoreApplication::translate("View", "Preview", nullptr));
-        pushButton->setText(QCoreApplication::translate("View", "PushButton", nullptr));
+        colorButton->setText(QCoreApplication::translate("View", "Choose Color", nullptr));
         penButton->setText(QCoreApplication::translate("View", "Pen", nullptr));
         eraserButton->setText(QCoreApplication::translate("View", "Eraser", nullptr));
         bucketButton->setText(QCoreApplication::translate("View", "Bucket", nullptr));

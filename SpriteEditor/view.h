@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QColorDialog>
 #include "model.h"
+#include <QPixmap>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class View; }
@@ -22,10 +23,16 @@ public:
 
 signals:
     void addFrame();
+    void deleteFrame();
     void setTool(std::string);
     void updateColor(QColor);
 
+
 public slots:
+    void displayFrame(QPixmap);
+
+    void disableDeleteButton();
+    void enableDeleteButton();
 
 private slots:
     //Added to set the tool
