@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QColor>
 #include <QImage>
+#include <QPixmap>
 
 //We add enum (jinwen)
 enum class SelectedTool{
@@ -32,7 +33,9 @@ private:
 
 signals:
     //Add methods (emit)
-    void goToFrame(int);
+    void goToFrame(QPixmap);
+    void disableDeleteButton();
+    void enableDeleteButton();
 
 public slots:
     void addNewFrame();
