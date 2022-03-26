@@ -16,6 +16,11 @@ public:
     View(model& m,QWidget *parent = nullptr);
     ~View();
 
+signals:
+    void addFrame();
+
+public slots:
+
 private:
     Ui::View *ui;
 };

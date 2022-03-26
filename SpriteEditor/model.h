@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QColor>
+#include <QImage>
 
 //We add enum (jinwen)
 enum class SelectedTool{
@@ -31,8 +32,9 @@ private:
 
 signals:
     //Add methods (emit)
+    void goToFrame(int);
 
-private slots:
+public slots:
     void addNewFrame();
     void deleteFrame();
     void zoomIn();

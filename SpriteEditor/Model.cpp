@@ -1,37 +1,66 @@
 #include "model.h"
-
+#include <QImage>
+#include <iostream>
 model::model(QObject *parent)
     : QObject{parent}
 {
+    // default values to be determined
+    penColor.setRgb(255, 255, 255, 255);
+    canvasHeight = 10;
+    canvasWidth = 10;
+    framesPerSec = 30;
+    currentFrame = 0;
+    penSize = 1;
+    eraserSize = 1;
+}
 
-}
 void model::addNewFrame(){
-    //TODO:
+    // new QImage?
+    QImage frame(canvasHeight, canvasWidth, QImage::Format_ARGB32);
+    frames.insert(currentFrame, frame);
+    emit goToFrame(++currentFrame);
 }
+
 void model::deleteFrame(){
-    //TODO:
+    frames.removeAt(currentFrame);
+
+    // if the last frame is deleted,
+    if(currentFrame == frames.size()){
+        emit goToFrame(--currentFrame);
+    }
+    else{
+        emit goToFrame(currentFrame);
+    }
 }
+
 void model::zoomIn(){
     //TODO:
 }
+
 void model::zoomOut(){
     //TODO:
 }
-void model::updateFPS(int){
-    //TODO:
+
+void model::updateFPS(int fps){
+    framesPerSec = fps;
 }
-void model::updatePenSize(int){
-    //TODO:
+
+void model::updatePenSize(int size){
+    penSize = size;
 }
-void model::updateEraserSize(int){
-    //TODO:
+
+void model::updateEraserSize(int size){
+    eraserSize = size;
 }
+
 void model::setStartingArea(int, int){
     //TODO:
 }
-void model::updateColor(QColor){
-    //TODO:
+
+void model::updateColor(QColor color){
+    penColor = color;
 }
+
 //void model::updateTool(Selected Tool){//TODO: }
 void model::getList(QList<QImage>){
     //TODO:

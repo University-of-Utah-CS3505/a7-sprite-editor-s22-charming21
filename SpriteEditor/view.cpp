@@ -8,6 +8,7 @@ View::View(model& model, QWidget *parent)
     ui->setupUi(this);
 
     //connections
+    connect(ui->addFrameButton, &QPushButton::clicked, &model, &model::addNewFrame);
 }
 
 View::~View()
@@ -15,3 +16,6 @@ View::~View()
     delete ui;
 }
 //methods for view
+
+
+
