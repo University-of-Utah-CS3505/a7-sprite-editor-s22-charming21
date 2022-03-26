@@ -98,7 +98,7 @@ void model::redo(){
 }
 
 //Frame that we are currently in
-void selectedFrame(int){
+void model::selectedFrame(int){
     //TODO
 }
 

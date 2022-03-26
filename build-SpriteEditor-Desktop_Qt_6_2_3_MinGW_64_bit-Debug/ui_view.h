@@ -58,7 +58,7 @@ public:
     QMenu *menuFile;
     QMenu *menuAbout;
     QMenu *menuHelp_me;
-    QMenu *menuZoom;
+    QMenu *menuZoom_In;
     QMenu *menuZoom_Out;
     QMenu *menuRedo;
     QMenu *menuUndo;
@@ -68,7 +68,7 @@ public:
     {
         if (View->objectName().isEmpty())
             View->setObjectName(QString::fromUtf8("View"));
-        View->resize(822, 578);
+        View->resize(800, 600);
         actionSave = new QAction(View);
         actionSave->setObjectName(QString::fromUtf8("actionSave"));
         actionOpen = new QAction(View);
@@ -108,7 +108,7 @@ public:
 
         verticalLayoutWidget_4 = new QWidget(centralwidget);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
-        verticalLayoutWidget_4->setGeometry(QRect(0, 20, 162, 491));
+        verticalLayoutWidget_4->setGeometry(QRect(0, 20, 170, 491));
         toolBarAndFrame = new QVBoxLayout(verticalLayoutWidget_4);
         toolBarAndFrame->setObjectName(QString::fromUtf8("toolBarAndFrame"));
         toolBarAndFrame->setContentsMargins(0, 0, 0, 0);
@@ -175,15 +175,15 @@ public:
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 822, 22));
+        menubar->setGeometry(QRect(0, 0, 800, 17));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuAbout = new QMenu(menubar);
         menuAbout->setObjectName(QString::fromUtf8("menuAbout"));
         menuHelp_me = new QMenu(menubar);
         menuHelp_me->setObjectName(QString::fromUtf8("menuHelp_me"));
-        menuZoom = new QMenu(menubar);
-        menuZoom->setObjectName(QString::fromUtf8("menuZoom"));
+        menuZoom_In = new QMenu(menubar);
+        menuZoom_In->setObjectName(QString::fromUtf8("menuZoom_In"));
         menuZoom_Out = new QMenu(menubar);
         menuZoom_Out->setObjectName(QString::fromUtf8("menuZoom_Out"));
         menuRedo = new QMenu(menubar);
@@ -198,7 +198,7 @@ public:
         menubar->addAction(menuFile->menuAction());
         menubar->addAction(menuAbout->menuAction());
         menubar->addAction(menuHelp_me->menuAction());
-        menubar->addAction(menuZoom->menuAction());
+        menubar->addAction(menuZoom_In->menuAction());
         menubar->addAction(menuZoom_Out->menuAction());
         menubar->addAction(menuRedo->menuAction());
         menubar->addAction(menuUndo->menuAction());
@@ -218,7 +218,7 @@ public:
         canvasLabel->setText(QCoreApplication::translate("View", "CANVAS", nullptr));
         actualSizeLabel->setText(QCoreApplication::translate("View", "Actual Size Preview", nullptr));
         previewButton->setText(QCoreApplication::translate("View", "Preview", nullptr));
-        colorButton->setText(QCoreApplication::translate("View", "Choose Color", nullptr));
+        colorButton->setText(QCoreApplication::translate("View", "PushButton", nullptr));
         penButton->setText(QCoreApplication::translate("View", "Pen", nullptr));
         eraserButton->setText(QCoreApplication::translate("View", "Eraser", nullptr));
         bucketButton->setText(QCoreApplication::translate("View", "Bucket", nullptr));
@@ -228,7 +228,7 @@ public:
         menuFile->setTitle(QCoreApplication::translate("View", "File", nullptr));
         menuAbout->setTitle(QCoreApplication::translate("View", "About", nullptr));
         menuHelp_me->setTitle(QCoreApplication::translate("View", "Help me", nullptr));
-        menuZoom->setTitle(QCoreApplication::translate("View", "Zoom In", nullptr));
+        menuZoom_In->setTitle(QCoreApplication::translate("View", "Zoom In", nullptr));
         menuZoom_Out->setTitle(QCoreApplication::translate("View", "Zoom Out", nullptr));
         menuRedo->setTitle(QCoreApplication::translate("View", "Redo", nullptr));
         menuUndo->setTitle(QCoreApplication::translate("View", "Undo", nullptr));

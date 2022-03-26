@@ -36,7 +36,6 @@ signals:
     void goToFrame(QPixmap);
     void disableDeleteButton();
     void enableDeleteButton();
-    void goToFrame(int);
     void sendList(QList<QImage>);
 
 

@@ -37,10 +37,6 @@ View::View(model& model, QWidget *parent)
             &QPushButton::clicked,
             &model,
             &model::deleteFrame);
-    connect(&model,
-            &model::goToFrame,
-            this,
-            &View::updateFramesBox);
 
     connect(ui->framesComboBox,
             &QComboBox::activated,
@@ -167,25 +163,25 @@ void View::enableDeleteButton(){
 
 
 //Methods from the UML for View
-void updateCanvas(){
+void View::updateCanvas(){
     //TODO
 }
-void updateFramesBox(int){
+void View::updateFramesBox(int){
     //TODO
 }
-void updatePreview(){
+void View::updatePreview(){
     //TODO
 }
-void updateSelectionTool(){
+void View::updateSelectionTool(){
     //TODO
 }
-void updateColorWheel(QColor){
+void View::updateColorWheel(QColor){
     //TODO
 }
-void updateToolSize(int){
+void View::updateToolSize(int){
     //TODO
 }
-void saveProject(QList<QImage>){
+void View::saveProject(QList<QImage>){
     //TODO
 }
 
