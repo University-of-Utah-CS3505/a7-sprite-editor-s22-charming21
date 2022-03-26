@@ -86,3 +86,12 @@ void model::redo(){
 void selectedFrame(int){
     //TODO
 }
+
+//updates the toolsize, we first check our selected tool
+void model::updateToolSize(int size){
+
+//    if(currentTool = eraser)
+//        updateEraserSize(size);
+//    else if(currentTool = Pen)
+//        updatePenSize(size);
+}

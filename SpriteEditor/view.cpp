@@ -82,6 +82,9 @@ View::View(model& model, QWidget *parent)
     //ColorUpdate
         connect(ui->colorButton, &QPushButton::clicked, this, &View::pushColorButton);
         connect(this, &View::updateColor, &model, &model::updateColor);
+
+    //updateToolSize
+        connect(ui->toolSizeBox, &QSpinBox::valueChanged, &model, &model::updateToolSize);
 }
 
 

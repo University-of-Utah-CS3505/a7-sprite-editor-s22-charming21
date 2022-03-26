@@ -53,6 +53,8 @@ public slots:
     void redo(); //need change parameters?
     void selectedFrame(int);
 
+    void updateToolSize(int);
+
 
 };
 
