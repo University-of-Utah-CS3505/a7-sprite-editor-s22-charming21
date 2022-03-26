@@ -62,9 +62,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="colorButton">
        <property name="text">
-        <string>PushButton</string>
+        <string>Choose Color</string>
        </property>
       </widget>
      </item>
@@ -75,7 +75,7 @@
      <rect>
       <x>0</x>
       <y>20</y>
-      <width>121</width>
+      <width>162</width>
       <height>491</height>
      </rect>
     </property>
@@ -153,7 +153,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>24</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

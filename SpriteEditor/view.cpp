@@ -12,6 +12,10 @@ View::View(model& model, QWidget *parent)
 
     //connections
     connect(ui->addFrameButton, &QPushButton::clicked, &model, &model::addNewFrame);
+
+    //ColorUpdate
+    connect(ui->colorButton, &QPushButton::clicked, this, &View::pushColorButton);
+    connect(this, &View::updateColor, &model, &model::updateColor);
 }
 
 View::~View()
@@ -40,6 +44,20 @@ void View::mouseReleaseEvent(QMouseEvent *releaseEvent){
         //std::cout << "Mouse Released x: " << releaseEvent->pos().x() << " y: "  << releaseEvent->pos().y() << std::endl;
         //send to model
     }
+}
+
+void View::pushColorButton(){
+
+    bool ok;
+    QColor color = QColorDialog::getColor(Qt::blue, this);
+    if(&ok)
+    {
+        //this code was for testing purposes
+        //ui->colorButton->setStyleSheet(QString("QPushButton{background-color:" + color.name(QColor::HexArgb) + ";}"));
+        emit updateColor(color);
+    }
+    //TODO : testing
+    //1. when we click cancel , changes color to black by default
 }
 
 

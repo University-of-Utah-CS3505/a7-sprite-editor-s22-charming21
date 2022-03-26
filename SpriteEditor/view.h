@@ -2,6 +2,7 @@
 #define VIEW_H
 
 #include <QMainWindow>
+#include <QColorDialog>
 #include "model.h"
 
 QT_BEGIN_NAMESPACE
@@ -21,10 +22,14 @@ public:
 
 signals:
     void addFrame();
+    void updateColor(QColor);
 
 public slots:
 
 private:
     Ui::View *ui;
+
+private slots:
+    void pushColorButton();
 };
 #endif // VIEW_H
