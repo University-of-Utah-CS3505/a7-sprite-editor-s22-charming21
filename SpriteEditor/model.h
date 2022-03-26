@@ -33,6 +33,8 @@ private:
 signals:
     //Add methods (emit)
     void goToFrame(int);
+    void sendList(QList<QImage>);
+
 
 public slots:
     void addNewFrame();
@@ -44,8 +46,12 @@ public slots:
     void updateEraserSize(int);
     void setStartingArea(int, int);
     void updateColor(QColor);
-    //void updateTool(Selected Tool);
+    void updateTool(std::string); //Change parameter from Selected tools to std::string
     void getList(QList<QImage>);
+    //Added
+    void undo(); //need change parameters?
+    void redo(); //need change parameters?
+    void selectedFrame(int);
 
 
 };

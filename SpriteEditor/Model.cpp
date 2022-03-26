@@ -46,11 +46,11 @@ void model::updateFPS(int fps){
 }
 
 void model::updatePenSize(int size){
-    penSize = size;
+    penSize = size;    
 }
 
 void model::updateEraserSize(int size){
-    eraserSize = size;
+    eraserSize = size;   
 }
 
 void model::setStartingArea(int, int){
@@ -61,7 +61,28 @@ void model::updateColor(QColor color){
     penColor = color;
 }
 
-//void model::updateTool(Selected Tool){//TODO: }
+void model::updateTool(std::string){
+    //TODO:
+}
+
+
+//Don't need the QList as Parameter??
 void model::getList(QList<QImage>){
     //TODO:
+    emit sendList(frames);
+}
+
+//need change parameters?
+void model::undo(){
+    //TODO
+}
+
+//need change parameters?
+void model::redo(){
+    //TODO
+}
+
+//Frame that we are currently in
+void selectedFrame(int){
+    //TODO
 }
