@@ -5,6 +5,12 @@
 #include <QColor>
 
 //We add enum (jinwen)
+enum class SelectedTool{
+    Tool_Pen,
+    Tool_Eraser,
+    Tool_Bucket,
+    Tool_ShapeCreator
+};
 
 class model : public QObject
 {
@@ -13,12 +19,13 @@ public:
     explicit model(QObject *parent = nullptr);
 
 private:
+    SelectedTool currentTool;
     QList<QImage> frames;
+    QColor penColor;
     int canvasHeight;
     int canvasWidth;
     int framesPerSec;
     int currentFrame;
-    QColor penColor;
     int penSize;
     int eraserSize;
 
