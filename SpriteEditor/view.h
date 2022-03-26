@@ -15,6 +15,9 @@ class View : public QMainWindow
 public:
     View(model& m,QWidget *parent = nullptr);
     ~View();
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *releaseEvent);
 
 signals:
     void addFrame();
