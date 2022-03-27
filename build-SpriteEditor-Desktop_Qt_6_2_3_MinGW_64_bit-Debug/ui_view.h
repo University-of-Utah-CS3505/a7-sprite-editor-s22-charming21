@@ -53,7 +53,11 @@ public:
     QSpinBox *toolSizeBox;
     QVBoxLayout *frameLayout;
     QComboBox *framesComboBox;
+    QLabel *frameNumberLabel;
+    QPushButton *lastFrameButton;
+    QPushButton *nextFrameButton;
     QPushButton *addFrameButton;
+    QPushButton *insertFrameButton;
     QPushButton *deleteFrameButton;
     QLabel *posLabel;
     QMenuBar *menubar;
@@ -111,7 +115,7 @@ public:
 
         verticalLayoutWidget_4 = new QWidget(centralwidget);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
-        verticalLayoutWidget_4->setGeometry(QRect(0, 20, 172, 491));
+        verticalLayoutWidget_4->setGeometry(QRect(0, 20, 172, 521));
         toolBarAndFrame = new QVBoxLayout(verticalLayoutWidget_4);
         toolBarAndFrame->setObjectName(QString::fromUtf8("toolBarAndFrame"));
         toolBarAndFrame->setContentsMargins(0, 0, 0, 0);
@@ -149,6 +153,7 @@ public:
 
         toolSizeBox = new QSpinBox(verticalLayoutWidget_4);
         toolSizeBox->setObjectName(QString::fromUtf8("toolSizeBox"));
+        toolSizeBox->setAlignment(Qt::AlignCenter);
 
         toolBarVerticalLayout->addWidget(toolSizeBox);
 
@@ -157,16 +162,42 @@ public:
         framesComboBox = new QComboBox(verticalLayoutWidget_4);
         framesComboBox->addItem(QString());
         framesComboBox->setObjectName(QString::fromUtf8("framesComboBox"));
+        framesComboBox->setLayoutDirection(Qt::LeftToRight);
 
         frameLayout->addWidget(framesComboBox);
+
+        frameNumberLabel = new QLabel(verticalLayoutWidget_4);
+        frameNumberLabel->setObjectName(QString::fromUtf8("frameNumberLabel"));
+        frameNumberLabel->setMaximumSize(QSize(162, 16));
+        frameNumberLabel->setAlignment(Qt::AlignCenter);
+
+        frameLayout->addWidget(frameNumberLabel);
+
+        lastFrameButton = new QPushButton(verticalLayoutWidget_4);
+        lastFrameButton->setObjectName(QString::fromUtf8("lastFrameButton"));
+        lastFrameButton->setEnabled(false);
+
+        frameLayout->addWidget(lastFrameButton);
+
+        nextFrameButton = new QPushButton(verticalLayoutWidget_4);
+        nextFrameButton->setObjectName(QString::fromUtf8("nextFrameButton"));
+        nextFrameButton->setEnabled(false);
+
+        frameLayout->addWidget(nextFrameButton);
 
         addFrameButton = new QPushButton(verticalLayoutWidget_4);
         addFrameButton->setObjectName(QString::fromUtf8("addFrameButton"));
 
         frameLayout->addWidget(addFrameButton);
 
+        insertFrameButton = new QPushButton(verticalLayoutWidget_4);
+        insertFrameButton->setObjectName(QString::fromUtf8("insertFrameButton"));
+
+        frameLayout->addWidget(insertFrameButton);
+
         deleteFrameButton = new QPushButton(verticalLayoutWidget_4);
         deleteFrameButton->setObjectName(QString::fromUtf8("deleteFrameButton"));
+        deleteFrameButton->setEnabled(false);
 
         frameLayout->addWidget(deleteFrameButton);
 
@@ -182,7 +213,7 @@ public:
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 24));
+        menubar->setGeometry(QRect(0, 0, 800, 22));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuAbout = new QMenu(menubar);
@@ -230,9 +261,13 @@ public:
         eraserButton->setText(QCoreApplication::translate("View", "Eraser", nullptr));
         bucketButton->setText(QCoreApplication::translate("View", "Bucket", nullptr));
         shapeButton->setText(QCoreApplication::translate("View", "Shape", nullptr));
-        framesComboBox->setItemText(0, QCoreApplication::translate("View", "0", nullptr));
+        framesComboBox->setItemText(0, QCoreApplication::translate("View", "1", nullptr));
 
+        frameNumberLabel->setText(QCoreApplication::translate("View", "1/1", nullptr));
+        lastFrameButton->setText(QCoreApplication::translate("View", "Last Frame", nullptr));
+        nextFrameButton->setText(QCoreApplication::translate("View", "Next Frame", nullptr));
         addFrameButton->setText(QCoreApplication::translate("View", "Add Frame", nullptr));
+        insertFrameButton->setText(QCoreApplication::translate("View", "Insert Frame", nullptr));
         deleteFrameButton->setText(QCoreApplication::translate("View", "Delete Frame", nullptr));
         posLabel->setText(QString());
         menuFile->setTitle(QCoreApplication::translate("View", "File", nullptr));
