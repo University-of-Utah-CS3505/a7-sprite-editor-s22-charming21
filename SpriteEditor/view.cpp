@@ -43,7 +43,16 @@ View::View(model& model, QWidget *parent)
             &model,
             &model::selectedFrame);
 
+    connect(&model,
+            &model::updateFrameNumberCombo,
+            this,
+            &View::updateFramesBox);
 
+    // change frame
+    connect(&model,
+            &model::goToFrame,
+            this,
+            &View::displayFrame);
 
     //Save Project
 //    connect(ui->actionSave,
@@ -84,15 +93,13 @@ View::View(model& model, QWidget *parent)
 //                &model,
 //                &model::undo);
 
-    // delete frame
-    connect(ui->deleteFrameButton, &QPushButton::clicked, &model, &model::deleteFrame);
+
 
     // disable and enable delete button
     connect(&model, &model::disableDeleteButton, this, &View::disableDeleteButton);
     connect(&model, &model::enableDeleteButton, this, &View::enableDeleteButton);
 
-    // change frame
-    connect(&model, &model::goToFrame, this, &View::displayFrame);
+
 
     //ColorUpdate
     connect(ui->colorButton, &QPushButton::clicked, this, &View::pushColorButton);
@@ -166,8 +173,16 @@ void View::enableDeleteButton(){
 void View::updateCanvas(){
     //TODO
 }
-void View::updateFramesBox(int){
-    //TODO
+void View::updateFramesBox(int page, int size){
+    if(size > ui->framesComboBox->count()){
+        ui->framesComboBox->addItem(QString::number(size - 1));
+    }
+
+    if(size < ui->framesComboBox->count()){
+        ui->framesComboBox->removeItem(ui->framesComboBox->count() - 1);
+    }
+
+    ui->framesComboBox->setCurrentIndex(page);
 }
 void View::updatePreview(){
     //TODO

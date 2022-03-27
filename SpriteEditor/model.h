@@ -37,7 +37,7 @@ signals:
     void disableDeleteButton();
     void enableDeleteButton();
     void sendList(QList<QImage>);
-
+    void updateFrameNumberCombo(int, int);
 
 public slots:
     void addNewFrame();

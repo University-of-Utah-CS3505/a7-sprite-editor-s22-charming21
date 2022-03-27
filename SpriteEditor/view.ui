@@ -124,7 +124,13 @@
        <item>
         <layout class="QVBoxLayout" name="frameLayout">
          <item>
-          <widget class="QComboBox" name="framesComboBox"/>
+          <widget class="QComboBox" name="framesComboBox">
+           <item>
+            <property name="text">
+             <string>0</string>
+            </property>
+           </item>
+          </widget>
          </item>
          <item>
           <widget class="QPushButton" name="addFrameButton">
@@ -153,7 +159,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>17</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

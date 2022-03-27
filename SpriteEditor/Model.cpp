@@ -2,6 +2,7 @@
 #include <QImage>
 #include <QPixmap>
 #include <iostream>
+#include <iostream>
 model::model(QObject *parent)
     : QObject{parent}
 {
@@ -23,13 +24,17 @@ void model::addNewFrame(){
     frames.insert(currentFrame, frame);
     currentFrame++;
 
+    emit updateFrameNumberCombo(currentFrame, frames.size());
     emit enableDeleteButton();
 
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame));
     emit goToFrame(map);
+    std::cout << frames.size()<<std::endl;
 }
 
 void model::deleteFrame(){
+    std::cout << frames.size()<<std::endl;
+    std::cout << currentFrame<<std::endl;
     frames.removeAt(currentFrame);
 
     if(frames.size() == 1){
@@ -46,6 +51,8 @@ void model::deleteFrame(){
         QPixmap map = QPixmap::fromImage(frames.at(currentFrame));
         emit goToFrame(map);
     }
+
+    emit updateFrameNumberCombo(currentFrame, frames.size());
 }
 
 void model::zoomIn(){
@@ -98,8 +105,10 @@ void model::redo(){
 }
 
 //Frame that we are currently in
-void model::selectedFrame(int){
-    //TODO
+void model::selectedFrame(int index){
+    currentFrame = index;
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame));
+    emit goToFrame(map);
 }
 
 //updates the toolsize, we first check our selected tool
