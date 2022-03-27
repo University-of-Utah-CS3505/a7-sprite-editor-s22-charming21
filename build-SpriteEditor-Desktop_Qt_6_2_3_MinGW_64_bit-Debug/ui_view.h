@@ -24,6 +24,7 @@
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include <canvas.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -33,7 +34,7 @@ public:
     QAction *actionSave;
     QAction *actionOpen;
     QWidget *centralwidget;
-    QLabel *canvasLabel;
+    Canvas *canvasLabel;
     QWidget *verticalLayoutWidget_2;
     QVBoxLayout *previewLayout;
     QLabel *actualSizeLabel;
@@ -54,6 +55,7 @@ public:
     QComboBox *framesComboBox;
     QPushButton *addFrameButton;
     QPushButton *deleteFrameButton;
+    QLabel *posLabel;
     QMenuBar *menubar;
     QMenu *menuFile;
     QMenu *menuAbout;
@@ -75,9 +77,10 @@ public:
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
         centralwidget = new QWidget(View);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
-        canvasLabel = new QLabel(centralwidget);
+        canvasLabel = new Canvas(centralwidget);
         canvasLabel->setObjectName(QString::fromUtf8("canvasLabel"));
-        canvasLabel->setGeometry(QRect(130, 70, 501, 371));
+        canvasLabel->setGeometry(QRect(190, 20, 431, 421));
+        canvasLabel->setFrameShape(QFrame::Box);
         canvasLabel->setAlignment(Qt::AlignCenter);
         verticalLayoutWidget_2 = new QWidget(centralwidget);
         verticalLayoutWidget_2->setObjectName(QString::fromUtf8("verticalLayoutWidget_2"));
@@ -108,7 +111,7 @@ public:
 
         verticalLayoutWidget_4 = new QWidget(centralwidget);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
-        verticalLayoutWidget_4->setGeometry(QRect(0, 20, 170, 491));
+        verticalLayoutWidget_4->setGeometry(QRect(0, 20, 172, 491));
         toolBarAndFrame = new QVBoxLayout(verticalLayoutWidget_4);
         toolBarAndFrame->setObjectName(QString::fromUtf8("toolBarAndFrame"));
         toolBarAndFrame->setContentsMargins(0, 0, 0, 0);
@@ -152,6 +155,7 @@ public:
         frameLayout = new QVBoxLayout();
         frameLayout->setObjectName(QString::fromUtf8("frameLayout"));
         framesComboBox = new QComboBox(verticalLayoutWidget_4);
+        framesComboBox->addItem(QString());
         framesComboBox->setObjectName(QString::fromUtf8("framesComboBox"));
 
         frameLayout->addWidget(framesComboBox);
@@ -172,10 +176,13 @@ public:
 
         toolBarAndFrame->addLayout(toolBarVerticalLayout);
 
+        posLabel = new QLabel(centralwidget);
+        posLabel->setObjectName(QString::fromUtf8("posLabel"));
+        posLabel->setGeometry(QRect(640, 350, 91, 19));
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 17));
+        menubar->setGeometry(QRect(0, 0, 800, 24));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuAbout = new QMenu(menubar);
@@ -223,8 +230,11 @@ public:
         eraserButton->setText(QCoreApplication::translate("View", "Eraser", nullptr));
         bucketButton->setText(QCoreApplication::translate("View", "Bucket", nullptr));
         shapeButton->setText(QCoreApplication::translate("View", "Shape", nullptr));
+        framesComboBox->setItemText(0, QCoreApplication::translate("View", "0", nullptr));
+
         addFrameButton->setText(QCoreApplication::translate("View", "Add Frame", nullptr));
         deleteFrameButton->setText(QCoreApplication::translate("View", "Delete Frame", nullptr));
+        posLabel->setText(QString());
         menuFile->setTitle(QCoreApplication::translate("View", "File", nullptr));
         menuAbout->setTitle(QCoreApplication::translate("View", "About", nullptr));
         menuHelp_me->setTitle(QCoreApplication::translate("View", "Help me", nullptr));

@@ -17,9 +17,7 @@ class View : public QMainWindow
 public:
     View(model& m,QWidget *parent = nullptr);
     ~View();
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *releaseEvent);
+
 
 signals:
     void addFrame();
@@ -33,6 +31,7 @@ public slots:
 
     void disableDeleteButton();
     void enableDeleteButton();
+    void showMouseLoc(QPoint& loc);
 
 private slots:
     //Added to set the tool

@@ -110,6 +110,8 @@ View::View(model& model, QWidget *parent)
 
     //updateToolSize
         connect(ui->toolSizeBox, &QSpinBox::valueChanged, &model, &model::updateToolSize);
+
+        connect(ui->canvasLabel, &Canvas::sendMouseLoc, this, &View::showMouseLoc);
 }
 
 
@@ -118,28 +120,6 @@ View::~View()
     delete ui;
 }
 //methods for view
-
-void View::mousePressEvent(QMouseEvent *pressEvent){
-    if(pressEvent->button() == Qt::LeftButton){
-        //std::cout << "x: " << pressEvent->pos().x() << " y: " <<  pressEvent->pos().y() << std::endl;
-        // pressEvent->event->pos(); returns a QPoint
-        //send to model
-    }
-}
-
-
-void View::mouseMoveEvent(QMouseEvent *moveEvent){
-    if(moveEvent->button() == Qt::LeftButton){
-        //constantly send to model for drawing
-    }
-}
-
-void View::mouseReleaseEvent(QMouseEvent *releaseEvent){
-    if(releaseEvent->button() == Qt::LeftButton){
-        //std::cout << "Mouse Released x: " << releaseEvent->pos().x() << " y: "  << releaseEvent->pos().y() << std::endl;
-        //send to model
-    }
-}
 
 void View::pushColorButton(){
 
@@ -165,6 +145,12 @@ void View::disableDeleteButton(){
 
 void View::enableDeleteButton(){
     ui->deleteFrameButton->setEnabled(true);
+}
+
+void View::showMouseLoc(QPoint &loc) // can delete later
+{
+    ui->posLabel->setText("x: " + QString::number(loc.x()) + " y: " + QString::number(loc.y()));
+
 }
 
 
