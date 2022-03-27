@@ -29,8 +29,14 @@ signals:
 public slots:
     void displayFrame(QPixmap);
 
+    // control buttons
     void disableDeleteButton();
     void enableDeleteButton();
+    void disableNextButton();
+    void disableLastButton();
+    void enableNextButton();
+    void enableLastButton();
+
     void showMouseLoc(QPoint& loc);
 
 private slots:
@@ -43,7 +49,7 @@ private slots:
 private:
     Ui::View *ui;
     void updateCanvas();
-    void updateFramesBox(int, int);
+    void updateFramesBoxAndLabel(int, int);
     void updatePreview();
     void updateSelectionTool(); //No Need, done in ui?
     void updateColorWheel(QColor);

@@ -11,16 +11,8 @@ View::View(model& model, QWidget *parent)
 {
 
     ui->setupUi(this);
-    disableDeleteButton();
 
     //connections
-
-    // add new frame
-    connect(ui->addFrameButton, &QPushButton::clicked, &model, &model::addNewFrame);
-    ui->setupUi(this);   
-
-
-    //Buttons' Connections
 
     //Tools
     connect(this,
@@ -33,6 +25,52 @@ View::View(model& model, QWidget *parent)
             &QPushButton::clicked,
             &model,
             &model::addNewFrame);
+
+    connect(ui->insertFrameButton,
+            &QPushButton::clicked,
+            &model,
+            &model::insertNewFrame);
+
+    connect(ui->nextFrameButton,
+            &QPushButton::clicked,
+            &model,
+            &model::nextFrame);
+
+    connect(ui->lastFrameButton,
+            &QPushButton::clicked,
+            &model,
+            &model::lastFrame);
+
+    connect(&model,
+            &model::disableNextButton,
+            this,
+            &View::disableNextButton);
+
+    connect(&model,
+            &model::disableLastButton,
+            this,
+            &View::disableLastButton);
+
+    connect(&model,
+            &model::enableNextButton,
+            this,
+            &View::enableNextButton);
+
+    connect(&model,
+            &model::enableLastButton,
+            this,
+            &View::enableLastButton);
+
+    connect(&model,
+            &model::disableDeleteButton,
+            this,
+            &View::disableDeleteButton);
+
+    connect(&model,
+            &model::enableDeleteButton,
+            this,
+            &View::enableDeleteButton);
+
     connect(ui->deleteFrameButton,
             &QPushButton::clicked,
             &model,
@@ -46,7 +84,7 @@ View::View(model& model, QWidget *parent)
     connect(&model,
             &model::updateFrameNumberCombo,
             this,
-            &View::updateFramesBox);
+            &View::updateFramesBoxAndLabel);
 
     // change frame
     connect(&model,
@@ -95,23 +133,41 @@ View::View(model& model, QWidget *parent)
 
 
 
-    // disable and enable delete button
-    connect(&model, &model::disableDeleteButton, this, &View::disableDeleteButton);
-    connect(&model, &model::enableDeleteButton, this, &View::enableDeleteButton);
+
 
 
 
     //ColorUpdate
-    connect(ui->colorButton, &QPushButton::clicked, this, &View::pushColorButton);
-    connect(this, &View::updateColor, &model, &model::updateColor);
+    connect(ui->colorButton,
+            &QPushButton::clicked,
+            this,
+            &View::pushColorButton);
 
-        connect(ui->colorButton, &QPushButton::clicked, this, &View::pushColorButton);
-        connect(this, &View::updateColor, &model, &model::updateColor);
+    connect(this,
+            &View::updateColor,
+            &model,
+            &model::updateColor);
+
+    connect(ui->colorButton,
+            &QPushButton::clicked,
+            this,
+            &View::pushColorButton);
+
+    connect(this,
+            &View::updateColor,
+            &model,
+            &model::updateColor);
 
     //updateToolSize
-        connect(ui->toolSizeBox, &QSpinBox::valueChanged, &model, &model::updateToolSize);
+    connect(ui->toolSizeBox,
+            &QSpinBox::valueChanged,
+            &model,
+            &model::updateToolSize);
 
-        connect(ui->canvasLabel, &Canvas::sendMouseLoc, this, &View::showMouseLoc);
+    connect(ui->canvasLabel,
+            &Canvas::sendMouseLoc,
+            this,
+            &View::showMouseLoc);
 }
 
 
@@ -147,6 +203,22 @@ void View::enableDeleteButton(){
     ui->deleteFrameButton->setEnabled(true);
 }
 
+void View::enableNextButton(){
+    ui->nextFrameButton->setEnabled(true);
+}
+
+void View::enableLastButton(){
+    ui->lastFrameButton->setEnabled(true);
+}
+
+void View::disableNextButton(){
+    ui->nextFrameButton->setEnabled(false);
+}
+
+void View::disableLastButton(){
+    ui->lastFrameButton->setEnabled(false);
+}
+
 void View::showMouseLoc(QPoint &loc) // can delete later
 {
     ui->posLabel->setText("x: " + QString::number(loc.x()) + " y: " + QString::number(loc.y()));
@@ -159,16 +231,21 @@ void View::showMouseLoc(QPoint &loc) // can delete later
 void View::updateCanvas(){
     //TODO
 }
-void View::updateFramesBox(int page, int size){
+void View::updateFramesBoxAndLabel(int page, int size){
     if(size > ui->framesComboBox->count()){
-        ui->framesComboBox->addItem(QString::number(size - 1));
+        ui->framesComboBox->addItem(QString::number(size));
     }
 
     if(size < ui->framesComboBox->count()){
         ui->framesComboBox->removeItem(ui->framesComboBox->count() - 1);
     }
 
-    ui->framesComboBox->setCurrentIndex(page);
+    QString str = QString::number(page);
+    str.append("/");
+    str.append(QString::number(size));
+
+    ui->frameNumberLabel->setText(str);
+    ui->framesComboBox->setCurrentText(QString::number(page));
 }
 void View::updatePreview(){
     //TODO

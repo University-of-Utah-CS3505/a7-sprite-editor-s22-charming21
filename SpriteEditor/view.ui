@@ -79,7 +79,7 @@
       <x>0</x>
       <y>20</y>
       <width>172</width>
-      <height>491</height>
+      <height>521</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="toolBarAndFrame">
@@ -122,17 +122,60 @@
         </layout>
        </item>
        <item>
-        <widget class="QSpinBox" name="toolSizeBox"/>
+        <widget class="QSpinBox" name="toolSizeBox">
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
        </item>
        <item>
         <layout class="QVBoxLayout" name="frameLayout">
          <item>
           <widget class="QComboBox" name="framesComboBox">
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
            <item>
             <property name="text">
-             <string>0</string>
+             <string>1</string>
             </property>
            </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="frameNumberLabel">
+           <property name="maximumSize">
+            <size>
+             <width>162</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>1/1</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="lastFrameButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Last Frame</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="nextFrameButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Next Frame</string>
+           </property>
           </widget>
          </item>
          <item>
@@ -143,7 +186,17 @@
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="insertFrameButton">
+           <property name="text">
+            <string>Insert Frame</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="deleteFrameButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Delete Frame</string>
            </property>
@@ -175,7 +228,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>24</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

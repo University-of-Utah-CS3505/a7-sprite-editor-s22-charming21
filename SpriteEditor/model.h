@@ -34,13 +34,23 @@ private:
 signals:
     //Add methods (emit)
     void goToFrame(QPixmap);
+
+    // control buttons
     void disableDeleteButton();
     void enableDeleteButton();
+    void disableNextButton();
+    void enableNextButton();
+    void disableLastButton();
+    void enableLastButton();
+
     void sendList(QList<QImage>);
     void updateFrameNumberCombo(int, int);
 
 public slots:
     void addNewFrame();
+    void insertNewFrame();
+    void nextFrame();
+    void lastFrame();
     void deleteFrame();
     void zoomIn();
     void zoomOut();

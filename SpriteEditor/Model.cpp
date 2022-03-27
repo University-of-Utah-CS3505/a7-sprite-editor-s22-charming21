@@ -13,42 +13,90 @@ model::model(QObject *parent)
     canvasHeight = 10;
     canvasWidth = 10;
     framesPerSec = 30;
-    currentFrame = 0;
+    currentFrame = 1;
     penSize = 1;
     eraserSize = 1;
 }
 
+// add a new frame to the position next to the current frame
 void model::addNewFrame(){
-    // new QImage?
     QImage frame(canvasHeight, canvasWidth, QImage::Format_ARGB32);
     frames.insert(currentFrame, frame);
+
+    // move to the new frame
     currentFrame++;
 
     emit updateFrameNumberCombo(currentFrame, frames.size());
     emit enableDeleteButton();
+    emit enableLastButton();
 
-    QPixmap map = QPixmap::fromImage(frames.at(currentFrame));
+    // if the new frame is at the end of the list, disale next button
+    if(currentFrame == frames.size()){
+        emit disableNextButton();
+    }
+
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
     emit goToFrame(map);
-    std::cout << frames.size()<<std::endl;
+}
+
+// insert a new frame to the position before current frame
+void model::insertNewFrame(){
+    QImage frame(canvasHeight, canvasWidth, QImage::Format_ARGB32);
+    frames.insert(currentFrame - 1, frame);
+
+    emit updateFrameNumberCombo(currentFrame, frames.size());
+    emit enableDeleteButton();
+    emit enableNextButton();
+
+    if(currentFrame == 1){
+        emit disableLastButton();
+    }
+
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
+    emit goToFrame(map);
+}
+
+void model::nextFrame(){
+     emit updateFrameNumberCombo(++currentFrame, frames.size());
+
+    emit enableLastButton();
+    if(currentFrame == frames.size()){
+        emit disableNextButton();
+    }
+
+     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
+     emit goToFrame(map);
+}
+
+void model::lastFrame(){
+    emit updateFrameNumberCombo(--currentFrame, frames.size());
+
+    emit enableNextButton();
+    if(currentFrame == 1){
+        emit disableLastButton();
+    }
+
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
+    emit goToFrame(map);
 }
 
 void model::deleteFrame(){
-    std::cout << frames.size()<<std::endl;
-    std::cout << currentFrame<<std::endl;
-    frames.removeAt(currentFrame);
+    frames.removeAt(currentFrame - 1);
 
     if(frames.size() == 1){
+        emit disableNextButton();
+        emit disableLastButton();
         emit disableDeleteButton();
     }
 
-    // if the last frame is deleted,
-    if(currentFrame == frames.size()){
+    // if the last frame is deleted
+    if(currentFrame - 1 == frames.size()){
         currentFrame--;
-        QPixmap map = QPixmap::fromImage(frames.at(currentFrame));
+        QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
         emit goToFrame(map);
     }
     else{
-        QPixmap map = QPixmap::fromImage(frames.at(currentFrame));
+        QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
         emit goToFrame(map);
     }
 
@@ -106,8 +154,8 @@ void model::redo(){
 
 //Frame that we are currently in
 void model::selectedFrame(int index){
-    currentFrame = index;
-    QPixmap map = QPixmap::fromImage(frames.at(currentFrame));
+    currentFrame = index + 1;
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
     emit goToFrame(map);
 }
 
