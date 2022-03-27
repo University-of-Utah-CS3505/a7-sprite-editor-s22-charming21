@@ -92,6 +92,7 @@ View::View(model& model, QWidget *parent)
             this,
             &View::displayFrame);
 
+
     //Save Project
 //    connect(ui->actionSave,
 //            &QAction::triggered,
@@ -114,27 +115,30 @@ View::View(model& model, QWidget *parent)
 
     //Zoom in/out, Redo and Undo
     //Change to Buttons
-//        connect(ui->menuZoom_In,
-//                &QAction::trigger,
-//                &model,
-//                &model::zoomIn);
-//        connect(ui->menuZoom_Out,
-//                &QAction::trigger,
-//                &model,
-//                &model::zoomOut);
-//        connect(ui->menuRedo,
-//                &QAction::trigger,
-//                &model,
-//                &model::redo);
-//        connect(ui->menuUndo,
-//                &QAction::trigger,
-//                &model,
-//                &model::undo);
-
-
-
-
-
+        connect(ui->zoomInButton,
+                &QPushButton::clicked,
+                &model,
+                &model::zoomIn);
+        connect(ui->zoomOutButton,
+                &QPushButton::clicked,
+                &model,
+                &model::zoomOut);
+        connect(ui->redoButton,
+                &QPushButton::clicked,
+                &model,
+                &model::redo);
+        connect(ui->undoButton,
+                &QPushButton::clicked,
+                &model,
+                &model::undo);
+        connect(&model,
+                &model::setCanvas,
+                this,
+                &View::zoomInCanvas);
+        connect(&model,
+                &model::setCanvas,
+                this,
+                &View::zoomOutCanvas);
 
 
     //ColorUpdate
@@ -271,22 +275,28 @@ void View::on_penButton_clicked()
 {
     emit setTool("pen");
 }
-
-
 void View::on_eraserButton_clicked()
 {
     emit setTool("eraser");
 }
-
-
 void View::on_bucketButton_clicked()
 {
     emit setTool("bucket");
 }
-
-
 void View::on_shapeButton_clicked()
 {
     emit setTool("shapeCreator");
+}
+
+//Zoom Mehtods
+
+void View::zoomInCanvas(QImage image){
+    //In view
+        //create image height and with that will be incrementing  with time
+    //Use Qpixmap Scale
+}
+void View::zoomOutCanvas(QImage){
+
+
 }
 

@@ -221,6 +221,46 @@
      <string/>
     </property>
    </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>470</y>
+      <width>411</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="zoomInButton">
+       <property name="text">
+        <string>Zoom In</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="zoomOutButton">
+       <property name="text">
+        <string>Zoom Out</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="redoButton">
+       <property name="text">
+        <string>Redo</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="undoButton">
+       <property name="text">
+        <string>Undo</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -228,7 +268,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>17</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -248,33 +288,9 @@
      <string>Help me</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuZoom_In">
-    <property name="title">
-     <string>Zoom In</string>
-    </property>
-   </widget>
-   <widget class="QMenu" name="menuZoom_Out">
-    <property name="title">
-     <string>Zoom Out</string>
-    </property>
-   </widget>
-   <widget class="QMenu" name="menuRedo">
-    <property name="title">
-     <string>Redo</string>
-    </property>
-   </widget>
-   <widget class="QMenu" name="menuUndo">
-    <property name="title">
-     <string>Undo</string>
-    </property>
-   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuAbout"/>
    <addaction name="menuHelp_me"/>
-   <addaction name="menuZoom_In"/>
-   <addaction name="menuZoom_Out"/>
-   <addaction name="menuRedo"/>
-   <addaction name="menuUndo"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionSave">

@@ -53,17 +53,23 @@ public:
     QSpinBox *toolSizeBox;
     QVBoxLayout *frameLayout;
     QComboBox *framesComboBox;
+    QLabel *frameNumberLabel;
+    QPushButton *lastFrameButton;
+    QPushButton *nextFrameButton;
     QPushButton *addFrameButton;
+    QPushButton *insertFrameButton;
     QPushButton *deleteFrameButton;
     QLabel *posLabel;
+    QWidget *horizontalLayoutWidget;
+    QHBoxLayout *horizontalLayout;
+    QPushButton *zoomInButton;
+    QPushButton *zoomOutButton;
+    QPushButton *redoButton;
+    QPushButton *undoButton;
     QMenuBar *menubar;
     QMenu *menuFile;
     QMenu *menuAbout;
     QMenu *menuHelp_me;
-    QMenu *menuZoom_In;
-    QMenu *menuZoom_Out;
-    QMenu *menuRedo;
-    QMenu *menuUndo;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *View)
@@ -111,7 +117,7 @@ public:
 
         verticalLayoutWidget_4 = new QWidget(centralwidget);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
-        verticalLayoutWidget_4->setGeometry(QRect(0, 20, 172, 491));
+        verticalLayoutWidget_4->setGeometry(QRect(0, 20, 172, 521));
         toolBarAndFrame = new QVBoxLayout(verticalLayoutWidget_4);
         toolBarAndFrame->setObjectName(QString::fromUtf8("toolBarAndFrame"));
         toolBarAndFrame->setContentsMargins(0, 0, 0, 0);
@@ -149,6 +155,7 @@ public:
 
         toolSizeBox = new QSpinBox(verticalLayoutWidget_4);
         toolSizeBox->setObjectName(QString::fromUtf8("toolSizeBox"));
+        toolSizeBox->setAlignment(Qt::AlignCenter);
 
         toolBarVerticalLayout->addWidget(toolSizeBox);
 
@@ -157,16 +164,42 @@ public:
         framesComboBox = new QComboBox(verticalLayoutWidget_4);
         framesComboBox->addItem(QString());
         framesComboBox->setObjectName(QString::fromUtf8("framesComboBox"));
+        framesComboBox->setLayoutDirection(Qt::LeftToRight);
 
         frameLayout->addWidget(framesComboBox);
+
+        frameNumberLabel = new QLabel(verticalLayoutWidget_4);
+        frameNumberLabel->setObjectName(QString::fromUtf8("frameNumberLabel"));
+        frameNumberLabel->setMaximumSize(QSize(162, 16));
+        frameNumberLabel->setAlignment(Qt::AlignCenter);
+
+        frameLayout->addWidget(frameNumberLabel);
+
+        lastFrameButton = new QPushButton(verticalLayoutWidget_4);
+        lastFrameButton->setObjectName(QString::fromUtf8("lastFrameButton"));
+        lastFrameButton->setEnabled(false);
+
+        frameLayout->addWidget(lastFrameButton);
+
+        nextFrameButton = new QPushButton(verticalLayoutWidget_4);
+        nextFrameButton->setObjectName(QString::fromUtf8("nextFrameButton"));
+        nextFrameButton->setEnabled(false);
+
+        frameLayout->addWidget(nextFrameButton);
 
         addFrameButton = new QPushButton(verticalLayoutWidget_4);
         addFrameButton->setObjectName(QString::fromUtf8("addFrameButton"));
 
         frameLayout->addWidget(addFrameButton);
 
+        insertFrameButton = new QPushButton(verticalLayoutWidget_4);
+        insertFrameButton->setObjectName(QString::fromUtf8("insertFrameButton"));
+
+        frameLayout->addWidget(insertFrameButton);
+
         deleteFrameButton = new QPushButton(verticalLayoutWidget_4);
         deleteFrameButton->setObjectName(QString::fromUtf8("deleteFrameButton"));
+        deleteFrameButton->setEnabled(false);
 
         frameLayout->addWidget(deleteFrameButton);
 
@@ -179,24 +212,42 @@ public:
         posLabel = new QLabel(centralwidget);
         posLabel->setObjectName(QString::fromUtf8("posLabel"));
         posLabel->setGeometry(QRect(640, 350, 91, 19));
+        horizontalLayoutWidget = new QWidget(centralwidget);
+        horizontalLayoutWidget->setObjectName(QString::fromUtf8("horizontalLayoutWidget"));
+        horizontalLayoutWidget->setGeometry(QRect(200, 470, 411, 61));
+        horizontalLayout = new QHBoxLayout(horizontalLayoutWidget);
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        horizontalLayout->setContentsMargins(0, 0, 0, 0);
+        zoomInButton = new QPushButton(horizontalLayoutWidget);
+        zoomInButton->setObjectName(QString::fromUtf8("zoomInButton"));
+
+        horizontalLayout->addWidget(zoomInButton);
+
+        zoomOutButton = new QPushButton(horizontalLayoutWidget);
+        zoomOutButton->setObjectName(QString::fromUtf8("zoomOutButton"));
+
+        horizontalLayout->addWidget(zoomOutButton);
+
+        redoButton = new QPushButton(horizontalLayoutWidget);
+        redoButton->setObjectName(QString::fromUtf8("redoButton"));
+
+        horizontalLayout->addWidget(redoButton);
+
+        undoButton = new QPushButton(horizontalLayoutWidget);
+        undoButton->setObjectName(QString::fromUtf8("undoButton"));
+
+        horizontalLayout->addWidget(undoButton);
+
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 24));
+        menubar->setGeometry(QRect(0, 0, 800, 17));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuAbout = new QMenu(menubar);
         menuAbout->setObjectName(QString::fromUtf8("menuAbout"));
         menuHelp_me = new QMenu(menubar);
         menuHelp_me->setObjectName(QString::fromUtf8("menuHelp_me"));
-        menuZoom_In = new QMenu(menubar);
-        menuZoom_In->setObjectName(QString::fromUtf8("menuZoom_In"));
-        menuZoom_Out = new QMenu(menubar);
-        menuZoom_Out->setObjectName(QString::fromUtf8("menuZoom_Out"));
-        menuRedo = new QMenu(menubar);
-        menuRedo->setObjectName(QString::fromUtf8("menuRedo"));
-        menuUndo = new QMenu(menubar);
-        menuUndo->setObjectName(QString::fromUtf8("menuUndo"));
         View->setMenuBar(menubar);
         statusbar = new QStatusBar(View);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -205,10 +256,6 @@ public:
         menubar->addAction(menuFile->menuAction());
         menubar->addAction(menuAbout->menuAction());
         menubar->addAction(menuHelp_me->menuAction());
-        menubar->addAction(menuZoom_In->menuAction());
-        menubar->addAction(menuZoom_Out->menuAction());
-        menubar->addAction(menuRedo->menuAction());
-        menubar->addAction(menuUndo->menuAction());
         menuFile->addAction(actionSave);
         menuFile->addAction(actionOpen);
 
@@ -230,18 +277,22 @@ public:
         eraserButton->setText(QCoreApplication::translate("View", "Eraser", nullptr));
         bucketButton->setText(QCoreApplication::translate("View", "Bucket", nullptr));
         shapeButton->setText(QCoreApplication::translate("View", "Shape", nullptr));
-        framesComboBox->setItemText(0, QCoreApplication::translate("View", "0", nullptr));
+        framesComboBox->setItemText(0, QCoreApplication::translate("View", "1", nullptr));
 
+        frameNumberLabel->setText(QCoreApplication::translate("View", "1/1", nullptr));
+        lastFrameButton->setText(QCoreApplication::translate("View", "Last Frame", nullptr));
+        nextFrameButton->setText(QCoreApplication::translate("View", "Next Frame", nullptr));
         addFrameButton->setText(QCoreApplication::translate("View", "Add Frame", nullptr));
+        insertFrameButton->setText(QCoreApplication::translate("View", "Insert Frame", nullptr));
         deleteFrameButton->setText(QCoreApplication::translate("View", "Delete Frame", nullptr));
         posLabel->setText(QString());
+        zoomInButton->setText(QCoreApplication::translate("View", "Zoom In", nullptr));
+        zoomOutButton->setText(QCoreApplication::translate("View", "Zoom Out", nullptr));
+        redoButton->setText(QCoreApplication::translate("View", "Redo", nullptr));
+        undoButton->setText(QCoreApplication::translate("View", "Undo", nullptr));
         menuFile->setTitle(QCoreApplication::translate("View", "File", nullptr));
         menuAbout->setTitle(QCoreApplication::translate("View", "About", nullptr));
         menuHelp_me->setTitle(QCoreApplication::translate("View", "Help me", nullptr));
-        menuZoom_In->setTitle(QCoreApplication::translate("View", "Zoom In", nullptr));
-        menuZoom_Out->setTitle(QCoreApplication::translate("View", "Zoom Out", nullptr));
-        menuRedo->setTitle(QCoreApplication::translate("View", "Redo", nullptr));
-        menuUndo->setTitle(QCoreApplication::translate("View", "Undo", nullptr));
     } // retranslateUi
 
 };

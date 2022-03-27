@@ -46,6 +46,8 @@ signals:
     void sendList(QList<QImage>);
     void updateFrameNumberCombo(int, int);
 
+    void setCanvas(QImage);
+
 public slots:
     void addNewFrame();
     void insertNewFrame();

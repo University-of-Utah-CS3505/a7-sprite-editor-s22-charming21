@@ -25,7 +25,6 @@ signals:
     void setTool(std::string);
     void updateColor(QColor);
 
-
 public slots:
     void displayFrame(QPixmap);
 
@@ -38,6 +37,8 @@ public slots:
     void enableLastButton();
 
     void showMouseLoc(QPoint& loc);
+    void zoomInCanvas(QImage);
+    void zoomOutCanvas(QImage);
 
 private slots:
     //Added to set the tool
@@ -51,9 +52,9 @@ private:
     void updateCanvas();
     void updateFramesBoxAndLabel(int, int);
     void updatePreview();
-    void updateSelectionTool(); //No Need, done in ui?
+    void updateSelectionTool();
     void updateColorWheel(QColor);
-    void updateToolSize(int); //No Need, done in ui?
+    void updateToolSize(int);
     void saveProject(QList<QImage>);
 
 private slots:

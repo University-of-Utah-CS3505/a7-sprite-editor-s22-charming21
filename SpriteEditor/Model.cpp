@@ -103,12 +103,14 @@ void model::deleteFrame(){
     emit updateFrameNumberCombo(currentFrame, frames.size());
 }
 
-void model::zoomIn(){
-    //TODO:
+//Testing
+void model::zoomIn(){    
+    emit setCanvas(frames[currentFrame -1]);
 }
 
 void model::zoomOut(){
-    //TODO:
+    emit setCanvas(frames[currentFrame -1]);
+
 }
 
 void model::updateFPS(int fps){
