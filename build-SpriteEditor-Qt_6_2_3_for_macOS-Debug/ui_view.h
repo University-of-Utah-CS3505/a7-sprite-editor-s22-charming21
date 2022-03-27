@@ -163,6 +163,7 @@ public:
         framesComboBox->addItem(QString());
         framesComboBox->setObjectName(QString::fromUtf8("framesComboBox"));
         framesComboBox->setLayoutDirection(Qt::LeftToRight);
+        framesComboBox->setStyleSheet(QString::fromUtf8(""));
 
         frameLayout->addWidget(framesComboBox);
 

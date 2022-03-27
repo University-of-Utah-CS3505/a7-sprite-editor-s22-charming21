@@ -12,6 +12,11 @@ View::View(model& model, QWidget *parent)
 
     ui->setupUi(this);
 
+    // set frame combo box alliment
+    ui->framesComboBox->setEditable(true);
+    ui->framesComboBox->lineEdit()->setReadOnly(true);
+    ui->framesComboBox->lineEdit()->setAlignment(Qt::AlignCenter);
+
     //connections
 
     //Tools
@@ -84,7 +89,13 @@ View::View(model& model, QWidget *parent)
     connect(&model,
             &model::updateFrameNumberCombo,
             this,
-            &View::updateFramesBoxAndLabel);
+            &View::updateFramesBox);
+
+    connect(&model,
+            &model::updateFrameNumberLabel,
+            this,
+            &View::updateFramesLabel);
+
 
     // change frame
     connect(&model,
@@ -235,7 +246,7 @@ void View::showMouseLoc(QPoint &loc) // can delete later
 void View::updateCanvas(){
     //TODO
 }
-void View::updateFramesBoxAndLabel(int page, int size){
+void View::updateFramesBox(int page, int size){
     if(size > ui->framesComboBox->count()){
         ui->framesComboBox->addItem(QString::number(size));
     }
@@ -244,12 +255,15 @@ void View::updateFramesBoxAndLabel(int page, int size){
         ui->framesComboBox->removeItem(ui->framesComboBox->count() - 1);
     }
 
+    ui->framesComboBox->setCurrentText(QString::number(page));
+}
+
+void View::updateFramesLabel(int page, int size){
     QString str = QString::number(page);
     str.append("/");
     str.append(QString::number(size));
 
     ui->frameNumberLabel->setText(str);
-    ui->framesComboBox->setCurrentText(QString::number(page));
 }
 void View::updatePreview(){
     //TODO

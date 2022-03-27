@@ -45,6 +45,7 @@ void model::insertNewFrame(){
     frames.insert(currentFrame - 1, frame);
 
     emit updateFrameNumberCombo(currentFrame, frames.size());
+    emit updateFrameNumberLabel(currentFrame, frames.size());
     emit enableDeleteButton();
     emit enableNextButton();
 
@@ -57,7 +58,8 @@ void model::insertNewFrame(){
 }
 
 void model::nextFrame(){
-     emit updateFrameNumberCombo(++currentFrame, frames.size());
+    emit updateFrameNumberCombo(++currentFrame, frames.size());
+    emit updateFrameNumberLabel(currentFrame, frames.size());
 
     emit enableLastButton();
     if(currentFrame == frames.size()){
@@ -70,6 +72,7 @@ void model::nextFrame(){
 
 void model::lastFrame(){
     emit updateFrameNumberCombo(--currentFrame, frames.size());
+    emit updateFrameNumberLabel(currentFrame, frames.size());
 
     emit enableNextButton();
     if(currentFrame == 1){
@@ -89,6 +92,10 @@ void model::deleteFrame(){
         emit disableDeleteButton();
     }
 
+    if(currentFrame == frames.size()){
+        emit disableNextButton();
+    }
+
     // if the last frame is deleted
     if(currentFrame - 1 == frames.size()){
         currentFrame--;
@@ -101,6 +108,7 @@ void model::deleteFrame(){
     }
 
     emit updateFrameNumberCombo(currentFrame, frames.size());
+    emit updateFrameNumberLabel(currentFrame, frames.size());
 }
 
 //Testing
@@ -132,11 +140,18 @@ void model::setStartingArea(int, int){
 void model::updateColor(QColor color){
     penColor = color;
 }
-
-void model::updateTool(std::string){
-    //TODO:
+//updates our current tool we are using
+void model::updateTool(std::string tool){
+    //Should we do a switch case? if we do, we have to change parameters (bri)
+    if(tool == "pen")
+        currentTool = SelectedTool::Tool_Pen;
+    else if(tool == "eraser")
+        currentTool = SelectedTool::Tool_Eraser;
+    else if(tool == "bucket")
+        currentTool = SelectedTool::Tool_Bucket;
+    else if(tool == "shapeCreator")
+        currentTool = SelectedTool::Tool_ShapeCreator;
 }
-
 
 //Don't need the QList as Parameter??
 void model::getList(QList<QImage>){
@@ -159,13 +174,28 @@ void model::selectedFrame(int index){
     currentFrame = index + 1;
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
     emit goToFrame(map);
+    emit updateFrameNumberLabel(currentFrame, frames.size());
+
+    if(currentFrame == frames.size()){
+        emit disableNextButton();
+    }
+    else if(currentFrame == 1){
+        emit disableLastButton();
+    }
+    else{
+        emit enableNextButton();
+        emit enableLastButton();
+    }
+
+
 }
 
 //updates the toolsize, we first check our selected tool
 void model::updateToolSize(int size){
 
-//    if(currentTool = eraser)
-//        updateEraserSize(size);
-//    else if(currentTool = Pen)
-//        updatePenSize(size);
+    //change to a switch case if we add more brushes
+    if(currentTool == SelectedTool::Tool_Eraser)
+        updateEraserSize(size);
+    else if(currentTool == SelectedTool::Tool_Pen)
+        updatePenSize(size);
 }
