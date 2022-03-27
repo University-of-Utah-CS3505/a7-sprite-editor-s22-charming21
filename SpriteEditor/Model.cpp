@@ -27,6 +27,7 @@ void model::addNewFrame(){
     currentFrame++;
 
     emit updateFrameNumberCombo(currentFrame, frames.size());
+    emit updateFrameNumberLabel(currentFrame, frames.size());
     emit enableDeleteButton();
     emit enableLastButton();
 
@@ -45,6 +46,7 @@ void model::insertNewFrame(){
     frames.insert(currentFrame - 1, frame);
 
     emit updateFrameNumberCombo(currentFrame, frames.size());
+    emit updateFrameNumberLabel(currentFrame, frames.size());
     emit enableDeleteButton();
     emit enableNextButton();
 
@@ -57,7 +59,8 @@ void model::insertNewFrame(){
 }
 
 void model::nextFrame(){
-     emit updateFrameNumberCombo(++currentFrame, frames.size());
+    emit updateFrameNumberCombo(++currentFrame, frames.size());
+    emit updateFrameNumberLabel(currentFrame, frames.size());
 
     emit enableLastButton();
     if(currentFrame == frames.size()){
@@ -70,6 +73,7 @@ void model::nextFrame(){
 
 void model::lastFrame(){
     emit updateFrameNumberCombo(--currentFrame, frames.size());
+    emit updateFrameNumberLabel(currentFrame, frames.size());
 
     emit enableNextButton();
     if(currentFrame == 1){
@@ -89,6 +93,10 @@ void model::deleteFrame(){
         emit disableDeleteButton();
     }
 
+    if(currentFrame == frames.size()){
+        emit disableNextButton();
+    }
+
     // if the last frame is deleted
     if(currentFrame - 1 == frames.size()){
         currentFrame--;
@@ -101,6 +109,7 @@ void model::deleteFrame(){
     }
 
     emit updateFrameNumberCombo(currentFrame, frames.size());
+    emit updateFrameNumberLabel(currentFrame, frames.size());
 }
 
 void model::zoomIn(){
@@ -157,6 +166,20 @@ void model::selectedFrame(int index){
     currentFrame = index + 1;
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
     emit goToFrame(map);
+    emit updateFrameNumberLabel(currentFrame, frames.size());
+
+    if(currentFrame == frames.size()){
+        emit disableNextButton();
+    }
+    else if(currentFrame == 1){
+        emit disableLastButton();
+    }
+    else{
+        emit enableNextButton();
+        emit enableLastButton();
+    }
+
+
 }
 
 //updates the toolsize, we first check our selected tool

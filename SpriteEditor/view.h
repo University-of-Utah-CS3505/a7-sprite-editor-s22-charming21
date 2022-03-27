@@ -49,7 +49,8 @@ private slots:
 private:
     Ui::View *ui;
     void updateCanvas();
-    void updateFramesBoxAndLabel(int, int);
+    void updateFramesBox(int, int);
+    void updateFramesLabel(int, int);
     void updatePreview();
     void updateSelectionTool(); //No Need, done in ui?
     void updateColorWheel(QColor);
