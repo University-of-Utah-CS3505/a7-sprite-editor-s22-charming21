@@ -167,7 +167,7 @@
             <bool>false</bool>
            </property>
            <property name="text">
-            <string>Last Frame</string>
+            <string>Previous Frame</string>
            </property>
           </widget>
          </item>
@@ -184,14 +184,14 @@
          <item>
           <widget class="QPushButton" name="addFrameButton">
            <property name="text">
-            <string>Add Frame</string>
+            <string>Insert After</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="insertFrameButton">
            <property name="text">
-            <string>Insert Frame</string>
+            <string>Insert Before</string>
            </property>
           </widget>
          </item>
@@ -271,7 +271,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>17</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

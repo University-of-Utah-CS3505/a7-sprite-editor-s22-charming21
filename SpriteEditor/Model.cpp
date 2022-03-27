@@ -27,6 +27,7 @@ void model::addNewFrame(){
     currentFrame++;
 
     emit updateFrameNumberCombo(currentFrame, frames.size());
+    emit updateFrameNumberLabel(currentFrame, frames.size());
     emit enableDeleteButton();
     emit enableLastButton();
 
