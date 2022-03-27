@@ -148,16 +148,6 @@ View::View(model& model, QWidget *parent)
             &model,
             &model::updateColor);
 
-    connect(ui->colorButton,
-            &QPushButton::clicked,
-            this,
-            &View::pushColorButton);
-
-    connect(this,
-            &View::updateColor,
-            &model,
-            &model::updateColor);
-
     //updateToolSize
     connect(ui->toolSizeBox,
             &QSpinBox::valueChanged,
@@ -179,16 +169,14 @@ View::~View()
 
 void View::pushColorButton(){
 
-    bool ok;
-    QColor color = QColorDialog::getColor(Qt::blue, this);
-    if(&ok)
-    {
-        //this code was for testing purposes
+    //opens colordialog
+    QColor color = QColorDialog::getColor();
+//        //this code was for testing purposes
         //ui->colorButton->setStyleSheet(QString("QPushButton{background-color:" + color.name(QColor::HexArgb) + ";}"));
         emit updateColor(color);
-    }
-    //TODO : testing
-    //1. when we click cancel , changes color to black by default
+//    if(QColorDialog::)
+//    //TODO : testing
+//    //1. when we click cancel , changes color to black by default
 }
 
 void View::displayFrame(QPixmap map){
