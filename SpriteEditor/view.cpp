@@ -192,12 +192,8 @@ View::~View()
 
 void View::pushColorButton(){
 
-    //opens colordialog
-    QColor color = QColorDialog::getColor();
-//        //this code was for testing purposes
-        //ui->colorButton->setStyleSheet(QString("QPushButton{background-color:" + color.name(QColor::HexArgb) + ";}"));
-        emit updateColor(color);
-//    if(QColorDialog::)
+    QColor color = QColorDialog::getColor(QColor(255,255,255), nullptr, QString(), {QColorDialog::DontUseNativeDialog, QColorDialog::ShowAlphaChannel});
+
 //    //TODO : testing
 //    //1. when we click cancel , changes color to black by default
 }

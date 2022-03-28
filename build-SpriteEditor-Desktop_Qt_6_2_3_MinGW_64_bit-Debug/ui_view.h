@@ -165,6 +165,7 @@ public:
         framesComboBox->addItem(QString());
         framesComboBox->setObjectName(QString::fromUtf8("framesComboBox"));
         framesComboBox->setLayoutDirection(Qt::LeftToRight);
+        framesComboBox->setStyleSheet(QString::fromUtf8(""));
 
         frameLayout->addWidget(framesComboBox);
 
@@ -241,7 +242,7 @@ public:
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 17));
+        menubar->setGeometry(QRect(0, 0, 800, 22));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuAbout = new QMenu(menubar);
@@ -280,10 +281,10 @@ public:
         framesComboBox->setItemText(0, QCoreApplication::translate("View", "1", nullptr));
 
         frameNumberLabel->setText(QCoreApplication::translate("View", "1/1", nullptr));
-        lastFrameButton->setText(QCoreApplication::translate("View", "Last Frame", nullptr));
+        lastFrameButton->setText(QCoreApplication::translate("View", "Previous Frame", nullptr));
         nextFrameButton->setText(QCoreApplication::translate("View", "Next Frame", nullptr));
-        addFrameButton->setText(QCoreApplication::translate("View", "Add Frame", nullptr));
-        insertFrameButton->setText(QCoreApplication::translate("View", "Insert Frame", nullptr));
+        addFrameButton->setText(QCoreApplication::translate("View", "Insert After", nullptr));
+        insertFrameButton->setText(QCoreApplication::translate("View", "Insert Before", nullptr));
         deleteFrameButton->setText(QCoreApplication::translate("View", "Delete Frame", nullptr));
         posLabel->setText(QString());
         zoomInButton->setText(QCoreApplication::translate("View", "Zoom In", nullptr));
