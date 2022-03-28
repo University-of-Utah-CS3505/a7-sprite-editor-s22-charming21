@@ -3,8 +3,11 @@
 
 #include <QObject>
 #include <QColor>
+#include <QPen>
 #include <QImage>
+#include <QPainter>
 #include <QPixmap>
+#include <iostream>
 
 //We add enum (jinwen)
 enum class SelectedTool{
@@ -30,6 +33,8 @@ private:
     int currentFrame;
     int penSize;
     int eraserSize;
+
+    void updatePixelsByPen(int, int);
 
 signals:
     //Add methods (emit)
@@ -68,6 +73,7 @@ public slots:
     void undo(); //need change parameters?
     void redo(); //need change parameters?
     void selectedFrame(int);
+    void updatePixels(int,int);
 
     void updateToolSize(int);
 
