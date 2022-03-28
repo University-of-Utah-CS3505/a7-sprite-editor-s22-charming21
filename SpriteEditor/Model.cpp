@@ -220,7 +220,12 @@ void model::updatePixels(int x, int y){
 }
 
 void model::updatePixelsByPen(int x, int y){
-    QImage AFrame = frames[currentFrame];
+    QImage* AFrame = &frames[currentFrame];
+    QPainter Painter(AFrame);
     QPen Pen(penColor);
     Pen.setWidth(penSize);
+    Pen.setColor(penColor);
+    Painter.setPen(Pen);
+    Painter.drawPoint(x,y);
+    Painter.end();
 }
