@@ -1,8 +1,5 @@
 #include "model.h"
-#include <QImage>
-#include <QPixmap>
-#include <iostream>
-#include <iostream>
+
 model::model(QObject *parent)
     : QObject{parent}
 {
@@ -27,6 +24,7 @@ void model::addNewFrame(){
     currentFrame++;
 
     emit updateFrameNumberCombo(currentFrame, frames.size());
+    emit updateFrameNumberLabel(currentFrame, frames.size());
     emit enableDeleteButton();
     emit enableLastButton();
 
@@ -198,4 +196,36 @@ void model::updateToolSize(int size){
         updateEraserSize(size);
     else if(currentTool == SelectedTool::Tool_Pen)
         updatePenSize(size);
+}
+
+void model::updatePixels(int x, int y){
+    switch(currentTool){
+        case SelectedTool::Tool_Pen:
+            updatePixelsByPen(x,y);
+            break;
+        case SelectedTool::Tool_Eraser:
+            //updatePixelsByEraser(x,y);
+            break;
+        case SelectedTool::Tool_Bucket:
+            //updatePixelsByBucket(x,y);
+            break;
+        case SelectedTool::Tool_ShapeCreator:
+            //updatePixelsByShapeCreator(x,y);
+            break;
+        default:
+            break;
+    }
+
+    //emit or call another method?
+}
+
+void model::updatePixelsByPen(int x, int y){
+    QImage* AFrame = &frames[currentFrame];
+    QPainter Painter(AFrame);
+    QPen Pen(penColor);
+    Pen.setWidth(penSize);
+    Pen.setColor(penColor);
+    Painter.setPen(Pen);
+    Painter.drawPoint(x,y);
+    Painter.end();
 }

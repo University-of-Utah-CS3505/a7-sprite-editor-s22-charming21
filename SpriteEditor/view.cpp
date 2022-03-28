@@ -173,8 +173,14 @@ View::View(model& model, QWidget *parent)
             this,
             &View::showMouseLoc);
 
+    connect(ui->canvasLabel,
+            &Canvas::sendMouseLoc,
+            this,
+            &View::on_clickMouse_released);
+
     //connects slider with update fps method in model
     connect(ui->playBackSpeedSlider, &QSlider::valueChanged, &model,&model::updateFPS);
+
 }
 
 
@@ -302,4 +308,16 @@ void View::zoomInCanvas(QImage image){
 void View::zoomOutCanvas(QImage){
 
 
+}
+
+void View::on_clickMouse_released(QPoint &loc) {
+  int width = ui->canvasLabel->width();
+  int height = ui->canvasLabel->height();
+  QPixmap imagePix(width, height);
+  QPainter paint(&imagePix);
+  imagePix.fill( Qt::white );
+  paint.setPen(QColor(0, 0, 0, 255));
+  QSize pixelSize(10,10);
+  paint.drawRect(QRect(loc, pixelSize));
+  ui->canvasLabel->setPixmap(imagePix);
 }
