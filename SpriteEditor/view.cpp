@@ -9,7 +9,6 @@ View::View(model& model, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::View)
 {
-
     ui->setupUi(this);
 
     // set frame combo box alliment
@@ -173,6 +172,9 @@ View::View(model& model, QWidget *parent)
             &Canvas::sendMouseLoc,
             this,
             &View::showMouseLoc);
+
+    //connects slider with update fps method in model
+    connect(ui->playBackSpeedSlider, &QSlider::valueChanged, &model,&model::updateFPS);
 }
 
 
@@ -301,4 +303,3 @@ void View::zoomOutCanvas(QImage){
 
 
 }
-
