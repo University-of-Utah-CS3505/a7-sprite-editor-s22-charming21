@@ -19,8 +19,8 @@
      <rect>
       <x>190</x>
       <y>20</y>
-      <width>431</width>
-      <height>421</height>
+      <width>360</width>
+      <height>360</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -264,6 +264,19 @@
      </item>
     </layout>
    </widget>
+   <widget class="QLabel" name="testLabel">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>430</y>
+      <width>141</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -271,7 +284,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>17</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

@@ -1,5 +1,6 @@
 #include "canvas.h"
 
+
 Canvas::Canvas(QWidget* parent) :QLabel(parent)
 {
 
@@ -29,3 +30,5 @@ void Canvas::mouseReleaseEvent(QMouseEvent *releaseEvent){
         //send to model
     }
 }
+
+

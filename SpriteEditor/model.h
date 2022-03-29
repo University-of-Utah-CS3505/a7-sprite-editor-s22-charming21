@@ -29,6 +29,8 @@ private:
     QColor penColor;
     int canvasHeight;
     int canvasWidth;
+    int zoomHeight; //for the zoom
+    int zoomWidth; //for the zoom
     int framesPerSec;
     int currentFrame;
     int penSize;
@@ -52,7 +54,7 @@ signals:
     void updateFrameNumberCombo(int, int);
     void updateFrameNumberLabel(int, int);
 
-    void setCanvas(QImage);
+    void setCanvas(QPixmap);
 
 public slots:
     void addNewFrame();
@@ -76,6 +78,7 @@ public slots:
     void updatePixels(int,int);
 
     void updateToolSize(int);
+    void drawOnCanvas(QPoint);
 
 
 };

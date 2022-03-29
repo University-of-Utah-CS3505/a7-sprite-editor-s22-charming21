@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QWidget>
 #include <QMouseEvent>
+#include <QPixmap>
 
 class Canvas : public QLabel
 {

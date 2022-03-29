@@ -24,6 +24,7 @@ signals:
     void deleteFrame();
     void setTool(std::string);
     void updateColor(QColor);
+    void editCanvas(QPoint);
 
 public slots:
     void displayFrame(QPixmap);
@@ -36,7 +37,7 @@ public slots:
     void enableNextButton();
     void enableLastButton();
 
-    void showMouseLoc(QPoint& loc);
+    void mouseLoc(QPoint& loc); //Changed Name to fit more on its function
     void zoomInCanvas(QImage);
     void zoomOutCanvas(QImage);
 
@@ -49,7 +50,7 @@ private slots:
     void on_clickMouse_released(QPoint& loc);
 private:
     Ui::View *ui;
-    void updateCanvas();
+    void updateCanvas(QPixmap);
     void updateFramesBox(int, int);
     void updateFramesLabel(int, int);
     void updatePreview();

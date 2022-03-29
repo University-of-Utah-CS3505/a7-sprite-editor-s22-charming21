@@ -66,6 +66,7 @@ public:
     QPushButton *zoomOutButton;
     QPushButton *redoButton;
     QPushButton *undoButton;
+    QLabel *testLabel;
     QMenuBar *menubar;
     QMenu *menuFile;
     QMenu *menuAbout;
@@ -85,7 +86,7 @@ public:
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         canvasLabel = new Canvas(centralwidget);
         canvasLabel->setObjectName(QString::fromUtf8("canvasLabel"));
-        canvasLabel->setGeometry(QRect(190, 20, 431, 421));
+        canvasLabel->setGeometry(QRect(190, 20, 360, 360));
         canvasLabel->setFrameShape(QFrame::Box);
         canvasLabel->setAlignment(Qt::AlignCenter);
         verticalLayoutWidget_2 = new QWidget(centralwidget);
@@ -165,6 +166,7 @@ public:
         framesComboBox->addItem(QString());
         framesComboBox->setObjectName(QString::fromUtf8("framesComboBox"));
         framesComboBox->setLayoutDirection(Qt::LeftToRight);
+        framesComboBox->setStyleSheet(QString::fromUtf8(""));
 
         frameLayout->addWidget(framesComboBox);
 
@@ -238,6 +240,9 @@ public:
 
         horizontalLayout->addWidget(undoButton);
 
+        testLabel = new QLabel(centralwidget);
+        testLabel->setObjectName(QString::fromUtf8("testLabel"));
+        testLabel->setGeometry(QRect(640, 430, 141, 91));
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
         menubar->setObjectName(QString::fromUtf8("menubar"));
@@ -280,16 +285,17 @@ public:
         framesComboBox->setItemText(0, QCoreApplication::translate("View", "1", nullptr));
 
         frameNumberLabel->setText(QCoreApplication::translate("View", "1/1", nullptr));
-        lastFrameButton->setText(QCoreApplication::translate("View", "Last Frame", nullptr));
+        lastFrameButton->setText(QCoreApplication::translate("View", "Previous Frame", nullptr));
         nextFrameButton->setText(QCoreApplication::translate("View", "Next Frame", nullptr));
-        addFrameButton->setText(QCoreApplication::translate("View", "Add Frame", nullptr));
-        insertFrameButton->setText(QCoreApplication::translate("View", "Insert Frame", nullptr));
+        addFrameButton->setText(QCoreApplication::translate("View", "Insert After", nullptr));
+        insertFrameButton->setText(QCoreApplication::translate("View", "Insert Before", nullptr));
         deleteFrameButton->setText(QCoreApplication::translate("View", "Delete Frame", nullptr));
         posLabel->setText(QString());
         zoomInButton->setText(QCoreApplication::translate("View", "Zoom In", nullptr));
         zoomOutButton->setText(QCoreApplication::translate("View", "Zoom Out", nullptr));
         redoButton->setText(QCoreApplication::translate("View", "Redo", nullptr));
         undoButton->setText(QCoreApplication::translate("View", "Undo", nullptr));
+        testLabel->setText(QCoreApplication::translate("View", "TextLabel", nullptr));
         menuFile->setTitle(QCoreApplication::translate("View", "File", nullptr));
         menuAbout->setTitle(QCoreApplication::translate("View", "About", nullptr));
         menuHelp_me->setTitle(QCoreApplication::translate("View", "Help me", nullptr));

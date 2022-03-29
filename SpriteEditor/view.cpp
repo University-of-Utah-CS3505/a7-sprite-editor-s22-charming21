@@ -12,13 +12,20 @@ View::View(model& model, QWidget *parent)
 
     ui->setupUi(this);
 
+   //A white image to start with in the canvas
+   QPixmap startImage(ui->canvasLabel->width(), ui->canvasLabel->height());
+   QPainter paint(&startImage);
+   startImage.fill(Qt::white );
+   ui->canvasLabel->setPixmap(startImage);
+
+
     // set frame combo box alliment
     ui->framesComboBox->setEditable(true);
     ui->framesComboBox->lineEdit()->setReadOnly(true);
     ui->framesComboBox->lineEdit()->setAlignment(Qt::AlignCenter);
 
-    //connections
 
+    //connections
     //Tools
     connect(this,
             &View::setTool,
@@ -96,8 +103,6 @@ View::View(model& model, QWidget *parent)
             this,
             &View::updateFramesLabel);
 
-
-    // change frame
     connect(&model,
             &model::goToFrame,
             this,
@@ -124,8 +129,7 @@ View::View(model& model, QWidget *parent)
 //            this,
 //            &View::setUpProject); //create method in view
 
-    //Zoom in/out, Redo and Undo
-    //Change to Buttons
+        //Zoom in/out,
         connect(ui->zoomInButton,
                 &QPushButton::clicked,
                 &model,
@@ -134,6 +138,8 @@ View::View(model& model, QWidget *parent)
                 &QPushButton::clicked,
                 &model,
                 &model::zoomOut);
+
+        //Redo and Undo
         connect(ui->redoButton,
                 &QPushButton::clicked,
                 &model,
@@ -142,14 +148,6 @@ View::View(model& model, QWidget *parent)
                 &QPushButton::clicked,
                 &model,
                 &model::undo);
-        connect(&model,
-                &model::setCanvas,
-                this,
-                &View::zoomInCanvas);
-        connect(&model,
-                &model::setCanvas,
-                this,
-                &View::zoomOutCanvas);
 
 
     //ColorUpdate
@@ -169,15 +167,26 @@ View::View(model& model, QWidget *parent)
             &model,
             &model::updateToolSize);
 
+    //Canvas Connect
     connect(ui->canvasLabel,
             &Canvas::sendMouseLoc,
             this,
-            &View::showMouseLoc);
+            &View::mouseLoc);
 
     connect(ui->canvasLabel,
             &Canvas::sendMouseLoc,
             this,
             &View::on_clickMouse_released);
+    //Test
+    connect(this,
+            &View::editCanvas,
+            &model,
+            &model::drawOnCanvas);
+    connect(&model,
+            &model::setCanvas,
+            this,
+            &View::updateCanvas);
+
 }
 
 
@@ -193,10 +202,10 @@ void View::pushColorButton(){
     QColor color = QColorDialog::getColor();
 //        //this code was for testing purposes
         //ui->colorButton->setStyleSheet(QString("QPushButton{background-color:" + color.name(QColor::HexArgb) + ";}"));
-        emit updateColor(color);
+    emit updateColor(color);
 //    if(QColorDialog::)
 //    //TODO : testing
-//    //1. when we click cancel , changes color to black by default
+//    //1. when we click cancel, changes color to black by default
 }
 
 void View::displayFrame(QPixmap map){
@@ -227,18 +236,25 @@ void View::disableLastButton(){
     ui->lastFrameButton->setEnabled(false);
 }
 
-void View::showMouseLoc(QPoint &loc) // can delete later
+void View::mouseLoc(QPoint &loc) // can delete later
 {
     ui->posLabel->setText("x: " + QString::number(loc.x()) + " y: " + QString::number(loc.y()));
+    //send the location of out mouse to our model
+    emit editCanvas(loc);
+}
 
+
+//Update the canvas by outputing the QPixmap that
+//was tranformed into QImage and edited in model
+void View::updateCanvas(QPixmap currentPic){
+    int height = ui->canvasLabel->height();
+    int width = ui->canvasLabel->width();
+    //display our QPixmap into our canvas size
+    ui->canvasLabel->setPixmap(currentPic.scaled(width, height));
 }
 
 
 
-//Methods from the UML for View
-void View::updateCanvas(){
-    //TODO
-}
 void View::updateFramesBox(int page, int size){
     if(size > ui->framesComboBox->count()){
         ui->framesComboBox->addItem(QString::number(size));
@@ -295,27 +311,12 @@ void View::on_shapeButton_clicked()
     emit setTool("shapeCreator");
 }
 
-//Zoom Mehtods
-
+//Zoom Mehtod -> Maybe remove??
 void View::zoomInCanvas(QImage image){
-    //In view
-        //create image height and with that will be incrementing  with time
-    //Use Qpixmap Scale
 }
 void View::zoomOutCanvas(QImage){
-
-
 }
 
 void View::on_clickMouse_released(QPoint &loc) {
-  int width = ui->canvasLabel->width();
-  int height = ui->canvasLabel->height();
-  QPixmap imagePix(width, height);
-  QPainter paint(&imagePix);
-  imagePix.fill( Qt::white );
-  paint.setPen(QColor(0, 0, 0, 255));
-  QSize pixelSize(10,10);
-  paint.drawRect(QRect(loc, pixelSize));
-  ui->canvasLabel->setPixmap(imagePix);
-}
 
+}
