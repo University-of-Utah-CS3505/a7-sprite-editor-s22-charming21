@@ -6,7 +6,7 @@ model::model(QObject *parent)
     // default values to be determined
     frames.append(QImage (canvasHeight, canvasWidth, QImage::Format_ARGB32));
 
-    penColor.setRgb(255, 255, 255, 255);
+    penColor.setRgb(255, 255, 255, 1);
     canvasHeight = 10;
     canvasWidth = 10;
     framesPerSec = 30;
@@ -137,6 +137,7 @@ void model::setStartingArea(int, int){
 
 void model::updateColor(QColor color){
     penColor = color;
+    emit setColorLabel(penColor);
 }
 //updates our current tool we are using
 void model::updateTool(std::string tool){

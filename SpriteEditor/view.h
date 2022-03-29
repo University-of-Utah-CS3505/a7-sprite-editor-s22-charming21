@@ -40,6 +40,7 @@ public slots:
     void zoomInCanvas(QImage);
     void zoomOutCanvas(QImage);
 
+
 private slots:
     //Added to set the tool
     void on_penButton_clicked();

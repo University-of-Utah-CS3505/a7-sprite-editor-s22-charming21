@@ -102,6 +102,12 @@ View::View(model& model, QWidget *parent)
             this,
             &View::displayFrame);
 
+    // color wheel
+    connect(&model,
+            &model::setColorLabel,
+            this,
+            &View::updateColorWheel);
+
 
     //Save Project
 //    connect(ui->actionSave,
@@ -193,7 +199,7 @@ View::~View()
 void View::pushColorButton(){
 
     QColor color = QColorDialog::getColor(QColor(255,255,255), nullptr, QString(), {QColorDialog::DontUseNativeDialog, QColorDialog::ShowAlphaChannel});
-
+    emit updateColor(color);
 //    //TODO : testing
 //    //1. when we click cancel , changes color to black by default
 }
@@ -233,7 +239,6 @@ void View::showMouseLoc(QPoint &loc) // can delete later
 }
 
 
-
 //Methods from the UML for View
 void View::updateCanvas(){
     //TODO
@@ -263,8 +268,10 @@ void View::updatePreview(){
 void View::updateSelectionTool(){
     //TODO
 }
-void View::updateColorWheel(QColor){
-    //TODO
+void View::updateColorWheel(QColor color){
+    QString style = "background: rgba(%1, %2, %3, %4);";
+
+    ui->colorLabel->setStyleSheet(style.arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()));
 }
 void View::updateToolSize(int){
     //TODO
