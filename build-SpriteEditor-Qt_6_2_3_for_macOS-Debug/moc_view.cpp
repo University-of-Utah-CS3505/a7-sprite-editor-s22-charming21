@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_View_t {
-    const uint offsetsAndSize[50];
-    char stringdata0[364];
+    const uint offsetsAndSize[62];
+    char stringdata0[455];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(offsetof(qt_meta_stringdata_View_t, stringdata0) + ofs), len 
@@ -36,36 +36,44 @@ QT_MOC_LITERAL(15, 11), // "deleteFrame"
 QT_MOC_LITERAL(27, 7), // "setTool"
 QT_MOC_LITERAL(35, 11), // "std::string"
 QT_MOC_LITERAL(47, 11), // "updateColor"
-QT_MOC_LITERAL(59, 12), // "displayFrame"
-QT_MOC_LITERAL(72, 19), // "disableDeleteButton"
-QT_MOC_LITERAL(92, 18), // "enableDeleteButton"
-QT_MOC_LITERAL(111, 17), // "disableNextButton"
-QT_MOC_LITERAL(129, 17), // "disableLastButton"
-QT_MOC_LITERAL(147, 16), // "enableNextButton"
-QT_MOC_LITERAL(164, 16), // "enableLastButton"
-QT_MOC_LITERAL(181, 12), // "showMouseLoc"
-QT_MOC_LITERAL(194, 7), // "QPoint&"
-QT_MOC_LITERAL(202, 3), // "loc"
-QT_MOC_LITERAL(206, 12), // "zoomInCanvas"
-QT_MOC_LITERAL(219, 13), // "zoomOutCanvas"
-QT_MOC_LITERAL(233, 20), // "on_penButton_clicked"
-QT_MOC_LITERAL(254, 23), // "on_eraserButton_clicked"
-QT_MOC_LITERAL(278, 23), // "on_bucketButton_clicked"
-QT_MOC_LITERAL(302, 22), // "on_shapeButton_clicked"
-QT_MOC_LITERAL(325, 22), // "on_clickMouse_released"
-QT_MOC_LITERAL(348, 15) // "pushColorButton"
+QT_MOC_LITERAL(59, 10), // "editCanvas"
+QT_MOC_LITERAL(70, 14), // "editCanvasSize"
+QT_MOC_LITERAL(85, 11), // "editPenSize"
+QT_MOC_LITERAL(97, 12), // "displayFrame"
+QT_MOC_LITERAL(110, 19), // "disableDeleteButton"
+QT_MOC_LITERAL(130, 18), // "enableDeleteButton"
+QT_MOC_LITERAL(149, 17), // "disableNextButton"
+QT_MOC_LITERAL(167, 17), // "disableLastButton"
+QT_MOC_LITERAL(185, 16), // "enableNextButton"
+QT_MOC_LITERAL(202, 16), // "enableLastButton"
+QT_MOC_LITERAL(219, 8), // "mouseLoc"
+QT_MOC_LITERAL(228, 7), // "QPoint&"
+QT_MOC_LITERAL(236, 3), // "loc"
+QT_MOC_LITERAL(240, 12), // "zoomInCanvas"
+QT_MOC_LITERAL(253, 13), // "zoomOutCanvas"
+QT_MOC_LITERAL(267, 20), // "on_penButton_clicked"
+QT_MOC_LITERAL(288, 23), // "on_eraserButton_clicked"
+QT_MOC_LITERAL(312, 23), // "on_bucketButton_clicked"
+QT_MOC_LITERAL(336, 22), // "on_shapeButton_clicked"
+QT_MOC_LITERAL(359, 22), // "on_clickMouse_released"
+QT_MOC_LITERAL(382, 15), // "pushColorButton"
+QT_MOC_LITERAL(398, 22), // "pushCanvasSizeIncrease"
+QT_MOC_LITERAL(421, 19), // "pushPenSizeIncrease"
+QT_MOC_LITERAL(441, 13) // "displaySprite"
 
     },
     "View\0addFrame\0\0deleteFrame\0setTool\0"
-    "std::string\0updateColor\0displayFrame\0"
+    "std::string\0updateColor\0editCanvas\0"
+    "editCanvasSize\0editPenSize\0displayFrame\0"
     "disableDeleteButton\0enableDeleteButton\0"
     "disableNextButton\0disableLastButton\0"
     "enableNextButton\0enableLastButton\0"
-    "showMouseLoc\0QPoint&\0loc\0zoomInCanvas\0"
+    "mouseLoc\0QPoint&\0loc\0zoomInCanvas\0"
     "zoomOutCanvas\0on_penButton_clicked\0"
     "on_eraserButton_clicked\0on_bucketButton_clicked\0"
     "on_shapeButton_clicked\0on_clickMouse_released\0"
-    "pushColorButton"
+    "pushColorButton\0pushCanvasSizeIncrease\0"
+    "pushPenSizeIncrease\0displaySprite"
 };
 #undef QT_MOC_LITERAL
 
@@ -75,42 +83,51 @@ static const uint qt_meta_data_View[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-      20,   14, // methods
+      26,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       4,       // signalCount
+       7,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,  134,    2, 0x06,    1 /* Public */,
-       3,    0,  135,    2, 0x06,    2 /* Public */,
-       4,    1,  136,    2, 0x06,    3 /* Public */,
-       6,    1,  139,    2, 0x06,    5 /* Public */,
+       1,    0,  170,    2, 0x06,    1 /* Public */,
+       3,    0,  171,    2, 0x06,    2 /* Public */,
+       4,    1,  172,    2, 0x06,    3 /* Public */,
+       6,    1,  175,    2, 0x06,    5 /* Public */,
+       7,    1,  178,    2, 0x06,    7 /* Public */,
+       8,    1,  181,    2, 0x06,    9 /* Public */,
+       9,    1,  184,    2, 0x06,   11 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       7,    1,  142,    2, 0x0a,    7 /* Public */,
-       8,    0,  145,    2, 0x0a,    9 /* Public */,
-       9,    0,  146,    2, 0x0a,   10 /* Public */,
-      10,    0,  147,    2, 0x0a,   11 /* Public */,
-      11,    0,  148,    2, 0x0a,   12 /* Public */,
-      12,    0,  149,    2, 0x0a,   13 /* Public */,
-      13,    0,  150,    2, 0x0a,   14 /* Public */,
-      14,    1,  151,    2, 0x0a,   15 /* Public */,
-      17,    1,  154,    2, 0x0a,   17 /* Public */,
-      18,    1,  157,    2, 0x0a,   19 /* Public */,
-      19,    0,  160,    2, 0x08,   21 /* Private */,
-      20,    0,  161,    2, 0x08,   22 /* Private */,
-      21,    0,  162,    2, 0x08,   23 /* Private */,
-      22,    0,  163,    2, 0x08,   24 /* Private */,
-      23,    1,  164,    2, 0x08,   25 /* Private */,
-      24,    0,  167,    2, 0x08,   27 /* Private */,
+      10,    1,  187,    2, 0x0a,   13 /* Public */,
+      11,    0,  190,    2, 0x0a,   15 /* Public */,
+      12,    0,  191,    2, 0x0a,   16 /* Public */,
+      13,    0,  192,    2, 0x0a,   17 /* Public */,
+      14,    0,  193,    2, 0x0a,   18 /* Public */,
+      15,    0,  194,    2, 0x0a,   19 /* Public */,
+      16,    0,  195,    2, 0x0a,   20 /* Public */,
+      17,    1,  196,    2, 0x0a,   21 /* Public */,
+      20,    1,  199,    2, 0x0a,   23 /* Public */,
+      21,    1,  202,    2, 0x0a,   25 /* Public */,
+      22,    0,  205,    2, 0x08,   27 /* Private */,
+      23,    0,  206,    2, 0x08,   28 /* Private */,
+      24,    0,  207,    2, 0x08,   29 /* Private */,
+      25,    0,  208,    2, 0x08,   30 /* Private */,
+      26,    1,  209,    2, 0x08,   31 /* Private */,
+      27,    1,  212,    2, 0x08,   33 /* Private */,
+      28,    0,  215,    2, 0x08,   35 /* Private */,
+      29,    0,  216,    2, 0x08,   36 /* Private */,
+      30,    1,  217,    2, 0x08,   37 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 5,    2,
     QMetaType::Void, QMetaType::QColor,    2,
+    QMetaType::Void, QMetaType::QPoint,    2,
+    QMetaType::Void, QMetaType::Int,    2,
+    QMetaType::Void, QMetaType::Int,    2,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QPixmap,    2,
@@ -120,15 +137,18 @@ static const uint qt_meta_data_View[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 15,   16,
+    QMetaType::Void, 0x80000000 | 18,   19,
     QMetaType::Void, QMetaType::QImage,    2,
     QMetaType::Void, QMetaType::QImage,    2,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 15,   16,
+    QMetaType::Void, 0x80000000 | 18,   19,
+    QMetaType::Void, QMetaType::QColor,    2,
     QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::QImage,    2,
 
        0        // eod
 };
@@ -143,22 +163,28 @@ void View::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void *
         case 1: _t->deleteFrame(); break;
         case 2: _t->setTool((*reinterpret_cast< std::string(*)>(_a[1]))); break;
         case 3: _t->updateColor((*reinterpret_cast< QColor(*)>(_a[1]))); break;
-        case 4: _t->displayFrame((*reinterpret_cast< QPixmap(*)>(_a[1]))); break;
-        case 5: _t->disableDeleteButton(); break;
-        case 6: _t->enableDeleteButton(); break;
-        case 7: _t->disableNextButton(); break;
-        case 8: _t->disableLastButton(); break;
-        case 9: _t->enableNextButton(); break;
-        case 10: _t->enableLastButton(); break;
-        case 11: _t->showMouseLoc((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
-        case 12: _t->zoomInCanvas((*reinterpret_cast< QImage(*)>(_a[1]))); break;
-        case 13: _t->zoomOutCanvas((*reinterpret_cast< QImage(*)>(_a[1]))); break;
-        case 14: _t->on_penButton_clicked(); break;
-        case 15: _t->on_eraserButton_clicked(); break;
-        case 16: _t->on_bucketButton_clicked(); break;
-        case 17: _t->on_shapeButton_clicked(); break;
-        case 18: _t->on_clickMouse_released((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
-        case 19: _t->pushColorButton(); break;
+        case 4: _t->editCanvas((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
+        case 5: _t->editCanvasSize((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 6: _t->editPenSize((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 7: _t->displayFrame((*reinterpret_cast< QPixmap(*)>(_a[1]))); break;
+        case 8: _t->disableDeleteButton(); break;
+        case 9: _t->enableDeleteButton(); break;
+        case 10: _t->disableNextButton(); break;
+        case 11: _t->disableLastButton(); break;
+        case 12: _t->enableNextButton(); break;
+        case 13: _t->enableLastButton(); break;
+        case 14: _t->mouseLoc((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
+        case 15: _t->zoomInCanvas((*reinterpret_cast< QImage(*)>(_a[1]))); break;
+        case 16: _t->zoomOutCanvas((*reinterpret_cast< QImage(*)>(_a[1]))); break;
+        case 17: _t->on_penButton_clicked(); break;
+        case 18: _t->on_eraserButton_clicked(); break;
+        case 19: _t->on_bucketButton_clicked(); break;
+        case 20: _t->on_shapeButton_clicked(); break;
+        case 21: _t->on_clickMouse_released((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
+        case 22: _t->pushColorButton((*reinterpret_cast< QColor(*)>(_a[1]))); break;
+        case 23: _t->pushCanvasSizeIncrease(); break;
+        case 24: _t->pushPenSizeIncrease(); break;
+        case 25: _t->displaySprite((*reinterpret_cast< QImage(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -191,6 +217,27 @@ void View::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void *
                 return;
             }
         }
+        {
+            using _t = void (View::*)(QPoint );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&View::editCanvas)) {
+                *result = 4;
+                return;
+            }
+        }
+        {
+            using _t = void (View::*)(int );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&View::editCanvasSize)) {
+                *result = 5;
+                return;
+            }
+        }
+        {
+            using _t = void (View::*)(int );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&View::editPenSize)) {
+                *result = 6;
+                return;
+            }
+        }
     }
 }
 
@@ -201,8 +248,8 @@ const QMetaObject View::staticMetaObject = { {
     qt_static_metacall,
     nullptr,
 qt_incomplete_metaTypeArray<qt_meta_stringdata_View_t
-, QtPrivate::TypeAndForceComplete<View, std::true_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<std::string, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QColor, std::false_type>
-, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPixmap, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QImage, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QImage, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>
+, QtPrivate::TypeAndForceComplete<View, std::true_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<std::string, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QColor, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>
+, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPixmap, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QImage, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QImage, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QColor, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QImage, std::false_type>
 
 
 >,
@@ -229,13 +276,13 @@ int View::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 20)
+        if (_id < 26)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 20;
+        _id -= 26;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 20)
+        if (_id < 26)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 20;
+        _id -= 26;
     }
     return _id;
 }
@@ -264,6 +311,27 @@ void View::updateColor(QColor _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 3, _a);
+}
+
+// SIGNAL 4
+void View::editCanvas(QPoint _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 4, _a);
+}
+
+// SIGNAL 5
+void View::editCanvasSize(int _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 5, _a);
+}
+
+// SIGNAL 6
+void View::editPenSize(int _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 6, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

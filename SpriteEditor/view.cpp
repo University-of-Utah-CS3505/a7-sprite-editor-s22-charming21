@@ -23,6 +23,8 @@ View::View(model& model, QWidget *parent)
     ui->framesComboBox->lineEdit()->setReadOnly(true);
     ui->framesComboBox->lineEdit()->setAlignment(Qt::AlignCenter);
 
+    // set color label
+    ui->colorLabel->setStyleSheet("background-color: black");
 
     //connections
     //Tools
@@ -164,13 +166,18 @@ View::View(model& model, QWidget *parent)
     //ColorUpdate
     connect(ui->colorButton,
             &QPushButton::clicked,
+            &model,
+            &model::checkCurrentColor);
+
+    connect(&model,
+            &model::sendCurrentColor,
             this,
             &View::pushColorButton);
 
     connect(this,
             &View::updateColor,
             &model,
-            &model::updateColor);
+            &model::updatePenColor);
 
     //updateToolSize
     connect(ui->toolSizeBox,
@@ -201,20 +208,20 @@ View::View(model& model, QWidget *parent)
 
     // gon
     // connections for increasing and decreasing canvas button and pen size
-    connect(ui->increaseCanvasButton,
-            &QPushButton::clicked,
-            this,
-            &View::pushCanvasSizeIncrease);
+//    connect(ui->increaseCanvasButton,
+//            &QPushButton::clicked,
+//            this,
+//            &View::pushCanvasSizeIncrease);
 
     connect(this,
             &View::editCanvasSize,
             &model,
             &model::updateCanvasSize);
 
-    connect(ui->increasePenButton,
-            &QPushButton::clicked,
-            this,
-            &View::pushPenSizeIncrease);
+//    connect(ui->increasePenButton,
+//            &QPushButton::clicked,
+//            this,
+//            &View::pushPenSizeIncrease);
 
     connect(this,
             &View::editPenSize,
@@ -245,10 +252,14 @@ View::~View()
 }
 //methods for view
 
-void View::pushColorButton(){
+void View::pushColorButton(QColor currentColor){
 
-    QColor color = QColorDialog::getColor(QColor(255,255,255), nullptr, QString(), {QColorDialog::DontUseNativeDialog, QColorDialog::ShowAlphaChannel});
-    emit updateColor(color);
+    QColor newColor = QColorDialog::getColor(currentColor, nullptr, QString(), {QColorDialog::DontUseNativeDialog, QColorDialog::ShowAlphaChannel});
+    if(newColor.isValid()){
+        emit updateColor(newColor);
+    }
+
+
 
     //TODO : testing
     //1. when we click cancel, changes color to black by default

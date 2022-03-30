@@ -119,7 +119,7 @@ public:
         colorLabel = new QLabel(verticalLayoutWidget_2);
         colorLabel->setObjectName(QString::fromUtf8("colorLabel"));
         colorLabel->setMaximumSize(QSize(162, 16));
-        colorLabel->setStyleSheet(QString::fromUtf8("color: rgb(255, 23, 32, 1)"));
+        colorLabel->setStyleSheet(QString::fromUtf8(""));
 
         previewLayout->addWidget(colorLabel);
 

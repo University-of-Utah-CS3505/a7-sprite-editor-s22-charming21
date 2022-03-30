@@ -28,6 +28,7 @@ signals:
     void editCanvasSize(int);
     void editPenSize(int);
 
+
 public slots:
     void displayFrame(QPixmap);
 
@@ -51,6 +52,7 @@ private slots:
     void on_bucketButton_clicked();
     void on_shapeButton_clicked();
     void on_clickMouse_released(QPoint& loc);
+
 private:
     Ui::View *ui;
     void updateCanvas(QPixmap);
@@ -63,7 +65,7 @@ private:
     void saveProject(QList<QImage>);
 
 private slots:
-    void pushColorButton();
+    void pushColorButton(QColor);
     void pushCanvasSizeIncrease();
     void pushPenSizeIncrease();
 

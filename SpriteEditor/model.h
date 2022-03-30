@@ -60,11 +60,12 @@ signals:
     void enableNextButton();
     void disableLastButton();
     void enableLastButton();
-
+    void sendCurrentColor(QColor);
     void sendList(QList<QImage>);
     void updateFrameNumberCombo(int, int);
     void updateFrameNumberLabel(int, int);
     void setColorLabel(QColor);
+
 
     void setCanvas(QPixmap);
 
@@ -82,9 +83,10 @@ public slots:
     void updatePenSize(int);
     void updateEraserSize(int);
     void setStartingArea(int, int);
-    void updateColor(QColor);
+    void updatePenColor(QColor);
     void updateTool(std::string); //Change parameter from Selected tools to std::string
     void getList(QList<QImage>);
+    void checkCurrentColor(QColor);
     //Added
     void undo(); //need change parameters?
     void redo(); //need change parameters?
@@ -95,7 +97,7 @@ public slots:
 //    //
     void updateToolSize(int);
     void drawOnCanvas(QPoint);
-    void updateCanvasSize(int);
+    void updateCanvasSize();
 
     //Preview
     void previewOfFrames();

@@ -23,8 +23,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_model_t {
-    const uint offsetsAndSize[70];
-    char stringdata0[445];
+    const uint offsetsAndSize[84];
+    char stringdata0[558];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(offsetof(qt_meta_stringdata_model_t, stringdata0) + ofs), len 
@@ -39,46 +39,57 @@ QT_MOC_LITERAL(56, 17), // "disableNextButton"
 QT_MOC_LITERAL(74, 16), // "enableNextButton"
 QT_MOC_LITERAL(91, 17), // "disableLastButton"
 QT_MOC_LITERAL(109, 16), // "enableLastButton"
-QT_MOC_LITERAL(126, 8), // "sendList"
-QT_MOC_LITERAL(135, 13), // "QList<QImage>"
-QT_MOC_LITERAL(149, 22), // "updateFrameNumberCombo"
-QT_MOC_LITERAL(172, 22), // "updateFrameNumberLabel"
-QT_MOC_LITERAL(195, 13), // "setColorLabel"
-QT_MOC_LITERAL(209, 9), // "setCanvas"
-QT_MOC_LITERAL(219, 11), // "addNewFrame"
-QT_MOC_LITERAL(231, 14), // "insertNewFrame"
-QT_MOC_LITERAL(246, 9), // "nextFrame"
-QT_MOC_LITERAL(256, 9), // "lastFrame"
-QT_MOC_LITERAL(266, 11), // "deleteFrame"
-QT_MOC_LITERAL(278, 6), // "zoomIn"
-QT_MOC_LITERAL(285, 7), // "zoomOut"
-QT_MOC_LITERAL(293, 9), // "updateFPS"
-QT_MOC_LITERAL(303, 13), // "updatePenSize"
-QT_MOC_LITERAL(317, 16), // "updateEraserSize"
-QT_MOC_LITERAL(334, 15), // "setStartingArea"
-QT_MOC_LITERAL(350, 11), // "updateColor"
-QT_MOC_LITERAL(362, 10), // "updateTool"
-QT_MOC_LITERAL(373, 11), // "std::string"
-QT_MOC_LITERAL(385, 7), // "getList"
-QT_MOC_LITERAL(393, 4), // "undo"
-QT_MOC_LITERAL(398, 4), // "redo"
-QT_MOC_LITERAL(403, 13), // "selectedFrame"
-QT_MOC_LITERAL(417, 12), // "updatePixels"
-QT_MOC_LITERAL(430, 14) // "updateToolSize"
+QT_MOC_LITERAL(126, 16), // "sendCurrentColor"
+QT_MOC_LITERAL(143, 8), // "sendList"
+QT_MOC_LITERAL(152, 13), // "QList<QImage>"
+QT_MOC_LITERAL(166, 22), // "updateFrameNumberCombo"
+QT_MOC_LITERAL(189, 22), // "updateFrameNumberLabel"
+QT_MOC_LITERAL(212, 13), // "setColorLabel"
+QT_MOC_LITERAL(226, 9), // "setCanvas"
+QT_MOC_LITERAL(236, 10), // "showSprite"
+QT_MOC_LITERAL(247, 11), // "addNewFrame"
+QT_MOC_LITERAL(259, 14), // "insertNewFrame"
+QT_MOC_LITERAL(274, 9), // "nextFrame"
+QT_MOC_LITERAL(284, 9), // "lastFrame"
+QT_MOC_LITERAL(294, 11), // "deleteFrame"
+QT_MOC_LITERAL(306, 6), // "zoomIn"
+QT_MOC_LITERAL(313, 7), // "zoomOut"
+QT_MOC_LITERAL(321, 9), // "updateFPS"
+QT_MOC_LITERAL(331, 13), // "updatePenSize"
+QT_MOC_LITERAL(345, 16), // "updateEraserSize"
+QT_MOC_LITERAL(362, 15), // "setStartingArea"
+QT_MOC_LITERAL(378, 14), // "updatePenColor"
+QT_MOC_LITERAL(393, 10), // "updateTool"
+QT_MOC_LITERAL(404, 11), // "std::string"
+QT_MOC_LITERAL(416, 7), // "getList"
+QT_MOC_LITERAL(424, 17), // "checkCurrentColor"
+QT_MOC_LITERAL(442, 4), // "undo"
+QT_MOC_LITERAL(447, 4), // "redo"
+QT_MOC_LITERAL(452, 13), // "selectedFrame"
+QT_MOC_LITERAL(466, 12), // "updatePixels"
+QT_MOC_LITERAL(479, 14), // "updateToolSize"
+QT_MOC_LITERAL(494, 12), // "drawOnCanvas"
+QT_MOC_LITERAL(507, 16), // "updateCanvasSize"
+QT_MOC_LITERAL(524, 15), // "previewOfFrames"
+QT_MOC_LITERAL(540, 17) // "updateActualLabel"
 
     },
     "model\0goToFrame\0\0disableDeleteButton\0"
     "enableDeleteButton\0disableNextButton\0"
     "enableNextButton\0disableLastButton\0"
-    "enableLastButton\0sendList\0QList<QImage>\0"
-    "updateFrameNumberCombo\0updateFrameNumberLabel\0"
-    "setColorLabel\0setCanvas\0addNewFrame\0"
+    "enableLastButton\0sendCurrentColor\0"
+    "sendList\0QList<QImage>\0updateFrameNumberCombo\0"
+    "updateFrameNumberLabel\0setColorLabel\0"
+    "setCanvas\0showSprite\0addNewFrame\0"
     "insertNewFrame\0nextFrame\0lastFrame\0"
     "deleteFrame\0zoomIn\0zoomOut\0updateFPS\0"
     "updatePenSize\0updateEraserSize\0"
-    "setStartingArea\0updateColor\0updateTool\0"
-    "std::string\0getList\0undo\0redo\0"
-    "selectedFrame\0updatePixels\0updateToolSize"
+    "setStartingArea\0updatePenColor\0"
+    "updateTool\0std::string\0getList\0"
+    "checkCurrentColor\0undo\0redo\0selectedFrame\0"
+    "updatePixels\0updateToolSize\0drawOnCanvas\0"
+    "updateCanvasSize\0previewOfFrames\0"
+    "updateActualLabel"
 };
 #undef QT_MOC_LITERAL
 
@@ -88,47 +99,54 @@ static const uint qt_meta_data_model[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-      31,   14, // methods
+      38,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-      12,       // signalCount
+      14,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,  200,    2, 0x06,    1 /* Public */,
-       3,    0,  203,    2, 0x06,    3 /* Public */,
-       4,    0,  204,    2, 0x06,    4 /* Public */,
-       5,    0,  205,    2, 0x06,    5 /* Public */,
-       6,    0,  206,    2, 0x06,    6 /* Public */,
-       7,    0,  207,    2, 0x06,    7 /* Public */,
-       8,    0,  208,    2, 0x06,    8 /* Public */,
-       9,    1,  209,    2, 0x06,    9 /* Public */,
-      11,    2,  212,    2, 0x06,   11 /* Public */,
-      12,    2,  217,    2, 0x06,   14 /* Public */,
-      13,    1,  222,    2, 0x06,   17 /* Public */,
-      14,    1,  225,    2, 0x06,   19 /* Public */,
+       1,    1,  242,    2, 0x06,    1 /* Public */,
+       3,    0,  245,    2, 0x06,    3 /* Public */,
+       4,    0,  246,    2, 0x06,    4 /* Public */,
+       5,    0,  247,    2, 0x06,    5 /* Public */,
+       6,    0,  248,    2, 0x06,    6 /* Public */,
+       7,    0,  249,    2, 0x06,    7 /* Public */,
+       8,    0,  250,    2, 0x06,    8 /* Public */,
+       9,    1,  251,    2, 0x06,    9 /* Public */,
+      10,    1,  254,    2, 0x06,   11 /* Public */,
+      12,    2,  257,    2, 0x06,   13 /* Public */,
+      13,    2,  262,    2, 0x06,   16 /* Public */,
+      14,    1,  267,    2, 0x06,   19 /* Public */,
+      15,    1,  270,    2, 0x06,   21 /* Public */,
+      16,    1,  273,    2, 0x06,   23 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-      15,    0,  228,    2, 0x0a,   21 /* Public */,
-      16,    0,  229,    2, 0x0a,   22 /* Public */,
-      17,    0,  230,    2, 0x0a,   23 /* Public */,
-      18,    0,  231,    2, 0x0a,   24 /* Public */,
-      19,    0,  232,    2, 0x0a,   25 /* Public */,
-      20,    0,  233,    2, 0x0a,   26 /* Public */,
-      21,    0,  234,    2, 0x0a,   27 /* Public */,
-      22,    1,  235,    2, 0x0a,   28 /* Public */,
-      23,    1,  238,    2, 0x0a,   30 /* Public */,
-      24,    1,  241,    2, 0x0a,   32 /* Public */,
-      25,    2,  244,    2, 0x0a,   34 /* Public */,
-      26,    1,  249,    2, 0x0a,   37 /* Public */,
-      27,    1,  252,    2, 0x0a,   39 /* Public */,
-      29,    1,  255,    2, 0x0a,   41 /* Public */,
-      30,    0,  258,    2, 0x0a,   43 /* Public */,
-      31,    0,  259,    2, 0x0a,   44 /* Public */,
-      32,    1,  260,    2, 0x0a,   45 /* Public */,
-      33,    2,  263,    2, 0x0a,   47 /* Public */,
-      34,    1,  268,    2, 0x0a,   50 /* Public */,
+      17,    0,  276,    2, 0x0a,   25 /* Public */,
+      18,    0,  277,    2, 0x0a,   26 /* Public */,
+      19,    0,  278,    2, 0x0a,   27 /* Public */,
+      20,    0,  279,    2, 0x0a,   28 /* Public */,
+      21,    0,  280,    2, 0x0a,   29 /* Public */,
+      22,    0,  281,    2, 0x0a,   30 /* Public */,
+      23,    0,  282,    2, 0x0a,   31 /* Public */,
+      24,    1,  283,    2, 0x0a,   32 /* Public */,
+      25,    1,  286,    2, 0x0a,   34 /* Public */,
+      26,    1,  289,    2, 0x0a,   36 /* Public */,
+      27,    2,  292,    2, 0x0a,   38 /* Public */,
+      28,    1,  297,    2, 0x0a,   41 /* Public */,
+      29,    1,  300,    2, 0x0a,   43 /* Public */,
+      31,    1,  303,    2, 0x0a,   45 /* Public */,
+      32,    1,  306,    2, 0x0a,   47 /* Public */,
+      33,    0,  309,    2, 0x0a,   49 /* Public */,
+      34,    0,  310,    2, 0x0a,   50 /* Public */,
+      35,    1,  311,    2, 0x0a,   51 /* Public */,
+      36,    2,  314,    2, 0x0a,   53 /* Public */,
+      37,    1,  319,    2, 0x0a,   56 /* Public */,
+      38,    1,  322,    2, 0x0a,   58 /* Public */,
+      39,    0,  325,    2, 0x0a,   60 /* Public */,
+      40,    0,  326,    2, 0x0a,   61 /* Public */,
+      41,    0,  327,    2, 0x0a,   62 /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QPixmap,    2,
@@ -138,10 +156,12 @@ static const uint qt_meta_data_model[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 10,    2,
+    QMetaType::Void, QMetaType::QColor,    2,
+    QMetaType::Void, 0x80000000 | 11,    2,
     QMetaType::Void, QMetaType::Int, QMetaType::Int,    2,    2,
     QMetaType::Void, QMetaType::Int, QMetaType::Int,    2,    2,
     QMetaType::Void, QMetaType::QColor,    2,
+    QMetaType::Void, QMetaType::QPixmap,    2,
     QMetaType::Void, QMetaType::QImage,    2,
 
  // slots: parameters
@@ -157,13 +177,18 @@ static const uint qt_meta_data_model[] = {
     QMetaType::Void, QMetaType::Int,    2,
     QMetaType::Void, QMetaType::Int, QMetaType::Int,    2,    2,
     QMetaType::Void, QMetaType::QColor,    2,
-    QMetaType::Void, 0x80000000 | 28,    2,
-    QMetaType::Void, 0x80000000 | 10,    2,
+    QMetaType::Void, 0x80000000 | 30,    2,
+    QMetaType::Void, 0x80000000 | 11,    2,
+    QMetaType::Void, QMetaType::QColor,    2,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    2,
     QMetaType::Void, QMetaType::Int, QMetaType::Int,    2,    2,
     QMetaType::Void, QMetaType::Int,    2,
+    QMetaType::Void, QMetaType::QPoint,    2,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -181,43 +206,50 @@ void model::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
         case 4: _t->enableNextButton(); break;
         case 5: _t->disableLastButton(); break;
         case 6: _t->enableLastButton(); break;
-        case 7: _t->sendList((*reinterpret_cast< QList<QImage>(*)>(_a[1]))); break;
-        case 8: _t->updateFrameNumberCombo((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 9: _t->updateFrameNumberLabel((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 10: _t->setColorLabel((*reinterpret_cast< QColor(*)>(_a[1]))); break;
-        case 11: _t->setCanvas((*reinterpret_cast< QImage(*)>(_a[1]))); break;
-        case 12: _t->addNewFrame(); break;
-        case 13: _t->insertNewFrame(); break;
-        case 14: _t->nextFrame(); break;
-        case 15: _t->lastFrame(); break;
-        case 16: _t->deleteFrame(); break;
-        case 17: _t->zoomIn(); break;
-        case 18: _t->zoomOut(); break;
-        case 19: _t->updateFPS((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 20: _t->updatePenSize((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 21: _t->updateEraserSize((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 22: _t->setStartingArea((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 23: _t->updateColor((*reinterpret_cast< QColor(*)>(_a[1]))); break;
-        case 24: _t->updateTool((*reinterpret_cast< std::string(*)>(_a[1]))); break;
-        case 25: _t->getList((*reinterpret_cast< QList<QImage>(*)>(_a[1]))); break;
-        case 26: _t->undo(); break;
-        case 27: _t->redo(); break;
-        case 28: _t->selectedFrame((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 29: _t->updatePixels((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 30: _t->updateToolSize((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 7: _t->sendCurrentColor((*reinterpret_cast< QColor(*)>(_a[1]))); break;
+        case 8: _t->sendList((*reinterpret_cast< QList<QImage>(*)>(_a[1]))); break;
+        case 9: _t->updateFrameNumberCombo((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 10: _t->updateFrameNumberLabel((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 11: _t->setColorLabel((*reinterpret_cast< QColor(*)>(_a[1]))); break;
+        case 12: _t->setCanvas((*reinterpret_cast< QPixmap(*)>(_a[1]))); break;
+        case 13: _t->showSprite((*reinterpret_cast< QImage(*)>(_a[1]))); break;
+        case 14: _t->addNewFrame(); break;
+        case 15: _t->insertNewFrame(); break;
+        case 16: _t->nextFrame(); break;
+        case 17: _t->lastFrame(); break;
+        case 18: _t->deleteFrame(); break;
+        case 19: _t->zoomIn(); break;
+        case 20: _t->zoomOut(); break;
+        case 21: _t->updateFPS((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 22: _t->updatePenSize((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 23: _t->updateEraserSize((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 24: _t->setStartingArea((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 25: _t->updatePenColor((*reinterpret_cast< QColor(*)>(_a[1]))); break;
+        case 26: _t->updateTool((*reinterpret_cast< std::string(*)>(_a[1]))); break;
+        case 27: _t->getList((*reinterpret_cast< QList<QImage>(*)>(_a[1]))); break;
+        case 28: _t->checkCurrentColor((*reinterpret_cast< QColor(*)>(_a[1]))); break;
+        case 29: _t->undo(); break;
+        case 30: _t->redo(); break;
+        case 31: _t->selectedFrame((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 32: _t->updatePixels((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 33: _t->updateToolSize((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 34: _t->drawOnCanvas((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
+        case 35: _t->updateCanvasSize(); break;
+        case 36: _t->previewOfFrames(); break;
+        case 37: _t->updateActualLabel(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
         switch (_id) {
         default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
-        case 7:
+        case 8:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
             case 0:
                 *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType::fromType< QList<QImage> >(); break;
             }
             break;
-        case 25:
+        case 27:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
             case 0:
@@ -277,37 +309,51 @@ void model::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
             }
         }
         {
-            using _t = void (model::*)(QList<QImage> );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&model::sendList)) {
+            using _t = void (model::*)(QColor );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&model::sendCurrentColor)) {
                 *result = 7;
                 return;
             }
         }
         {
-            using _t = void (model::*)(int , int );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&model::updateFrameNumberCombo)) {
+            using _t = void (model::*)(QList<QImage> );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&model::sendList)) {
                 *result = 8;
                 return;
             }
         }
         {
             using _t = void (model::*)(int , int );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&model::updateFrameNumberLabel)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&model::updateFrameNumberCombo)) {
                 *result = 9;
+                return;
+            }
+        }
+        {
+            using _t = void (model::*)(int , int );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&model::updateFrameNumberLabel)) {
+                *result = 10;
                 return;
             }
         }
         {
             using _t = void (model::*)(QColor );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&model::setColorLabel)) {
-                *result = 10;
+                *result = 11;
+                return;
+            }
+        }
+        {
+            using _t = void (model::*)(QPixmap );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&model::setCanvas)) {
+                *result = 12;
                 return;
             }
         }
         {
             using _t = void (model::*)(QImage );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&model::setCanvas)) {
-                *result = 11;
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&model::showSprite)) {
+                *result = 13;
                 return;
             }
         }
@@ -321,8 +367,8 @@ const QMetaObject model::staticMetaObject = { {
     qt_static_metacall,
     nullptr,
 qt_incomplete_metaTypeArray<qt_meta_stringdata_model_t
-, QtPrivate::TypeAndForceComplete<model, std::true_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPixmap, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QList<QImage>, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QColor, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QImage, std::false_type>
-, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QColor, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<std::string, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QList<QImage>, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>
+, QtPrivate::TypeAndForceComplete<model, std::true_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPixmap, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QColor, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QList<QImage>, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QColor, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPixmap, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QImage, std::false_type>
+, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QColor, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<std::string, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QList<QImage>, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QColor, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>
 
 
 >,
@@ -349,13 +395,13 @@ int model::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 31)
+        if (_id < 38)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 31;
+        _id -= 38;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 31)
+        if (_id < 38)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 31;
+        _id -= 38;
     }
     return _id;
 }
@@ -404,38 +450,52 @@ void model::enableLastButton()
 }
 
 // SIGNAL 7
-void model::sendList(QList<QImage> _t1)
+void model::sendCurrentColor(QColor _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 7, _a);
 }
 
 // SIGNAL 8
-void model::updateFrameNumberCombo(int _t1, int _t2)
+void model::sendList(QList<QImage> _t1)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 8, _a);
 }
 
 // SIGNAL 9
-void model::updateFrameNumberLabel(int _t1, int _t2)
+void model::updateFrameNumberCombo(int _t1, int _t2)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
     QMetaObject::activate(this, &staticMetaObject, 9, _a);
 }
 
 // SIGNAL 10
-void model::setColorLabel(QColor _t1)
+void model::updateFrameNumberLabel(int _t1, int _t2)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
     QMetaObject::activate(this, &staticMetaObject, 10, _a);
 }
 
 // SIGNAL 11
-void model::setCanvas(QImage _t1)
+void model::setColorLabel(QColor _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 11, _a);
+}
+
+// SIGNAL 12
+void model::setCanvas(QPixmap _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 12, _a);
+}
+
+// SIGNAL 13
+void model::showSprite(QImage _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 13, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

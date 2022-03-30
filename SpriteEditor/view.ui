@@ -111,7 +111,7 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: rgb(255, 23, 32, 1)</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string/>

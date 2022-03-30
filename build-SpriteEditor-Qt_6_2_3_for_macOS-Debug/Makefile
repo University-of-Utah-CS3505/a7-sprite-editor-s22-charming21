@@ -596,6 +596,8 @@ moc_canvas.cpp: ../SpriteEditor/canvas.h \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qwidget.h \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QMouseEvent \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qevent.h \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPixmap \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpixmap.h \
 		../../../../Qt/6.2.3/macos/libexec/moc
 	/Users/xingliu/Qt/6.2.3/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=13 -D__clang_minor__=1 -D__clang_patchlevel__=6 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/xingliu/Qt/6.2.3/macos/mkspecs/macx-clang -I/Users/xingliu/Documents/GitHub/a7-sprite-editor-s22-charming21/SpriteEditor -I/Users/xingliu/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers -I/Users/xingliu/Qt/6.2.3/macos/lib/QtGui.framework/Headers -I/Users/xingliu/Qt/6.2.3/macos/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/13.1.6/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/Users/xingliu/Qt/6.2.3/macos/lib ../SpriteEditor/canvas.h -o moc_canvas.cpp
 
@@ -604,8 +606,12 @@ moc_model.cpp: ../SpriteEditor/model.h \
 		../../../../Qt/6.2.3/macos/lib/QtCore.framework/Headers/qobject.h \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QColor \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qcolor.h \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPen \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpen.h \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QImage \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qimage.h \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPainter \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpainter.h \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPixmap \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpixmap.h \
 		../../../../Qt/6.2.3/macos/libexec/moc
@@ -621,8 +627,12 @@ moc_view.cpp: ../SpriteEditor/view.h \
 		../../../../Qt/6.2.3/macos/lib/QtCore.framework/Headers/qobject.h \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QColor \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qcolor.h \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPen \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpen.h \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QImage \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qimage.h \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPainter \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpainter.h \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPixmap \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpixmap.h \
 		../../../../Qt/6.2.3/macos/libexec/moc
@@ -645,7 +655,9 @@ ui_view.h: ../SpriteEditor/view.ui \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/QWidget \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qwidget.h \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QMouseEvent \
-		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qevent.h
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qevent.h \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPixmap \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpixmap.h
 	/Users/xingliu/Qt/6.2.3/macos/libexec/uic ../SpriteEditor/view.ui -o ui_view.h
 
 compiler_rez_source_make_all:
@@ -668,7 +680,9 @@ canvas.o: ../SpriteEditor/canvas.cpp ../SpriteEditor/canvas.h \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/QWidget \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qwidget.h \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QMouseEvent \
-		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qevent.h
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qevent.h \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPixmap \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpixmap.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o canvas.o ../SpriteEditor/canvas.cpp
 
 main.o: ../SpriteEditor/main.cpp ../SpriteEditor/view.h \
@@ -681,8 +695,12 @@ main.o: ../SpriteEditor/main.cpp ../SpriteEditor/view.h \
 		../../../../Qt/6.2.3/macos/lib/QtCore.framework/Headers/qobject.h \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QColor \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qcolor.h \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPen \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpen.h \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QImage \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qimage.h \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPainter \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpainter.h \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPixmap \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpixmap.h \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/QApplication \
@@ -694,10 +712,15 @@ model.o: ../SpriteEditor/model.cpp ../SpriteEditor/model.h \
 		../../../../Qt/6.2.3/macos/lib/QtCore.framework/Headers/qobject.h \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QColor \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qcolor.h \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPen \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpen.h \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QImage \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qimage.h \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPainter \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpainter.h \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPixmap \
-		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpixmap.h
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpixmap.h \
+		../../../../Qt/6.2.3/macos/lib/QtCore.framework/Headers/qtimer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o model.o ../SpriteEditor/model.cpp
 
 view.o: ../SpriteEditor/view.cpp ../SpriteEditor/view.h \
@@ -710,11 +733,22 @@ view.o: ../SpriteEditor/view.cpp ../SpriteEditor/view.h \
 		../../../../Qt/6.2.3/macos/lib/QtCore.framework/Headers/qobject.h \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QColor \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qcolor.h \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPen \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpen.h \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QImage \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qimage.h \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPainter \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpainter.h \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPixmap \
 		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpixmap.h \
 		ui_view.h \
+		../SpriteEditor/canvas.h \
+		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/QLabel \
+		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qlabel.h \
+		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/QWidget \
+		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qwidget.h \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/QMouseEvent \
+		../../../../Qt/6.2.3/macos/lib/QtGui.framework/Headers/qevent.h \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/QtWidgets \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qabstractbutton.h \
@@ -776,7 +810,6 @@ view.o: ../SpriteEditor/view.cpp ../SpriteEditor/view.h \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qitemdelegate.h \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qitemeditorfactory.h \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qkeysequenceedit.h \
-		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qlabel.h \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qlayout.h \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qlayoutitem.h \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qlcdnumber.h \
@@ -833,7 +866,6 @@ view.o: ../SpriteEditor/view.cpp ../SpriteEditor/view.h \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qundostack.h \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qundoview.h \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qwhatsthis.h \
-		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qwidget.h \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qwidgetaction.h \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qwizard.h \
 		../../../../Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qtwidgetsversion.h

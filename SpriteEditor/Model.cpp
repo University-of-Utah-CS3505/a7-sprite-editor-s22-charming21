@@ -192,7 +192,11 @@ void model::setStartingArea(int, int){
     //TODO:
 }
 
-void model::updateColor(QColor color){
+void model::checkCurrentColor(QColor){
+    emit sendCurrentColor(penColor);
+}
+
+void model::updatePenColor(QColor color){
     penColor = color;
     emit setColorLabel(penColor);
 }
@@ -368,10 +372,10 @@ void model::drawOnCanvas(QPoint pixelPoint){
 
 }
 
-void model::updateCanvasSize(int incrNum)
+void model::updateCanvasSize()
 {
-    canvasHeight += incrNum;
-    canvasWidth += incrNum;
+    canvasHeight += 1;
+    canvasWidth += 1;
 }
 
 void model::previewOfFrames(){
