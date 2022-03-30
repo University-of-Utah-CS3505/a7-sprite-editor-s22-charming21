@@ -41,6 +41,7 @@ public:
     QPushButton *previewButton;
     QSlider *playBackSpeedSlider;
     QPushButton *colorButton;
+    QLabel *colorLabel;
     QWidget *verticalLayoutWidget_4;
     QVBoxLayout *toolBarAndFrame;
     QVBoxLayout *toolBarVerticalLayout;
@@ -66,7 +67,6 @@ public:
     QPushButton *zoomOutButton;
     QPushButton *redoButton;
     QPushButton *undoButton;
-    QLabel *testLabel;
     QMenuBar *menubar;
     QMenu *menuFile;
     QMenu *menuAbout;
@@ -115,6 +115,13 @@ public:
         colorButton->setObjectName(QString::fromUtf8("colorButton"));
 
         previewLayout->addWidget(colorButton);
+
+        colorLabel = new QLabel(verticalLayoutWidget_2);
+        colorLabel->setObjectName(QString::fromUtf8("colorLabel"));
+        colorLabel->setMaximumSize(QSize(162, 16));
+        colorLabel->setStyleSheet(QString::fromUtf8("color: rgb(255, 23, 32, 1)"));
+
+        previewLayout->addWidget(colorLabel);
 
         verticalLayoutWidget_4 = new QWidget(centralwidget);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
@@ -240,13 +247,10 @@ public:
 
         horizontalLayout->addWidget(undoButton);
 
-        testLabel = new QLabel(centralwidget);
-        testLabel->setObjectName(QString::fromUtf8("testLabel"));
-        testLabel->setGeometry(QRect(640, 430, 141, 91));
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 22));
+        menubar->setGeometry(QRect(0, 0, 800, 17));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuAbout = new QMenu(menubar);
@@ -278,6 +282,7 @@ public:
         actualSizeLabel->setText(QCoreApplication::translate("View", "Actual Size Preview", nullptr));
         previewButton->setText(QCoreApplication::translate("View", "Preview", nullptr));
         colorButton->setText(QCoreApplication::translate("View", "PushButton", nullptr));
+        colorLabel->setText(QString());
         penButton->setText(QCoreApplication::translate("View", "Pen", nullptr));
         eraserButton->setText(QCoreApplication::translate("View", "Eraser", nullptr));
         bucketButton->setText(QCoreApplication::translate("View", "Bucket", nullptr));
@@ -295,7 +300,6 @@ public:
         zoomOutButton->setText(QCoreApplication::translate("View", "Zoom Out", nullptr));
         redoButton->setText(QCoreApplication::translate("View", "Redo", nullptr));
         undoButton->setText(QCoreApplication::translate("View", "Undo", nullptr));
-        testLabel->setText(QCoreApplication::translate("View", "TextLabel", nullptr));
         menuFile->setTitle(QCoreApplication::translate("View", "File", nullptr));
         menuAbout->setTitle(QCoreApplication::translate("View", "About", nullptr));
         menuHelp_me->setTitle(QCoreApplication::translate("View", "Help me", nullptr));
