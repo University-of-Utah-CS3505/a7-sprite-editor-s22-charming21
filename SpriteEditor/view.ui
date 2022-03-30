@@ -71,6 +71,22 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QLabel" name="colorLabel">
+       <property name="maximumSize">
+        <size>
+         <width>162</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(255, 23, 32, 1)</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="verticalLayoutWidget_4">

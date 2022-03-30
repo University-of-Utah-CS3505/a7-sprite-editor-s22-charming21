@@ -38,6 +38,7 @@ void model::addNewFrame(){
     }
 
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
+    map.fill(Qt::white);
     emit goToFrame(map);
 }
 
@@ -56,6 +57,7 @@ void model::insertNewFrame(){
     }
 
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
+    map.fill(Qt::white);
     emit goToFrame(map);
 }
 
@@ -181,6 +183,7 @@ void model::setStartingArea(int, int){
 
 void model::updateColor(QColor color){
     penColor = color;
+    emit setColorLabel(penColor);
 }
 //updates our current tool we are using
 void model::updateTool(std::string tool){
@@ -264,9 +267,14 @@ void model::updatePixels(int x, int y){
 }
 
 void model::updatePixelsByPen(int x, int y){
-    QImage AFrame = frames[currentFrame];
+    QImage* AFrame = &frames[currentFrame -1];
+    QPainter Painter(AFrame);
     QPen Pen(penColor);
     Pen.setWidth(penSize);
+    Pen.setColor(penColor);
+    Painter.setPen(Pen);
+    Painter.drawPoint(x,y);
+    Painter.end();
 }
 
 
@@ -281,7 +289,8 @@ void model::drawOnCanvas(QPoint pixelPoint){
     int y = pixelPoint.y()/ratio;
 
     //Edit the pixels of the current QImage
-    frames[currentFrame -1].setPixelColor(x, y,penColor);
+    //frames[currentFrame -1].setPixelColor(x, y,penColor);
+    updatePixels(x,y);
 
     //Create a Pixmap to return to view
     QPixmap currentPic;

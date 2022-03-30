@@ -9,7 +9,6 @@ View::View(model& model, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::View)
 {
-
     ui->setupUi(this);
 
    //A white image to start with in the canvas
@@ -108,6 +107,18 @@ View::View(model& model, QWidget *parent)
             this,
             &View::displayFrame);
 
+    //connects slider with update fps method in model
+    connect(ui->playBackSpeedSlider,
+            &QSlider::valueChanged,
+            &model,
+            &model::updateFPS);
+
+    // color wheel
+    connect(&model,
+            &model::setColorLabel,
+            this,
+            &View::updateColorWheel);
+
 
     //Save Project
 //    connect(ui->actionSave,
@@ -177,6 +188,7 @@ View::View(model& model, QWidget *parent)
             &Canvas::sendMouseLoc,
             this,
             &View::on_clickMouse_released);
+
     //Test
     connect(this,
             &View::editCanvas,
@@ -186,6 +198,9 @@ View::View(model& model, QWidget *parent)
             &model::setCanvas,
             this,
             &View::updateCanvas);
+
+
+
 
 }
 
@@ -198,18 +213,15 @@ View::~View()
 
 void View::pushColorButton(){
 
-    //opens colordialog
-    QColor color = QColorDialog::getColor();
-//        //this code was for testing purposes
-        //ui->colorButton->setStyleSheet(QString("QPushButton{background-color:" + color.name(QColor::HexArgb) + ";}"));
+    QColor color = QColorDialog::getColor(QColor(255,255,255), nullptr, QString(), {QColorDialog::DontUseNativeDialog, QColorDialog::ShowAlphaChannel});
     emit updateColor(color);
-//    if(QColorDialog::)
-//    //TODO : testing
-//    //1. when we click cancel, changes color to black by default
+
+    //TODO : testing
+    //1. when we click cancel, changes color to black by default
 }
 
 void View::displayFrame(QPixmap map){
-    ui->canvasLabel->setPixmap(map);
+    ui->canvasLabel->setPixmap(map.scaled(ui->canvasLabel->width(), ui->canvasLabel->height()));
 }
 
 void View::disableDeleteButton(){
@@ -253,8 +265,6 @@ void View::updateCanvas(QPixmap currentPic){
     ui->canvasLabel->setPixmap(currentPic.scaled(width, height));
 }
 
-
-
 void View::updateFramesBox(int page, int size){
     if(size > ui->framesComboBox->count()){
         ui->framesComboBox->addItem(QString::number(size));
@@ -280,8 +290,10 @@ void View::updatePreview(){
 void View::updateSelectionTool(){
     //TODO
 }
-void View::updateColorWheel(QColor){
-    //TODO
+void View::updateColorWheel(QColor color){
+    QString style = "background: rgba(%1, %2, %3, %4);";
+
+    ui->colorLabel->setStyleSheet(style.arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()));
 }
 void View::updateToolSize(int){
     //TODO

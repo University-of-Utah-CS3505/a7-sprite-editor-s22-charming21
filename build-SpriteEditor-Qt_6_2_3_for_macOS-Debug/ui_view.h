@@ -41,6 +41,7 @@ public:
     QPushButton *previewButton;
     QSlider *playBackSpeedSlider;
     QPushButton *colorButton;
+    QLabel *colorLabel;
     QWidget *verticalLayoutWidget_4;
     QVBoxLayout *toolBarAndFrame;
     QVBoxLayout *toolBarVerticalLayout;
@@ -114,6 +115,13 @@ public:
         colorButton->setObjectName(QString::fromUtf8("colorButton"));
 
         previewLayout->addWidget(colorButton);
+
+        colorLabel = new QLabel(verticalLayoutWidget_2);
+        colorLabel->setObjectName(QString::fromUtf8("colorLabel"));
+        colorLabel->setMaximumSize(QSize(162, 16));
+        colorLabel->setStyleSheet(QString::fromUtf8("color: rgb(255, 23, 32, 1)"));
+
+        previewLayout->addWidget(colorLabel);
 
         verticalLayoutWidget_4 = new QWidget(centralwidget);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
@@ -274,6 +282,7 @@ public:
         actualSizeLabel->setText(QCoreApplication::translate("View", "Actual Size Preview", nullptr));
         previewButton->setText(QCoreApplication::translate("View", "Preview", nullptr));
         colorButton->setText(QCoreApplication::translate("View", "PushButton", nullptr));
+        colorLabel->setText(QString());
         penButton->setText(QCoreApplication::translate("View", "Pen", nullptr));
         eraserButton->setText(QCoreApplication::translate("View", "Eraser", nullptr));
         bucketButton->setText(QCoreApplication::translate("View", "Bucket", nullptr));

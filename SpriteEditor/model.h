@@ -53,6 +53,7 @@ signals:
     void sendList(QList<QImage>);
     void updateFrameNumberCombo(int, int);
     void updateFrameNumberLabel(int, int);
+    void setColorLabel(QColor);
 
     void setCanvas(QPixmap);
 
