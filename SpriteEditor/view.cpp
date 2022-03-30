@@ -213,20 +213,6 @@ View::View(model& model, QWidget *parent)
 //            this,
 //            &View::pushCanvasSizeIncrease);
 
-    connect(this,
-            &View::editCanvasSize,
-            &model,
-            &model::updateCanvasSize);
-
-//    connect(ui->increasePenButton,
-//            &QPushButton::clicked,
-//            this,
-//            &View::pushPenSizeIncrease);
-
-    connect(this,
-            &View::editPenSize,
-            &model,
-            &model::updatePenSize);
 
     //Preview actual canvas
 
@@ -265,15 +251,6 @@ void View::pushColorButton(QColor currentColor){
     //1. when we click cancel, changes color to black by default
 }
 
-void View::pushCanvasSizeIncrease()
-{
-    emit editCanvasSize(1);
-}
-
-void View::pushPenSizeIncrease()
-{
-    emit editPenSize(1);
-}
 
 void View::displayFrame(QPixmap map){
     ui->canvasLabel->setPixmap(map.scaled(ui->canvasLabel->width(), ui->canvasLabel->height()));
@@ -342,20 +319,13 @@ void View::updateFramesLabel(int page, int size){
 
     ui->frameNumberLabel->setText(str);
 }
-void View::updatePreview(){
-    //TODO
-}
-void View::updateSelectionTool(){
-    //TODO
-}
+
 void View::updateColorWheel(QColor color){
     QString style = "background: rgba(%1, %2, %3, %4);";
 
     ui->colorLabel->setStyleSheet(style.arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()));
 }
-void View::updateToolSize(int){
-    //TODO
-}
+
 void View::saveProject(QList<QImage>){
     //TODO
 }

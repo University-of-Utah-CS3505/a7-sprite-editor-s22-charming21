@@ -4,7 +4,7 @@
 model::model(QObject *parent)
     : QObject{parent}
 {
-    penColor.setRgb(255, 255, 255, 255);
+    penColor.setRgb(0, 0, 0, 255);
     canvasHeight = 20;
     canvasWidth = 20;
     zoomHeight = 20;
@@ -45,9 +45,8 @@ void model::addNewFrame(){
     if(currentFrame == frames.size()){
         emit disableNextButton();
     }
-
+    frames[currentFrame-1].fill(Qt::white);
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-    map.fill(Qt::white);
     emit goToFrame(map);
 }
 
@@ -65,8 +64,8 @@ void model::insertNewFrame(){
         emit disableLastButton();
     }
 
+    frames[currentFrame-1].fill(Qt::white);
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-    map.fill(Qt::white);
     emit goToFrame(map);
 }
 

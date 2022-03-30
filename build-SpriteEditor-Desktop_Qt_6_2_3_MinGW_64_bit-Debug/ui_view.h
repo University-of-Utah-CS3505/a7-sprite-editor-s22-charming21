@@ -44,7 +44,6 @@ public:
     QHBoxLayout *horizontalLayout_3;
     QPushButton *increaseCanvasButton;
     QPushButton *pushButton;
-    QPushButton *increasePenButton;
     QLabel *colorLabel;
     QWidget *verticalLayoutWidget_4;
     QVBoxLayout *toolBarAndFrame;
@@ -137,15 +136,10 @@ public:
 
         previewLayout->addLayout(horizontalLayout_3);
 
-        increasePenButton = new QPushButton(verticalLayoutWidget_2);
-        increasePenButton->setObjectName(QString::fromUtf8("increasePenButton"));
-
-        previewLayout->addWidget(increasePenButton);
-
         colorLabel = new QLabel(verticalLayoutWidget_2);
         colorLabel->setObjectName(QString::fromUtf8("colorLabel"));
         colorLabel->setMaximumSize(QSize(162, 16));
-        colorLabel->setStyleSheet(QString::fromUtf8("color: rgb(255, 23, 32, 1)"));
+        colorLabel->setStyleSheet(QString::fromUtf8(""));
 
         previewLayout->addWidget(colorLabel);
 
@@ -278,7 +272,7 @@ public:
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 22));
+        menubar->setGeometry(QRect(0, 0, 800, 17));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuAbout = new QMenu(menubar);
@@ -312,7 +306,6 @@ public:
         colorButton->setText(QCoreApplication::translate("View", "Choose Color", nullptr));
         increaseCanvasButton->setText(QCoreApplication::translate("View", "+", nullptr));
         pushButton->setText(QCoreApplication::translate("View", "-", nullptr));
-        increasePenButton->setText(QCoreApplication::translate("View", "Pen + ", nullptr));
         colorLabel->setText(QString());
         penButton->setText(QCoreApplication::translate("View", "Pen", nullptr));
         eraserButton->setText(QCoreApplication::translate("View", "Eraser", nullptr));

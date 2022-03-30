@@ -3,8 +3,8 @@
 
 #include <QMainWindow>
 #include <QColorDialog>
-#include "model.h"
 #include <QPixmap>
+#include "model.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class View; }
@@ -20,19 +20,28 @@ public:
 
 
 signals:
-    void addFrame();
-    void deleteFrame();
     void setTool(std::string);
     void updateColor(QColor);
     void editCanvas(QPoint);
-    void editCanvasSize(int);
-    void editPenSize(int);
 
 
-public slots:
-    void displayFrame(QPixmap);
+private slots:
+    //Tool selection
+    void on_penButton_clicked();
+    void on_eraserButton_clicked();
+    void on_bucketButton_clicked();
+    void on_shapeButton_clicked();
 
-    // control buttons
+    //Mouse events
+    void on_clickMouse_released(QPoint& loc);
+    void mouseLoc(QPoint& loc);
+
+    //Update Color
+    void pushColorButton(QColor);
+    void updateColorWheel(QColor);
+
+
+    //Control buttons
     void disableDeleteButton();
     void enableDeleteButton();
     void disableNextButton();
@@ -40,35 +49,26 @@ public slots:
     void enableNextButton();
     void enableLastButton();
 
-    void mouseLoc(QPoint& loc); //Changed Name to fit more on its function
+    //Zoom
     void zoomInCanvas(QImage);
     void zoomOutCanvas(QImage);
 
+    //Canvas
+    void updateCanvas(QPixmap);
 
-private slots:
-    //Added to set the tool
-    void on_penButton_clicked();
-    void on_eraserButton_clicked();
-    void on_bucketButton_clicked();
-    void on_shapeButton_clicked();
-    void on_clickMouse_released(QPoint& loc);
+    //Frame
+    void updateFramesBox(int, int);
+    void updateFramesLabel(int, int);
+    void displayFrame(QPixmap);
+    void displaySprite(QImage);
+
+
+     //Save and Load
+     void saveProject(QList<QImage>);
+
 
 private:
     Ui::View *ui;
-    void updateCanvas(QPixmap);
-    void updateFramesBox(int, int);
-    void updateFramesLabel(int, int);
-    void updatePreview();
-    void updateSelectionTool();
-    void updateColorWheel(QColor);
-    void updateToolSize(int);
-    void saveProject(QList<QImage>);
 
-private slots:
-    void pushColorButton(QColor);
-    void pushCanvasSizeIncrease();
-    void pushPenSizeIncrease();
-
-    void displaySprite(QImage);
 };
 #endif // VIEW_H
