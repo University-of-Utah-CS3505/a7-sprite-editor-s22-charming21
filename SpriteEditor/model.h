@@ -35,8 +35,17 @@ private:
     int currentFrame;
     int penSize;
     int eraserSize;
+    double ratio;
+
+    //
+    int numOfPixels;
+    int pixelLength;
 
     void updatePixelsByPen(int, int);
+//    //gon
+//    void updatePixelsByPen2(int, int, int, int);
+//    //
+
 
 signals:
     //Add methods (emit)
@@ -77,9 +86,12 @@ public slots:
     void redo(); //need change parameters?
     void selectedFrame(int);
     void updatePixels(int,int);
-
+//    //gon
+//    void updatePixels2(int, int, int , int);
+//    //
     void updateToolSize(int);
     void drawOnCanvas(QPoint);
+    void updateCanvasSize(int);
 
 
 };

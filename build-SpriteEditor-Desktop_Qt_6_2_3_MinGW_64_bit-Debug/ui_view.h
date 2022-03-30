@@ -41,6 +41,10 @@ public:
     QPushButton *previewButton;
     QSlider *playBackSpeedSlider;
     QPushButton *colorButton;
+    QHBoxLayout *horizontalLayout_3;
+    QPushButton *increaseCanvasButton;
+    QPushButton *pushButton;
+    QPushButton *increasePenButton;
     QLabel *colorLabel;
     QWidget *verticalLayoutWidget_4;
     QVBoxLayout *toolBarAndFrame;
@@ -91,7 +95,7 @@ public:
         canvasLabel->setAlignment(Qt::AlignCenter);
         verticalLayoutWidget_2 = new QWidget(centralwidget);
         verticalLayoutWidget_2->setObjectName(QString::fromUtf8("verticalLayoutWidget_2"));
-        verticalLayoutWidget_2->setGeometry(QRect(640, 21, 160, 261));
+        verticalLayoutWidget_2->setGeometry(QRect(640, 21, 170, 261));
         previewLayout = new QVBoxLayout(verticalLayoutWidget_2);
         previewLayout->setObjectName(QString::fromUtf8("previewLayout"));
         previewLayout->setContentsMargins(0, 0, 0, 0);
@@ -116,6 +120,26 @@ public:
 
         previewLayout->addWidget(colorButton);
 
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
+        increaseCanvasButton = new QPushButton(verticalLayoutWidget_2);
+        increaseCanvasButton->setObjectName(QString::fromUtf8("increaseCanvasButton"));
+
+        horizontalLayout_3->addWidget(increaseCanvasButton);
+
+        pushButton = new QPushButton(verticalLayoutWidget_2);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+
+        horizontalLayout_3->addWidget(pushButton);
+
+
+        previewLayout->addLayout(horizontalLayout_3);
+
+        increasePenButton = new QPushButton(verticalLayoutWidget_2);
+        increasePenButton->setObjectName(QString::fromUtf8("increasePenButton"));
+
+        previewLayout->addWidget(increasePenButton);
+
         colorLabel = new QLabel(verticalLayoutWidget_2);
         colorLabel->setObjectName(QString::fromUtf8("colorLabel"));
         colorLabel->setMaximumSize(QSize(162, 16));
@@ -125,7 +149,7 @@ public:
 
         verticalLayoutWidget_4 = new QWidget(centralwidget);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
-        verticalLayoutWidget_4->setGeometry(QRect(0, 20, 172, 521));
+        verticalLayoutWidget_4->setGeometry(QRect(0, 20, 181, 521));
         toolBarAndFrame = new QVBoxLayout(verticalLayoutWidget_4);
         toolBarAndFrame->setObjectName(QString::fromUtf8("toolBarAndFrame"));
         toolBarAndFrame->setContentsMargins(0, 0, 0, 0);
@@ -250,7 +274,7 @@ public:
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 17));
+        menubar->setGeometry(QRect(0, 0, 800, 24));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuAbout = new QMenu(menubar);
@@ -282,6 +306,9 @@ public:
         actualSizeLabel->setText(QCoreApplication::translate("View", "Actual Size Preview", nullptr));
         previewButton->setText(QCoreApplication::translate("View", "Preview", nullptr));
         colorButton->setText(QCoreApplication::translate("View", "PushButton", nullptr));
+        increaseCanvasButton->setText(QCoreApplication::translate("View", "+", nullptr));
+        pushButton->setText(QCoreApplication::translate("View", "-", nullptr));
+        increasePenButton->setText(QCoreApplication::translate("View", "Pen + ", nullptr));
         colorLabel->setText(QString());
         penButton->setText(QCoreApplication::translate("View", "Pen", nullptr));
         eraserButton->setText(QCoreApplication::translate("View", "Eraser", nullptr));

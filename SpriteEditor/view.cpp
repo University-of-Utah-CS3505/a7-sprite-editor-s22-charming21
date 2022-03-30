@@ -199,7 +199,27 @@ View::View(model& model, QWidget *parent)
             this,
             &View::updateCanvas);
 
+    // gon
+    // connections for increasing and decreasing canvas button and pen size
+    connect(ui->increaseCanvasButton,
+            &QPushButton::clicked,
+            this,
+            &View::pushCanvasSizeIncrease);
 
+    connect(this,
+            &View::editCanvasSize,
+            &model,
+            &model::updateCanvasSize);
+
+    connect(ui->increasePenButton,
+            &QPushButton::clicked,
+            this,
+            &View::pushPenSizeIncrease);
+
+    connect(this,
+            &View::editPenSize,
+            &model,
+            &model::updatePenSize);
 
 
 }
@@ -218,6 +238,16 @@ void View::pushColorButton(){
 
     //TODO : testing
     //1. when we click cancel, changes color to black by default
+}
+
+void View::pushCanvasSizeIncrease()
+{
+    emit editCanvasSize(1);
+}
+
+void View::pushPenSizeIncrease()
+{
+    emit editPenSize(1);
 }
 
 void View::displayFrame(QPixmap map){
@@ -263,6 +293,9 @@ void View::updateCanvas(QPixmap currentPic){
     int width = ui->canvasLabel->width();
     //display our QPixmap into our canvas size
     ui->canvasLabel->setPixmap(currentPic.scaled(width, height));
+
+//    //gon
+//    ui->canvasLabel->setPixmap(currentPic);
 }
 
 void View::updateFramesBox(int page, int size){

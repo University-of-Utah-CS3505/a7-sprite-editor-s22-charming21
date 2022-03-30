@@ -25,6 +25,8 @@ signals:
     void setTool(std::string);
     void updateColor(QColor);
     void editCanvas(QPoint);
+    void editCanvasSize(int);
+    void editPenSize(int);
 
 public slots:
     void displayFrame(QPixmap);
@@ -62,5 +64,7 @@ private:
 
 private slots:
     void pushColorButton();
+    void pushCanvasSizeIncrease();
+    void pushPenSizeIncrease();
 };
 #endif // VIEW_H

@@ -14,8 +14,15 @@ model::model(QObject *parent)
     eraserSize = 1;
     // default values to be determined
     frames.append(QImage (canvasHeight, canvasWidth, QImage::Format_ARGB32));
+
+//    //gon
+//    frames.append(QImage (360, 360, QImage::Format_ARGB32));
+//    //
+
     //Make the first inage to have a white background
     frames[currentFrame-1].fill(Qt::white);
+
+
 
 }
 
@@ -163,6 +170,7 @@ void model::zoomOut(){
     emit setCanvas(currentPic.scaled(zoomWidth, zoomHeight));
     //emit setCanvas(frames[currentFrame -1]);
 
+
 }
 
 void model::updateFPS(int fps){
@@ -170,7 +178,8 @@ void model::updateFPS(int fps){
 }
 
 void model::updatePenSize(int size){
-    penSize = size;    
+    //penSize = size;
+    penSize += size;
 }
 
 void model::updateEraserSize(int size){
@@ -266,6 +275,31 @@ void model::updatePixels(int x, int y){
     //emit or call another method?
 }
 
+//// gon
+
+//void model::updatePixels2(int sx, int sy, int ex, int ey){
+//    std::cout << "hit" << std::endl;
+
+//    switch(currentTool){
+//        case SelectedTool::Tool_Pen:
+//            updatePixelsByPen2(sx,sy,ex,ey);
+//            break;
+//        case SelectedTool::Tool_Eraser:
+//            //updatePixelsByEraser(x,y);
+//            break;
+//        case SelectedTool::Tool_Bucket:
+//            //updatePixelsByBucket(x,y);
+//            break;
+//        case SelectedTool::Tool_ShapeCreator:
+//            //updatePixelsByShapeCreator(x,y);
+//            break;
+//        default:
+//            break;
+//    }
+
+//    //emit or call another method?
+//}
+
 void model::updatePixelsByPen(int x, int y){
     QImage* AFrame = &frames[currentFrame -1];
     QPainter Painter(AFrame);
@@ -277,25 +311,63 @@ void model::updatePixelsByPen(int x, int y){
     Painter.end();
 }
 
+//void model::updatePixelsByPen2(int sx, int sy, int ex, int ey){
+//    //QPen Pen(penColor);
+//    for(int x = sx; x < ex; x++){
+//        for(int y = sy; y < ey; y++){
+//            frames[currentFrame -1].setPixel(x,y,penColor.rgba());
+//        }
+//    }
+//}
+
 
 //This method obtains where the current position of the mouse is in our canvas
 //then it optains the ratio
 void model::drawOnCanvas(QPoint pixelPoint){
     //Set the canvas ratio -> Canvas Label Size / number of pixels
     //(Choose height, but height and width should all be the same)
-    double ratio = 360/canvasHeight;
+    std::cout << canvasHeight << std::endl;
+    ratio = 360/canvasHeight;
     //Calculate x and y position of our QImage pixels
     int x = pixelPoint.x()/ratio;
     int y = pixelPoint.y()/ratio;
 
+    //gon added
+    int pointStartX = x * ratio;
+    int pointStartY = y * ratio;
+    int pointEndX = pointStartX + (penSize * ratio);
+    int pointEndY = pointStartY + (penSize * ratio);
+
+    std::cout << pointStartX << " " << pointStartY << std::endl;
+    std::cout << pointEndX << " " << pointEndY << std::endl;
+
     //Edit the pixels of the current QImage
     //frames[currentFrame -1].setPixelColor(x, y,penColor);
-    updatePixels(x,y);
 
+    updatePixels(x,y);
     //Create a Pixmap to return to view
     QPixmap currentPic;
     //Convert QImage to QPixmap
     currentPic.convertFromImage(frames[currentFrame-1]);
     //Return the pixmap of our QImage
     emit setCanvas(currentPic);
+
+//    //gon//
+//    updatePixels2(pointStartX, pointStartY,pointEndX, pointEndY);
+//    QPixmap currentPic;
+//    //Convert QImage to QPixmap
+//    currentPic.convertFromImage(frames[currentFrame -1]);
+//    //Return the pixmap of our QImage
+//    emit setCanvas(currentPic);
+//    //////
+
+
+
+
+}
+
+void model::updateCanvasSize(int incrNum)
+{
+    canvasHeight += incrNum;
+    canvasWidth += incrNum;
 }
