@@ -186,7 +186,7 @@ View::View(model& model, QWidget *parent)
             &model::updateToolSize);
 
     //Canvas Connect
-    connect(ui->canvasLabel,
+    connect(ui->canvasLabel, // mouse click
             &Canvas::sendMouseLoc,
             this,
             &View::mouseLoc);
@@ -195,6 +195,10 @@ View::View(model& model, QWidget *parent)
             &Canvas::sendMouseLoc,
             this,
             &View::on_clickMouse_released);
+
+
+
+
 
     //Test
     connect(this,
@@ -241,10 +245,10 @@ View::~View()
 void View::pushColorButton(QColor currentColor){
 
     QColor newColor = QColorDialog::getColor(currentColor, nullptr, QString(), {QColorDialog::DontUseNativeDialog, QColorDialog::ShowAlphaChannel});
+
     if(newColor.isValid()){
         emit updateColor(newColor);
     }
-
 
 
     //TODO : testing

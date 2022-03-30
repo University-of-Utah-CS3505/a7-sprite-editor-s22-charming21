@@ -11,7 +11,9 @@ void Canvas::mouseMoveEvent(QMouseEvent *moveEvent)
     QPoint mouseLoc = moveEvent->pos();
     if (mouseLoc.x() <= this->size().width() && mouseLoc.y() <= this->size().height()
         && mouseLoc.x() > 0 && mouseLoc.y() > 0){
-       //emit sendMouseLoc(mouseLoc);
+       //emit sendMouseMoveLoc(mouseLoc);
+        emit sendMouseLoc(mouseLoc);
+
     }
 
 }

@@ -21,7 +21,6 @@ protected:
 signals:
     void sendMouseLoc(QPoint&);
 
-
 };
 
 #endif // CANVAS_H
