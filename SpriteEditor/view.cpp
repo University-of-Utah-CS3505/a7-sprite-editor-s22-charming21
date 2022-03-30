@@ -221,10 +221,24 @@ View::View(model& model, QWidget *parent)
             &model,
             &model::updatePenSize);
 
+    //Preview actual canvas
+
+    connect(ui->previewButton,
+            &QPushButton::clicked,
+            &model,
+            &model::previewOfFrames);
+    connect(&model,
+            &model::showSprite,
+            this,
+            &View::displaySprite);
 
 }
 
+void View::displaySprite(QImage currentFrame){
+    //fix scaling issue of the qimage
+    ui->actualSizeLabel->setPixmap(QPixmap::fromImage(currentFrame).scaled(100,100,Qt::IgnoreAspectRatio, Qt::FastTransformation));
 
+}
 View::~View()
 {
     delete ui;

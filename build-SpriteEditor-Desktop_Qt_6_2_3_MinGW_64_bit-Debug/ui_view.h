@@ -111,6 +111,8 @@ public:
 
         playBackSpeedSlider = new QSlider(verticalLayoutWidget_2);
         playBackSpeedSlider->setObjectName(QString::fromUtf8("playBackSpeedSlider"));
+        playBackSpeedSlider->setMinimum(1);
+        playBackSpeedSlider->setMaximum(60);
         playBackSpeedSlider->setOrientation(Qt::Horizontal);
 
         previewLayout->addWidget(playBackSpeedSlider);
@@ -188,6 +190,8 @@ public:
         toolSizeBox = new QSpinBox(verticalLayoutWidget_4);
         toolSizeBox->setObjectName(QString::fromUtf8("toolSizeBox"));
         toolSizeBox->setAlignment(Qt::AlignCenter);
+        toolSizeBox->setMinimum(1);
+        toolSizeBox->setMaximum(10);
 
         toolBarVerticalLayout->addWidget(toolSizeBox);
 
@@ -274,7 +278,7 @@ public:
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 24));
+        menubar->setGeometry(QRect(0, 0, 800, 22));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuAbout = new QMenu(menubar);
@@ -305,7 +309,7 @@ public:
         canvasLabel->setText(QCoreApplication::translate("View", "CANVAS", nullptr));
         actualSizeLabel->setText(QCoreApplication::translate("View", "Actual Size Preview", nullptr));
         previewButton->setText(QCoreApplication::translate("View", "Preview", nullptr));
-        colorButton->setText(QCoreApplication::translate("View", "PushButton", nullptr));
+        colorButton->setText(QCoreApplication::translate("View", "Choose Color", nullptr));
         increaseCanvasButton->setText(QCoreApplication::translate("View", "+", nullptr));
         pushButton->setText(QCoreApplication::translate("View", "-", nullptr));
         increasePenButton->setText(QCoreApplication::translate("View", "Pen + ", nullptr));

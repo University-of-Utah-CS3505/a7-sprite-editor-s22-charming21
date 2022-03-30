@@ -41,6 +41,8 @@ private:
     int numOfPixels;
     int pixelLength;
 
+    int currentIndex; //index counter to access frames.
+
     void updatePixelsByPen(int, int);
 //    //gon
 //    void updatePixelsByPen2(int, int, int, int);
@@ -65,6 +67,8 @@ signals:
     void setColorLabel(QColor);
 
     void setCanvas(QPixmap);
+
+    void showSprite(QImage);
 
 public slots:
     void addNewFrame();
@@ -92,6 +96,10 @@ public slots:
     void updateToolSize(int);
     void drawOnCanvas(QPoint);
     void updateCanvasSize(int);
+
+    //Preview
+    void previewOfFrames();
+    void updateActualLabel();
 
 
 };

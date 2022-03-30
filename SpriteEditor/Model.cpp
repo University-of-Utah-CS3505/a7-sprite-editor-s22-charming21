@@ -1,4 +1,5 @@
 #include "model.h"
+#include "qtimer.h"
 
 model::model(QObject *parent)
     : QObject{parent}
@@ -8,10 +9,11 @@ model::model(QObject *parent)
     canvasWidth = 20;
     zoomHeight = 20;
     zoomWidth = 20;
-    framesPerSec = 30;
+    framesPerSec = 1;
     currentFrame = 1;
     penSize = 1;
     eraserSize = 1;
+    currentIndex = 1; //for keeping track of our current index in the list when displaying a sprite.
     // default values to be determined
     frames.append(QImage (canvasHeight, canvasWidth, QImage::Format_ARGB32));
 
@@ -370,4 +372,23 @@ void model::updateCanvasSize(int incrNum)
 {
     canvasHeight += incrNum;
     canvasWidth += incrNum;
+}
+
+void model::previewOfFrames(){
+    int time = 2000/framesPerSec;
+
+    for(int i = 0; i < frames.size(); i++)
+    {
+        QTimer::singleShot(time * i, this, &model::updateActualLabel);
+    }
+}
+
+void model::updateActualLabel(){
+
+    emit showSprite(frames[currentIndex]);
+
+    //is there a way to access an index in frames without a instance current variable.
+    currentIndex++;
+    if(currentIndex == frames.size())
+        currentIndex = 0;
 }

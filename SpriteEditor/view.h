@@ -66,5 +66,7 @@ private slots:
     void pushColorButton();
     void pushCanvasSizeIncrease();
     void pushPenSizeIncrease();
+
+    void displaySprite(QImage);
 };
 #endif // VIEW_H
