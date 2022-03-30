@@ -13,7 +13,7 @@ model::model(QObject *parent)
     currentFrame = 1;
     penSize = 1;
     eraserSize = 1;
-    currentIndex = 1; //for keeping track of our current index in the list when displaying a sprite.
+    currentIndex = 0; //for keeping track of our current index in the list when displaying a sprite.
     // default values to be determined
     frames.append(QImage (canvasHeight, canvasWidth, QImage::Format_ARGB32));
 

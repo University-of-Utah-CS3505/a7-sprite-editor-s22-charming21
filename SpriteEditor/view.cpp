@@ -233,8 +233,7 @@ View::View(model& model, QWidget *parent)
 
 void View::displaySprite(QImage currentFrame){
     //fix scaling issue of the qimage
-    ui->actualSizeLabel->setPixmap(QPixmap::fromImage(currentFrame).scaled(100,100,Qt::IgnoreAspectRatio, Qt::FastTransformation));
-
+    ui->actualSizeLabel->setPixmap(QPixmap::fromImage(currentFrame));
 }
 View::~View()
 {
@@ -302,6 +301,9 @@ void View::updateCanvas(QPixmap currentPic){
 
 //    //gon
 //    ui->canvasLabel->setPixmap(currentPic);
+
+    //display on actualsize label (Brittney)
+    ui->actualSizeLabel->setPixmap(currentPic);
 }
 
 void View::updateFramesBox(int page, int size){
