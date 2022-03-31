@@ -34,6 +34,7 @@ model::model(QObject *parent)
 // add a new frame to the position next to the current frame
 void model::addNewFrame(){
     QImage frame(canvasHeight, canvasWidth, QImage::Format_ARGB32);
+    frame.fill(Qt::white);
     frames.insert(currentFrame, frame);
 
     // move to the new frame
@@ -50,7 +51,7 @@ void model::addNewFrame(){
     if(currentFrame == frames.size()){
         emit disableNextButton();
     }
-    frames[currentFrame-1].fill(Qt::white);
+    //frames[currentFrame-1].fill(Qt::white);
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
     emit goToFrame(map);
 }
@@ -58,6 +59,7 @@ void model::addNewFrame(){
 // insert a new frame to the position before current frame
 void model::insertNewFrame(){
     QImage frame(canvasHeight, canvasWidth, QImage::Format_ARGB32);
+    frame.fill(Qt::white);
     frames.insert(currentFrame - 1, frame);
 
     emit enableUndo();
@@ -72,7 +74,7 @@ void model::insertNewFrame(){
         emit disableLastButton();
     }
 
-    frames[currentFrame-1].fill(Qt::white);
+    //frames[currentFrame-1].fill(Qt::white);
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
     emit goToFrame(map);
 }
@@ -474,8 +476,8 @@ void model::drawOnCanvas(QPoint pixelPoint){
     //1. Know if we are zoomed in
     if(canvasHeight != zoomHeight ){
         ratio = 360/ zoomHeight;
-        x = (pixelPoint.x()/ratio) * zoomIndex;
-        y = (pixelPoint.y()/ratio) * zoomIndex;
+        x = (pixelPoint.x()/ratio) + zoomIndex;
+        y = (pixelPoint.y()/ratio) + zoomIndex;
 
 
     }
