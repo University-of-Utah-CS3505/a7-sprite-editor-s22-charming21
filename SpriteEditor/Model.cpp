@@ -4,6 +4,7 @@
 model::model(QObject *parent)
     : QObject{parent}
 {
+
     penColor.setRgb(0, 0, 0, 255);
     canvasHeight = 20; //Change to have it initialized
     canvasWidth = 20; //Change to have it initialized
@@ -15,7 +16,7 @@ model::model(QObject *parent)
     currentFrame = 1;
     penSize = 1;
     eraserSize = 1;
-    currentIndex = 1; //for keeping track of our current index in the list when displaying a sprite.
+    currentIndex = 0; //for keeping track of our current index in the list when displaying a sprite.
     // default values to be determined
     frames.append(QImage (canvasHeight, canvasWidth, QImage::Format_ARGB32));
 
@@ -25,7 +26,7 @@ model::model(QObject *parent)
 
     //Make the first inage to have a white background
     frames[currentFrame-1].fill(Qt::white);
-
+    undoStack.push(frames);
 
 
 }
@@ -42,6 +43,8 @@ void model::addNewFrame(){
     emit updateFrameNumberLabel(currentFrame, frames.size());
     emit enableDeleteButton();
     emit enableLastButton();
+    emit enableUndo();
+    undoStack.push(frames);
 
     // if the new frame is at the end of the list, disale next button
     if(currentFrame == frames.size()){
@@ -56,6 +59,9 @@ void model::addNewFrame(){
 void model::insertNewFrame(){
     QImage frame(canvasHeight, canvasWidth, QImage::Format_ARGB32);
     frames.insert(currentFrame - 1, frame);
+
+    emit enableUndo();
+    undoStack.push(frames);
 
     emit updateFrameNumberCombo(currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
@@ -120,6 +126,9 @@ void model::deleteFrame(){
         QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
         emit goToFrame(map);
     }
+
+    emit enableUndo();
+    undoStack.push(frames);
 
     emit updateFrameNumberCombo(currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
@@ -199,13 +208,13 @@ void model::updatePenColor(QColor color){
 void model::updateTool(std::string tool){
     //Should we do a switch case? if we do, we have to change parameters (bri)
     if(tool == "pen")
-        currentTool = SelectedTool::Tool_Pen;
+        currentTool = SelectedTool::SC_Pen;
     else if(tool == "eraser")
-        currentTool = SelectedTool::Tool_Eraser;
+        currentTool = SelectedTool::SC_Eraser;
     else if(tool == "bucket")
-        currentTool = SelectedTool::Tool_Bucket;
+        currentTool = SelectedTool::SC_Bucket;
     else if(tool == "shapeCreator")
-        currentTool = SelectedTool::Tool_ShapeCreator;
+        currentTool = SelectedTool::SC_ShapeCreator;
 }
 
 //Don't need the QList as Parameter??
@@ -216,12 +225,92 @@ void model::getList(QList<QImage>){
 
 //need change parameters?
 void model::undo(){
-    //TODO
+    redoStack.push(undoStack.pop());
+    emit enableRedo();
+    if(undoStack.size() == 1){
+        emit disableUndo();
+    }
+
+
+    QList<QImage> previousFrames = undoStack.at(undoStack.size() - 1);
+
+    if(frames.size() > previousFrames.size() && currentFrame == previousFrames.size() + 1){
+        currentFrame--;
+    }
+
+    frames = previousFrames;
+
+    if(frames.size() > currentFrame){
+        emit enableNextButton();
+    }
+    else if(frames.size() == currentFrame){
+        emit disableNextButton();
+    }
+
+    if(currentFrame > 1){
+        emit enableLastButton();
+    }
+    else{
+        emit disableLastButton();
+    }
+
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
+    emit updateFrameNumberLabel(currentFrame, frames.size());
+    emit updateFrameNumberCombo(currentFrame, frames.size());
+    emit goToFrame(map);
 }
 
 //need change parameters?
 void model::redo(){
-    //TODO
+    frames = redoStack.pop();
+
+    if(frames.size() > currentFrame){
+        currentFrame++;
+    }
+
+    undoStack.push(frames);
+
+    emit enableUndo();
+
+    if(frames.size() > currentFrame){
+        emit enableNextButton();
+    }
+    else if(frames.size() == currentFrame){
+        emit disableNextButton();
+    }
+    else{
+        currentFrame = frames.size();
+    }
+
+    if(redoStack.size() == 0){
+        emit disableRedo();
+    }
+
+
+
+
+    if(currentFrame > 1){
+        emit enableLastButton();
+    }
+    else{
+        emit disableLastButton();
+    }
+
+
+
+    emit updateFrameNumberLabel(currentFrame, frames.size());
+    emit updateFrameNumberCombo(currentFrame, frames.size());
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
+    emit goToFrame(map);
+}
+
+void model::saveFrameToStack(){
+    emit enableUndo();
+    undoStack.push(frames);
+
+    if(undoStack.size() > 10000){
+        undoStack.pop_back();
+    }
 }
 
 //Frame that we are currently in
@@ -249,25 +338,25 @@ void model::selectedFrame(int index){
 void model::updateToolSize(int size){
 
     //change to a switch case if we add more brushes
-    if(currentTool == SelectedTool::Tool_Eraser)
+    if(currentTool == SelectedTool::SC_Eraser)
         updateEraserSize(size);
-    else if(currentTool == SelectedTool::Tool_Pen)
+    else if(currentTool == SelectedTool::SC_Pen)
         updatePenSize(size);
 }
 
-void model::updatePixels(int x, int y){
+void model::updatePixels(int initialX, int initialY, int endX, int endY){
     switch(currentTool){
-        case SelectedTool::Tool_Pen:
-            updatePixelsByPen(x,y);
+        case SelectedTool::SC_Pen:
+            updatePixelsByPen(initialX,initialY);
             break;
-        case SelectedTool::Tool_Eraser:
-            //updatePixelsByEraser(x,y);
+        case SelectedTool::SC_Eraser:
+            updatePixelsByEraser(initialX, initialY);
             break;
-        case SelectedTool::Tool_Bucket:
+        case SelectedTool::SC_Bucket:
             //updatePixelsByBucket(x,y);
             break;
-        case SelectedTool::Tool_ShapeCreator:
-            //updatePixelsByShapeCreator(x,y);
+        case SelectedTool::SC_ShapeCreator:
+            updatePixelsByShapeCreator(initialX, initialY, endX, endY);
             break;
         default:
             break;
@@ -276,7 +365,7 @@ void model::updatePixels(int x, int y){
     //emit or call another method?
 }
 
-//// gon
+// gon
 
 //void model::updatePixels2(int sx, int sy, int ex, int ey){
 //    std::cout << "hit" << std::endl;
@@ -301,15 +390,66 @@ void model::updatePixels(int x, int y){
 //    //emit or call another method?
 //}
 
+
 void model::updatePixelsByPen(int x, int y){
     QImage* AFrame = &frames[currentFrame -1];
     QPainter Painter(AFrame);
     QPen Pen(penColor);
     Pen.setWidth(penSize);
-    Pen.setColor(penColor);
     Painter.setPen(Pen);
     Painter.drawPoint(x,y);
     Painter.end();
+}
+
+void model::updatePixelsByEraser(int x, int y){
+    QImage* AFrame = &frames[currentFrame -1];
+    QPainter Painter(AFrame);
+    // Give QPen a white color to act as eraser
+    QPen Pen(QColor(255,255,255));
+    Pen.setWidth(eraserSize);
+    Painter.setPen(Pen);
+    Painter.drawPoint(x,y);
+    Painter.end();
+}
+
+void model::updatePixelsByShapeCreator(int initialX, int initialY, int endX, int endY){
+    // Set pen specs for shape creator
+    QImage* AFrame = &frames[currentFrame -1];
+    QPainter Painter(AFrame);
+    QPen Pen(penColor);
+    Pen.setWidth(penSize);
+    Painter.setPen(Pen);
+
+    switch(currentShape){
+        case ShapeCreator::SC_Line:
+            Painter.drawLine(initialX, initialY, endX, endY);
+            Painter.end();
+            break;
+        case ShapeCreator::SC_Ciecle:
+            Painter.drawEllipse(initialX, initialY, initialX-endX, initialY-endY);
+            Painter.end();
+            break;
+        case ShapeCreator::SC_Rectangle:
+            Painter.drawRect(initialX, initialY, initialX-endX, initialY-endY);
+            Painter.end();
+            break;
+        default:
+            break;
+    }
+}
+
+void model::updatePixelsByBucketFiller(int x, int y){
+    QList<std::tuple<int,int>> pixelsToBeFilled;
+    pixelsToBeFilled.append(std::tuple<int,int>(x,y));
+    QColor colorToBeChanged = (frames[currentFrame -1]).pixelColor(x,y);
+    pixelsToBeFilled = FindPixelsWithTheSameColorInBound(pixelsToBeFilled,colorToBeChanged,x,y);
+}
+
+QList<std::tuple<int,int>> model::FindPixelsWithTheSameColorInBound(QList<std::tuple<int,int>> coordinates,
+                                                                    const QColor colorToBeChanged,
+                                                                    int x,
+                                                                    int y){
+
 }
 
 //void model::updatePixelsByPen2(int sx, int sy, int ex, int ey){
@@ -408,4 +548,72 @@ void model::updateActualLabel(){
     currentIndex++;
     if(currentIndex == frames.size())
         currentIndex = 0;
+}
+
+//save file
+void model::save(QString fileName){//QJsonObject &json) const{ //change parameters
+    QJsonObject json;
+
+    int n = 0;
+    json["height"] = canvasHeight;
+    json["width"] = canvasWidth;
+    json["numberOfFrames"] = frames.size();
+
+    //*******Important******//
+    // x and y coordinate are switched, x is columns and y is rows, to fix this
+    // i will have rowNum go in the Y in the forloo for pixel when we get pixelcolor
+    // and pixelNum will go in the X in the forloop for pixe when we get pixelcolor.
+    //I'm doing this so it can fit the requirements in Q6 //
+    //*******Important*******//
+    QJsonObject framesObj;
+    for(QImage a : frames)
+    {
+        QJsonArray frame;
+        for(int rowNum = 0 ; rowNum < canvasHeight; rowNum++)
+        {
+            QJsonArray row;
+            for(int pixelNum = 0; pixelNum < canvasWidth; pixelNum++)
+            {
+                QJsonObject pixel;
+                QString pixelName = "pixel" + QString::number(pixelNum);
+                pixel["r"] = a.pixelColor(pixelNum,rowNum).red();
+                pixel["g"] = a.pixelColor(pixelNum,rowNum).green();
+                pixel["b"] = a.pixelColor(pixelNum,rowNum).blue();
+                pixel["a"] = a.pixelColor(pixelNum,rowNum).alpha();
+                row.append(pixel);
+            }
+            QString rowName = "row" + QString::number(rowNum);
+            frame.append(row);
+        }
+        QString frameName = "Frame" + QString::number(n);
+        framesObj[frameName] = frame;
+        n++;
+    }
+
+    json["frames"] = framesObj;
+    QJsonDocument doc(json);
+
+    //to print our in application output (testing)
+    //QString strJson(doc.toJson(QJsonDocument::Compact));
+    //std::cout<<strJson.toStdString()<<std::endl;
+
+    QFile jsonFile(fileName + ".ssp");
+    jsonFile.open(QFile::WriteOnly);
+    jsonFile.write(doc.toJson());
+
+
+}
+
+//Read/Open file
+void model::read(QString filePath){
+//    TODO: Still trying to figure this out (Brittney)
+//    QJsonDocument doc;
+
+//    QFile loadFile(filePath);
+//    if(loadFile.open(QIODevice::ReadOnly))
+//        doc = QJsonDocument().fromJson(loadFile.readAll());
+//    if(!doc.isEmpty())
+//    {
+
+//    }
 }

@@ -8,13 +8,25 @@
 #include <QPainter>
 #include <QPixmap>
 #include <iostream>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QFile>
+#include <QStack>
+
 
 //We add enum (jinwen)
 enum class SelectedTool{
-    Tool_Pen,
-    Tool_Eraser,
-    Tool_Bucket,
-    Tool_ShapeCreator
+    SC_Pen,
+    SC_Eraser,
+    SC_Bucket,
+    SC_ShapeCreator
+};
+
+enum class ShapeCreator{
+    SC_Line,
+    SC_Ciecle,
+    SC_Rectangle
 };
 
 class model : public QObject
@@ -25,6 +37,7 @@ public:
 
 private:
     SelectedTool currentTool;
+    ShapeCreator currentShape;
     QList<QImage> frames;
     QColor penColor;
     int canvasHeight;
@@ -38,6 +51,9 @@ private:
     int eraserSize;
     double ratio;
 
+    // redo and undo
+    QStack<QList<QImage>> undoStack;
+    QStack<QList<QImage>> redoStack;
     //
     int numOfPixels;
     int pixelLength;
@@ -45,10 +61,18 @@ private:
     int currentIndex; //index counter to access frames.
 
     void updatePixelsByPen(int, int);
+    void updatePixelsByEraser(int, int);
+    void updatePixelsByBucketFiller(int, int);
+    void updatePixelsByShapeCreator(int, int, int, int);
+
+    QList<std::tuple<int,int>> FindPixelsWithTheSameColorInBound(QList<std::tuple<int,int>>, QColor, int, int);
+
 //    //gon
 //    void updatePixelsByPen2(int, int, int, int);
 //    //
 
+    //Read/Open file //still in testing phase, need to work on.
+    void read(QString fileName);
 
 signals:
     //Add methods (emit)
@@ -66,7 +90,10 @@ signals:
     void updateFrameNumberCombo(int, int);
     void updateFrameNumberLabel(int, int);
     void setColorLabel(QColor);
-
+    void enableUndo();
+    void disableUndo();
+    void enableRedo();
+    void disableRedo();
 
     void setCanvas(QPixmap);
 
@@ -98,7 +125,7 @@ public slots:
     void undo(); //need change parameters?
     void redo(); //need change parameters?
     void selectedFrame(int);
-    void updatePixels(int,int);
+    void updatePixels(int,int,int = 0,int = 0);
 //    //gon
 //    void updatePixels2(int, int, int , int);
 //    //
@@ -110,6 +137,10 @@ public slots:
     void previewOfFrames();
     void updateActualLabel();
 
+
+    //Save file
+    void save(QString fileName); //do i need to make it const? (Brittney)
+    void saveFrameToStack();
 
 };
 

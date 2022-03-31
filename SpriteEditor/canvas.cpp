@@ -1,5 +1,5 @@
 #include "canvas.h"
-
+#include <iostream>
 
 Canvas::Canvas(QWidget* parent) :QLabel(parent)
 {
@@ -27,6 +27,7 @@ void Canvas::mousePressEvent(QMouseEvent *pressEvent){
 }
 
 void Canvas::mouseReleaseEvent(QMouseEvent *releaseEvent){
+    emit saveToStack();
     if(releaseEvent->button() == Qt::LeftButton){
         //std::cout << "Mouse Released x: " << releaseEvent->pos().x() << " y: "  << releaseEvent->pos().y() << std::endl;
         //send to model

@@ -68,8 +68,8 @@ public:
     QHBoxLayout *horizontalLayout;
     QPushButton *zoomInButton;
     QPushButton *zoomOutButton;
-    QPushButton *redoButton;
     QPushButton *undoButton;
+    QPushButton *redoButton;
     QMenuBar *menubar;
     QMenu *menuFile;
     QMenu *menuAbout;
@@ -259,20 +259,22 @@ public:
 
         horizontalLayout->addWidget(zoomOutButton);
 
-        redoButton = new QPushButton(horizontalLayoutWidget);
-        redoButton->setObjectName(QString::fromUtf8("redoButton"));
-
-        horizontalLayout->addWidget(redoButton);
-
         undoButton = new QPushButton(horizontalLayoutWidget);
         undoButton->setObjectName(QString::fromUtf8("undoButton"));
+        undoButton->setEnabled(false);
 
         horizontalLayout->addWidget(undoButton);
+
+        redoButton = new QPushButton(horizontalLayoutWidget);
+        redoButton->setObjectName(QString::fromUtf8("redoButton"));
+        redoButton->setEnabled(false);
+
+        horizontalLayout->addWidget(redoButton);
 
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 17));
+        menubar->setGeometry(QRect(0, 0, 800, 22));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuAbout = new QMenu(menubar);
@@ -322,8 +324,8 @@ public:
         posLabel->setText(QString());
         zoomInButton->setText(QCoreApplication::translate("View", "Zoom In", nullptr));
         zoomOutButton->setText(QCoreApplication::translate("View", "Zoom Out", nullptr));
-        redoButton->setText(QCoreApplication::translate("View", "Redo", nullptr));
         undoButton->setText(QCoreApplication::translate("View", "Undo", nullptr));
+        redoButton->setText(QCoreApplication::translate("View", "Redo", nullptr));
         menuFile->setTitle(QCoreApplication::translate("View", "File", nullptr));
         menuAbout->setTitle(QCoreApplication::translate("View", "About", nullptr));
         menuHelp_me->setTitle(QCoreApplication::translate("View", "Help me", nullptr));

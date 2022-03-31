@@ -41,6 +41,9 @@ public:
     QPushButton *previewButton;
     QSlider *playBackSpeedSlider;
     QPushButton *colorButton;
+    QHBoxLayout *horizontalLayout_3;
+    QPushButton *increaseCanvasButton;
+    QPushButton *pushButton;
     QLabel *colorLabel;
     QWidget *verticalLayoutWidget_4;
     QVBoxLayout *toolBarAndFrame;
@@ -65,8 +68,8 @@ public:
     QHBoxLayout *horizontalLayout;
     QPushButton *zoomInButton;
     QPushButton *zoomOutButton;
-    QPushButton *redoButton;
     QPushButton *undoButton;
+    QPushButton *redoButton;
     QMenuBar *menubar;
     QMenu *menuFile;
     QMenu *menuAbout;
@@ -86,12 +89,12 @@ public:
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         canvasLabel = new Canvas(centralwidget);
         canvasLabel->setObjectName(QString::fromUtf8("canvasLabel"));
-        canvasLabel->setGeometry(QRect(190, 20, 431, 421));
+        canvasLabel->setGeometry(QRect(190, 20, 360, 360));
         canvasLabel->setFrameShape(QFrame::Box);
         canvasLabel->setAlignment(Qt::AlignCenter);
         verticalLayoutWidget_2 = new QWidget(centralwidget);
         verticalLayoutWidget_2->setObjectName(QString::fromUtf8("verticalLayoutWidget_2"));
-        verticalLayoutWidget_2->setGeometry(QRect(640, 21, 160, 261));
+        verticalLayoutWidget_2->setGeometry(QRect(640, 21, 170, 261));
         previewLayout = new QVBoxLayout(verticalLayoutWidget_2);
         previewLayout->setObjectName(QString::fromUtf8("previewLayout"));
         previewLayout->setContentsMargins(0, 0, 0, 0);
@@ -107,6 +110,8 @@ public:
 
         playBackSpeedSlider = new QSlider(verticalLayoutWidget_2);
         playBackSpeedSlider->setObjectName(QString::fromUtf8("playBackSpeedSlider"));
+        playBackSpeedSlider->setMinimum(1);
+        playBackSpeedSlider->setMaximum(60);
         playBackSpeedSlider->setOrientation(Qt::Horizontal);
 
         previewLayout->addWidget(playBackSpeedSlider);
@@ -115,6 +120,21 @@ public:
         colorButton->setObjectName(QString::fromUtf8("colorButton"));
 
         previewLayout->addWidget(colorButton);
+
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
+        increaseCanvasButton = new QPushButton(verticalLayoutWidget_2);
+        increaseCanvasButton->setObjectName(QString::fromUtf8("increaseCanvasButton"));
+
+        horizontalLayout_3->addWidget(increaseCanvasButton);
+
+        pushButton = new QPushButton(verticalLayoutWidget_2);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+
+        horizontalLayout_3->addWidget(pushButton);
+
+
+        previewLayout->addLayout(horizontalLayout_3);
 
         colorLabel = new QLabel(verticalLayoutWidget_2);
         colorLabel->setObjectName(QString::fromUtf8("colorLabel"));
@@ -125,7 +145,7 @@ public:
 
         verticalLayoutWidget_4 = new QWidget(centralwidget);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
-        verticalLayoutWidget_4->setGeometry(QRect(0, 20, 172, 521));
+        verticalLayoutWidget_4->setGeometry(QRect(0, 20, 181, 521));
         toolBarAndFrame = new QVBoxLayout(verticalLayoutWidget_4);
         toolBarAndFrame->setObjectName(QString::fromUtf8("toolBarAndFrame"));
         toolBarAndFrame->setContentsMargins(0, 0, 0, 0);
@@ -164,6 +184,8 @@ public:
         toolSizeBox = new QSpinBox(verticalLayoutWidget_4);
         toolSizeBox->setObjectName(QString::fromUtf8("toolSizeBox"));
         toolSizeBox->setAlignment(Qt::AlignCenter);
+        toolSizeBox->setMinimum(1);
+        toolSizeBox->setMaximum(10);
 
         toolBarVerticalLayout->addWidget(toolSizeBox);
 
@@ -237,15 +259,17 @@ public:
 
         horizontalLayout->addWidget(zoomOutButton);
 
-        redoButton = new QPushButton(horizontalLayoutWidget);
-        redoButton->setObjectName(QString::fromUtf8("redoButton"));
-
-        horizontalLayout->addWidget(redoButton);
-
         undoButton = new QPushButton(horizontalLayoutWidget);
         undoButton->setObjectName(QString::fromUtf8("undoButton"));
+        undoButton->setEnabled(false);
 
         horizontalLayout->addWidget(undoButton);
+
+        redoButton = new QPushButton(horizontalLayoutWidget);
+        redoButton->setObjectName(QString::fromUtf8("redoButton"));
+        redoButton->setEnabled(false);
+
+        horizontalLayout->addWidget(redoButton);
 
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
@@ -281,7 +305,9 @@ public:
         canvasLabel->setText(QCoreApplication::translate("View", "CANVAS", nullptr));
         actualSizeLabel->setText(QCoreApplication::translate("View", "Actual Size Preview", nullptr));
         previewButton->setText(QCoreApplication::translate("View", "Preview", nullptr));
-        colorButton->setText(QCoreApplication::translate("View", "PushButton", nullptr));
+        colorButton->setText(QCoreApplication::translate("View", "Choose Color", nullptr));
+        increaseCanvasButton->setText(QCoreApplication::translate("View", "+", nullptr));
+        pushButton->setText(QCoreApplication::translate("View", "-", nullptr));
         colorLabel->setText(QString());
         penButton->setText(QCoreApplication::translate("View", "Pen", nullptr));
         eraserButton->setText(QCoreApplication::translate("View", "Eraser", nullptr));
@@ -298,8 +324,8 @@ public:
         posLabel->setText(QString());
         zoomInButton->setText(QCoreApplication::translate("View", "Zoom In", nullptr));
         zoomOutButton->setText(QCoreApplication::translate("View", "Zoom Out", nullptr));
-        redoButton->setText(QCoreApplication::translate("View", "Redo", nullptr));
         undoButton->setText(QCoreApplication::translate("View", "Undo", nullptr));
+        redoButton->setText(QCoreApplication::translate("View", "Redo", nullptr));
         menuFile->setTitle(QCoreApplication::translate("View", "File", nullptr));
         menuAbout->setTitle(QCoreApplication::translate("View", "About", nullptr));
         menuHelp_me->setTitle(QCoreApplication::translate("View", "Help me", nullptr));

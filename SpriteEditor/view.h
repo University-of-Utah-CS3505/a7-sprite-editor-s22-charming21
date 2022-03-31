@@ -23,6 +23,7 @@ signals:
     void setTool(std::string);
     void updateColor(QColor);
     void editCanvas(QPoint);
+    void save(QString);
 
 
 private slots:
@@ -48,6 +49,10 @@ private slots:
     void disableLastButton();
     void enableNextButton();
     void enableLastButton();
+    void enableUndoButton();
+    void disableUndoButton();
+    void enableRedoButton();
+    void disableRedoButton();
 
     //Zoom
     void zoomInCanvas(QPixmap, int, int);
@@ -66,6 +71,8 @@ private slots:
 
      //Save and Load
      void saveProject(QList<QImage>);
+     void saveFile();
+     void openFile();
 
 
 private:

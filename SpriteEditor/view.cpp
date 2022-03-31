@@ -2,6 +2,7 @@
 #include "ui_view.h"
 #include <QtWidgets>
 #include <QPixmap>
+#include <QFileDialog>
 
 #include <iostream> // delete later
 
@@ -118,22 +119,32 @@ View::View(model& model, QWidget *parent)
             &model,
             &model::updateFPS);
 
+    // enable and disable buttons
+    connect(&model,
+            &model::enableRedo,
+            this,
+            &View::enableRedoButton);
+
+    connect(&model,
+            &model::enableUndo,
+            this,
+            &View::enableUndoButton);
+
+    connect(&model,
+            &model::disableRedo,
+            this,
+            &View::disableRedoButton);
+
+    connect(&model,
+            &model::disableUndo,
+            this,
+            &View::disableUndoButton);
+
     // color wheel
     connect(&model,
             &model::setColorLabel,
             this,
             &View::updateColorWheel);
-
-
-    //Save Project
-//    connect(ui->actionSave,
-//            &QAction::triggered,
-//            &model,
-//            &model::getList);
-    connect(&model,
-            &model::sendList,
-            this,
-            &View::saveProject);
 
     //Open a Project
 //    connect(ui->actionOpen,
@@ -172,6 +183,11 @@ View::View(model& model, QWidget *parent)
                 &QPushButton::clicked,
                 &model,
                 &model::undo);
+
+        connect(ui->canvasLabel, // mouse click
+                &Canvas::saveToStack,
+                &model,
+                &model::saveFrameToStack);
 
 
     //ColorUpdate
@@ -240,12 +256,28 @@ View::View(model& model, QWidget *parent)
             this,
             &View::displaySprite);
 
+    // save file
+    connect(ui->actionSave,
+            &QAction::triggered,
+            this,
+            &View::saveFile);
+
+    connect(this,
+            &View::save,
+            &model,
+            &model::save);
+    // open file
+    connect(ui->actionOpen,
+            &QAction::triggered,
+            this,
+            &View::openFile);
+
 }
 
 void View::displaySprite(QImage currentFrame){
     //fix scaling issue of the qimage
-    ui->actualSizeLabel->setPixmap(QPixmap::fromImage(currentFrame).scaled(100,100,Qt::IgnoreAspectRatio, Qt::FastTransformation));
-
+    ui->actualSizeLabel->setPixmap(QPixmap::fromImage(currentFrame).scaled(ui->actualSizeLabel->width(),
+                                                                            ui->actualSizeLabel->height()));
 }
 View::~View()
 {
@@ -258,12 +290,9 @@ void View::pushColorButton(QColor currentColor){
     QColor newColor = QColorDialog::getColor(currentColor, nullptr, QString(), {QColorDialog::DontUseNativeDialog, QColorDialog::ShowAlphaChannel});
 
     if(newColor.isValid()){
+
         emit updateColor(newColor);
     }
-
-
-    //TODO : testing
-    //1. when we click cancel, changes color to black by default
 }
 
 
@@ -295,6 +324,22 @@ void View::disableLastButton(){
     ui->lastFrameButton->setEnabled(false);
 }
 
+void View::enableUndoButton(){
+    ui->undoButton->setEnabled(true);
+}
+
+void View::enableRedoButton(){
+    ui->redoButton->setEnabled(true);
+}
+
+void View::disableUndoButton(){
+    ui->undoButton->setEnabled(false);
+}
+
+void View::disableRedoButton(){
+    ui->redoButton->setEnabled(false);
+}
+
 void View::mouseLoc(QPoint &loc) // can delete later
 {
     ui->posLabel->setText("x: " + QString::number(loc.x()) + " y: " + QString::number(loc.y()));
@@ -313,6 +358,10 @@ void View::updateCanvas(QPixmap currentPic){
 
 //    //gon
 //    ui->canvasLabel->setPixmap(currentPic);
+
+    //display on actualsize label (Brittney)
+    ui->actualSizeLabel->setPixmap(currentPic.scaled(ui->actualSizeLabel->width(),
+                                                     ui->actualSizeLabel->height()));
 }
 
 void View::updateFramesBox(int page, int size){
@@ -345,6 +394,19 @@ void View::saveProject(QList<QImage>){
     //TODO
 }
 
+void View::saveFile()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, "Save file", "C://");
+    emit save(fileName);
+}
+
+void View::openFile()
+{
+    QFileDialog::getOpenFileName(this, "Open file", "C://");
+    // will have to do an emit to the model
+
+}
+
 
 
 //This is to update the current tool, and let know
@@ -367,6 +429,7 @@ void View::on_shapeButton_clicked()
 }
 
 
+//Displays the image with the given ratio to increase the size
 void View::zoomInCanvas(QPixmap currentPic, int canvasSize, int zoomIndex){
     int ratio = ui->canvasLabel->height()/canvasSize;
 
@@ -378,7 +441,7 @@ void View::zoomInCanvas(QPixmap currentPic, int canvasSize, int zoomIndex){
     ui->canvasLabel->setPixmap(currentPic.scaled(canvasLabelWidth, canvasLabelHeight, Qt::KeepAspectRatioByExpanding));
 }
 
-//Displays the image with the given ratio to increase the size
+//Displays the image with the given ratio to decrease the size
 void View::zoomOutCanvas(QPixmap currentPic, int canvasSize, int zoomIndex){
     int ratio = ui->canvasLabel->height()/canvasSize;
 
@@ -406,3 +469,4 @@ void View::disableZoomButtons(std::string zoomType){
 void View::on_clickMouse_released(QPoint &loc) {
 
 }
+
