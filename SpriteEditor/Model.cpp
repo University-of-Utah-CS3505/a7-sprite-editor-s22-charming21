@@ -444,14 +444,36 @@ void model::updatePixelsByBucketFiller(int x, int y){
     QList<std::tuple<int,int>> pixelsToBeFilled;
     pixelsToBeFilled.append(std::tuple<int,int>(x,y));
     QColor colorToBeChanged = (frames[currentFrame -1]).pixelColor(x,y);
-    pixelsToBeFilled = FindPixelsWithTheSameColorInBound(pixelsToBeFilled,colorToBeChanged,x,y);
+    pixelsToBeFilled = FindPixelsWithTheSameColorInBound(pixelsToBeFilled, frames[currentFrame-1], colorToBeChanged,x,y);
+
+    for(std::tuple<int,int> coordinates : pixelsToBeFilled){
+        QImage* AFrame = &frames[currentFrame -1];
+        AFrame->setPixelColor(get<0>(coordinates), get<1>(coordinates), penColor);
+    }
 }
 
 QList<std::tuple<int,int>> model::FindPixelsWithTheSameColorInBound(QList<std::tuple<int,int>> coordinates,
+                                                                    const QImage frame,
                                                                     const QColor colorToBeChanged,
                                                                     int x,
                                                                     int y){
+    // If it is not the color we wanna change (reach the edge)
+    if(frame.pixelColor(x,y) != colorToBeChanged)
+        return coordinates;
+    // If we have arrived the current pixel earlier, return
+    if(coordinates.contains(std::tuple<int,int>(x,y)))
+        return coordinates;
+    // Check if it goes out of the canvas
+    if(x < 0 || x > 360 || y < 0 || y > 360)
+        return coordinates;
 
+    // add the current coordinate into the list of pixel coordinates.
+    coordinates.append(std::tuple<int,int>(x,y));
+
+    FindPixelsWithTheSameColorInBound(coordinates, frame, colorToBeChanged, x + 1, y);
+    FindPixelsWithTheSameColorInBound(coordinates, frame, colorToBeChanged, x, y + 1);
+    FindPixelsWithTheSameColorInBound(coordinates, frame, colorToBeChanged, x - 1, y);
+    FindPixelsWithTheSameColorInBound(coordinates, frame, colorToBeChanged, x, y - 1);
 }
 
 //void model::updatePixelsByPen2(int sx, int sy, int ex, int ey){
