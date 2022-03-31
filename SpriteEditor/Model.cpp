@@ -19,7 +19,7 @@ model::model(QObject *parent)
     currentIndex = 0; //for keeping track of our current index in the list when displaying a sprite.
     // default values to be determined
     frames.append(QImage (canvasHeight, canvasWidth, QImage::Format_ARGB32));
-
+    currentTool = SelectedTool::SC_Pen;
 //    //gon
 //    frames.append(QImage (360, 360, QImage::Format_ARGB32));
 //    //
@@ -267,11 +267,16 @@ void model::undo(){
 
     QList<QImage> previousFrames = undoStack.at(undoStack.size() - 1);
 
+    if(previousFrames.size() > frames.size()){
+        currentFrame++;
+    }
+
     if(frames.size() > previousFrames.size() && currentFrame == previousFrames.size() + 1){
         currentFrame--;
     }
 
     frames = previousFrames;
+
 
     if(frames.size() > currentFrame){
         emit enableNextButton();
@@ -297,15 +302,12 @@ void model::undo(){
 void model::redo(){
     frames = redoStack.pop();
 
-    if(frames.size() > currentFrame){
-        currentFrame++;
-    }
-
     undoStack.push(frames);
 
     emit enableUndo();
 
     if(frames.size() > currentFrame){
+        currentFrame++;
         emit enableNextButton();
     }
     else if(frames.size() == currentFrame){
@@ -319,17 +321,12 @@ void model::redo(){
         emit disableRedo();
     }
 
-
-
-
     if(currentFrame > 1){
         emit enableLastButton();
     }
     else{
         emit disableLastButton();
     }
-
-
 
     emit updateFrameNumberLabel(currentFrame, frames.size());
     emit updateFrameNumberCombo(currentFrame, frames.size());
