@@ -2,6 +2,7 @@
 #include "ui_view.h"
 #include <QtWidgets>
 #include <QPixmap>
+#include <QFileDialog>
 
 #include <iostream> // delete later
 
@@ -229,6 +230,16 @@ View::View(model& model, QWidget *parent)
             this,
             &View::displaySprite);
 
+    // save and open
+    connect(ui->actionSave,
+            &QAction::triggered,
+            this,
+            &View::saveFile);
+    connect(ui->actionOpen,
+            &QAction::triggered,
+            this,
+            &View::openFile);
+
 }
 
 void View::displaySprite(QImage currentFrame){
@@ -334,6 +345,19 @@ void View::updateColorWheel(QColor color){
 
 void View::saveProject(QList<QImage>){
     //TODO
+}
+
+void View::saveFile()
+{
+    QFileDialog::getSaveFileName(this, "Save file", "C://");
+    // will have to do an emit to the model
+}
+
+void View::openFile()
+{
+    QFileDialog::getOpenFileName(this, "Open file", "C://");
+    // will have to do an emit to the model
+
 }
 
 

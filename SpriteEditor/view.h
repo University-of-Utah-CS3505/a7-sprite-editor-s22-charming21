@@ -65,6 +65,8 @@ private slots:
 
      //Save and Load
      void saveProject(QList<QImage>);
+     void saveFile();
+     void openFile();
 
 
 private:
