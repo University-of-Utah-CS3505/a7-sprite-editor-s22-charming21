@@ -116,6 +116,27 @@ View::View(model& model, QWidget *parent)
             &model,
             &model::updateFPS);
 
+    // enable and disable buttons
+    connect(&model,
+            &model::enableRedo,
+            this,
+            &View::enableRedoButton);
+
+    connect(&model,
+            &model::enableUndo,
+            this,
+            &View::enableUndoButton);
+
+    connect(&model,
+            &model::disableRedo,
+            this,
+            &View::disableRedoButton);
+
+    connect(&model,
+            &model::disableUndo,
+            this,
+            &View::disableUndoButton);
+
     // color wheel
     connect(&model,
             &model::setColorLabel,
@@ -151,6 +172,11 @@ View::View(model& model, QWidget *parent)
                 &QPushButton::clicked,
                 &model,
                 &model::undo);
+
+        connect(ui->canvasLabel, // mouse click
+                &Canvas::saveToStack,
+                &model,
+                &model::saveFrameToStack);
 
 
     //ColorUpdate
@@ -252,6 +278,7 @@ void View::pushColorButton(QColor currentColor){
     QColor newColor = QColorDialog::getColor(currentColor, nullptr, QString(), {QColorDialog::DontUseNativeDialog, QColorDialog::ShowAlphaChannel});
 
     if(newColor.isValid()){
+
         emit updateColor(newColor);
     }
 }
@@ -283,6 +310,22 @@ void View::disableNextButton(){
 
 void View::disableLastButton(){
     ui->lastFrameButton->setEnabled(false);
+}
+
+void View::enableUndoButton(){
+    ui->undoButton->setEnabled(true);
+}
+
+void View::enableRedoButton(){
+    ui->redoButton->setEnabled(true);
+}
+
+void View::disableUndoButton(){
+    ui->undoButton->setEnabled(false);
+}
+
+void View::disableRedoButton(){
+    ui->redoButton->setEnabled(false);
 }
 
 void View::mouseLoc(QPoint &loc) // can delete later
@@ -381,3 +424,4 @@ void View::zoomOutCanvas(QImage){
 void View::on_clickMouse_released(QPoint &loc) {
 
 }
+

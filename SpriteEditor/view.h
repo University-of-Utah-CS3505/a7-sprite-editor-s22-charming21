@@ -49,6 +49,10 @@ private slots:
     void disableLastButton();
     void enableNextButton();
     void enableLastButton();
+    void enableUndoButton();
+    void disableUndoButton();
+    void enableRedoButton();
+    void disableRedoButton();
 
     //Zoom
     void zoomInCanvas(QImage);

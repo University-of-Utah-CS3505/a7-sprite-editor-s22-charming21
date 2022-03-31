@@ -4,7 +4,7 @@
 model::model(QObject *parent)
     : QObject{parent}
 {
-    penColor.setRgb(0, 0, 0, 255);
+    penColor.setRgb(0,0,0,255);
     canvasHeight = 20;
     canvasWidth = 20;
     zoomHeight = 20;
@@ -23,7 +23,7 @@ model::model(QObject *parent)
 
     //Make the first inage to have a white background
     frames[currentFrame-1].fill(Qt::white);
-
+    undoStack.push(frames);
 
 
 }
@@ -40,6 +40,8 @@ void model::addNewFrame(){
     emit updateFrameNumberLabel(currentFrame, frames.size());
     emit enableDeleteButton();
     emit enableLastButton();
+    emit enableUndo();
+    undoStack.push(frames);
 
     // if the new frame is at the end of the list, disale next button
     if(currentFrame == frames.size()){
@@ -54,6 +56,9 @@ void model::addNewFrame(){
 void model::insertNewFrame(){
     QImage frame(canvasHeight, canvasWidth, QImage::Format_ARGB32);
     frames.insert(currentFrame - 1, frame);
+
+    emit enableUndo();
+    undoStack.push(frames);
 
     emit updateFrameNumberCombo(currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
@@ -118,6 +123,9 @@ void model::deleteFrame(){
         QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
         emit goToFrame(map);
     }
+
+    emit enableUndo();
+    undoStack.push(frames);
 
     emit updateFrameNumberCombo(currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
@@ -220,12 +228,92 @@ void model::getList(QList<QImage>){
 
 //need change parameters?
 void model::undo(){
-    //TODO
+    redoStack.push(undoStack.pop());
+    emit enableRedo();
+    if(undoStack.size() == 1){
+        emit disableUndo();
+    }
+
+
+    QList<QImage> previousFrames = undoStack.at(undoStack.size() - 1);
+
+    if(frames.size() > previousFrames.size() && currentFrame == previousFrames.size() + 1){
+        currentFrame--;
+    }
+
+    frames = previousFrames;
+
+    if(frames.size() > currentFrame){
+        emit enableNextButton();
+    }
+    else if(frames.size() == currentFrame){
+        emit disableNextButton();
+    }
+
+    if(currentFrame > 1){
+        emit enableLastButton();
+    }
+    else{
+        emit disableLastButton();
+    }
+
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
+    emit updateFrameNumberLabel(currentFrame, frames.size());
+    emit updateFrameNumberCombo(currentFrame, frames.size());
+    emit goToFrame(map);
 }
 
 //need change parameters?
 void model::redo(){
-    //TODO
+    frames = redoStack.pop();
+
+    if(frames.size() > currentFrame){
+        currentFrame++;
+    }
+
+    undoStack.push(frames);
+
+    emit enableUndo();
+
+    if(frames.size() > currentFrame){
+        emit enableNextButton();
+    }
+    else if(frames.size() == currentFrame){
+        emit disableNextButton();
+    }
+    else{
+        currentFrame = frames.size();
+    }
+
+    if(redoStack.size() == 0){
+        emit disableRedo();
+    }
+
+
+
+
+    if(currentFrame > 1){
+        emit enableLastButton();
+    }
+    else{
+        emit disableLastButton();
+    }
+
+
+
+    emit updateFrameNumberLabel(currentFrame, frames.size());
+    emit updateFrameNumberCombo(currentFrame, frames.size());
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
+    emit goToFrame(map);
+}
+
+void model::saveFrameToStack(){
+    emit enableUndo();
+    undoStack.push(frames);
+
+    if(undoStack.size() > 10000){
+        undoStack.pop_back();
+    }
 }
 
 //Frame that we are currently in

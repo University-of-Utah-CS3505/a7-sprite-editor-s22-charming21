@@ -20,7 +20,7 @@ protected:
 
 signals:
     void sendMouseLoc(QPoint&);
-
+    void saveToStack();
 };
 
 #endif // CANVAS_H

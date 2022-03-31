@@ -8,10 +8,14 @@
 #include <QPainter>
 #include <QPixmap>
 #include <iostream>
+<<<<<<< Updated upstream
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QFile>
+=======
+#include <QStack>
+>>>>>>> Stashed changes
 
 //We add enum (jinwen)
 enum class SelectedTool{
@@ -48,6 +52,9 @@ private:
     int eraserSize;
     double ratio;
 
+    // redo and undo
+    QStack<QList<QImage>> undoStack;
+    QStack<QList<QImage>> redoStack;
     //
     int numOfPixels;
     int pixelLength;
@@ -84,7 +91,10 @@ signals:
     void updateFrameNumberCombo(int, int);
     void updateFrameNumberLabel(int, int);
     void setColorLabel(QColor);
-
+    void enableUndo();
+    void disableUndo();
+    void enableRedo();
+    void disableRedo();
 
     void setCanvas(QPixmap);
 
@@ -121,9 +131,14 @@ public slots:
     //Preview
     void previewOfFrames();
     void updateActualLabel();
+<<<<<<< Updated upstream
 
     //Save file
     void save(QString fileName); //do i need to make it const? (Brittney)
+=======
+    void saveFrameToStack();
+
+>>>>>>> Stashed changes
 };
 
 #endif // MODEL_H
