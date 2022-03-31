@@ -136,6 +136,36 @@ void model::deleteFrame(){
     emit updateFrameNumberLabel(currentFrame, frames.size());
 }
 
+void model::clearCanvas(){
+    QImage frame(canvasHeight, canvasWidth, QImage::Format_ARGB32);
+    frame.fill(Qt::white);
+    frames.replace(currentFrame - 1, frame);
+    QPixmap map = QPixmap::fromImage(frame);
+    emit setCanvas(map);
+    emit enableUndo();
+    undoStack.push(frames);
+}
+
+void model::copyFrame(){
+    QImage frame = QImage(frames.at(currentFrame - 1));
+    frames.insert(currentFrame++, frame);
+
+    emit updateFrameNumberCombo(currentFrame, frames.size());
+    emit updateFrameNumberLabel(currentFrame, frames.size());
+    emit enableDeleteButton();
+    emit enableLastButton();
+    emit enableUndo();
+    undoStack.push(frames);
+
+    // if the new frame is at the end of the list, disale next button
+    if(currentFrame == frames.size()){
+        emit disableNextButton();
+    }
+    //frames[currentFrame-1].fill(Qt::white);
+    QPixmap map = QPixmap::fromImage(frame);
+    emit setCanvas(map);
+}
+
 //Need to implement the change of pixels to edit
 //This method increases the size of the image, and sends it back to the
 //view  to be displayed in the canvas
@@ -206,6 +236,7 @@ void model::updatePenColor(QColor color){
     penColor = color;
     emit setColorLabel(penColor);
 }
+
 //updates our current tool we are using
 void model::updateTool(std::string tool){
     //Should we do a switch case? if we do, we have to change parameters (bri)
@@ -309,10 +340,6 @@ void model::redo(){
 void model::saveFrameToStack(){
     emit enableUndo();
     undoStack.push(frames);
-
-    if(undoStack.size() > 10000){
-        undoStack.pop_back();
-    }
 }
 
 //Frame that we are currently in

@@ -62,6 +62,10 @@ public:
     QPushButton *nextFrameButton;
     QPushButton *addFrameButton;
     QPushButton *insertFrameButton;
+    QPushButton *swapUpButton;
+    QPushButton *swapDownButton;
+    QPushButton *copyButton;
+    QPushButton *ClearButton;
     QPushButton *deleteFrameButton;
     QLabel *posLabel;
     QWidget *horizontalLayoutWidget;
@@ -228,6 +232,28 @@ public:
 
         frameLayout->addWidget(insertFrameButton);
 
+        swapUpButton = new QPushButton(verticalLayoutWidget_4);
+        swapUpButton->setObjectName(QString::fromUtf8("swapUpButton"));
+        swapUpButton->setEnabled(false);
+
+        frameLayout->addWidget(swapUpButton);
+
+        swapDownButton = new QPushButton(verticalLayoutWidget_4);
+        swapDownButton->setObjectName(QString::fromUtf8("swapDownButton"));
+        swapDownButton->setEnabled(false);
+
+        frameLayout->addWidget(swapDownButton);
+
+        copyButton = new QPushButton(verticalLayoutWidget_4);
+        copyButton->setObjectName(QString::fromUtf8("copyButton"));
+
+        frameLayout->addWidget(copyButton);
+
+        ClearButton = new QPushButton(verticalLayoutWidget_4);
+        ClearButton->setObjectName(QString::fromUtf8("ClearButton"));
+
+        frameLayout->addWidget(ClearButton);
+
         deleteFrameButton = new QPushButton(verticalLayoutWidget_4);
         deleteFrameButton->setObjectName(QString::fromUtf8("deleteFrameButton"));
         deleteFrameButton->setEnabled(false);
@@ -320,6 +346,10 @@ public:
         nextFrameButton->setText(QCoreApplication::translate("View", "Next Frame", nullptr));
         addFrameButton->setText(QCoreApplication::translate("View", "Insert After", nullptr));
         insertFrameButton->setText(QCoreApplication::translate("View", "Insert Before", nullptr));
+        swapUpButton->setText(QCoreApplication::translate("View", "Swap(up)", nullptr));
+        swapDownButton->setText(QCoreApplication::translate("View", "Swap(down)", nullptr));
+        copyButton->setText(QCoreApplication::translate("View", "Copy", nullptr));
+        ClearButton->setText(QCoreApplication::translate("View", "Clear", nullptr));
         deleteFrameButton->setText(QCoreApplication::translate("View", "Delete Frame", nullptr));
         posLabel->setText(QString());
         zoomInButton->setText(QCoreApplication::translate("View", "Zoom In", nullptr));

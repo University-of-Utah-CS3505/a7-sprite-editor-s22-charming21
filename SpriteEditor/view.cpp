@@ -231,6 +231,14 @@ View::View(model& model, QWidget *parent)
             &model::setCanvas,
             this,
             &View::updateCanvas);
+    connect(ui->ClearButton,
+            &QPushButton::clicked,
+            &model,
+            &model::clearCanvas);
+    connect(ui->copyButton,
+            &QPushButton::clicked,
+            &model,
+            &model::copyFrame);
 
     // gon
     // connections for increasing and decreasing canvas button and pen size
@@ -364,6 +372,7 @@ void View::updateFramesBox(int page, int size){
     }
 
     ui->framesComboBox->setCurrentText(QString::number(page));
+    ui->framesComboBox->setCurrentIndex(page - 1);
 }
 
 void View::updateFramesLabel(int page, int size){

@@ -119,6 +119,9 @@ public slots:
     void updateTool(std::string); //Change parameter from Selected tools to std::string
     void getList(QList<QImage>);
     void checkCurrentColor(QColor);
+    void clearCanvas();
+    void copyFrame();
+
     //Added
     void undo(); //need change parameters?
     void redo(); //need change parameters?
