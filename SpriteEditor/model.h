@@ -11,10 +11,16 @@
 
 //We add enum (jinwen)
 enum class SelectedTool{
-    Tool_Pen,
-    Tool_Eraser,
-    Tool_Bucket,
+    SC_Pen,
+    SC_Eraser,
+    SC_Bucket,
     Tool_ShapeCreator
+};
+
+enum class ShapeCreator{
+    SC_Triangle,
+    SC_Ciecle,
+    SC_Square
 };
 
 class model : public QObject
@@ -44,6 +50,8 @@ private:
     int currentIndex; //index counter to access frames.
 
     void updatePixelsByPen(int, int);
+    void updatePixelsByEraser(int, int);
+
 //    //gon
 //    void updatePixelsByPen2(int, int, int, int);
 //    //
