@@ -14,13 +14,13 @@ enum class SelectedTool{
     SC_Pen,
     SC_Eraser,
     SC_Bucket,
-    Tool_ShapeCreator
+    SC_ShapeCreator
 };
 
 enum class ShapeCreator{
-    SC_Triangle,
+    SC_Line,
     SC_Ciecle,
-    SC_Square
+    SC_Rectangle
 };
 
 class model : public QObject
@@ -31,6 +31,7 @@ public:
 
 private:
     SelectedTool currentTool;
+    ShapeCreator currentShape;
     QList<QImage> frames;
     QColor penColor;
     int canvasHeight;
@@ -51,6 +52,7 @@ private:
 
     void updatePixelsByPen(int, int);
     void updatePixelsByEraser(int, int);
+    void updatePixelsByShapeCreator(int, int, int, int);
 
 //    //gon
 //    void updatePixelsByPen2(int, int, int, int);
@@ -99,7 +101,7 @@ public slots:
     void undo(); //need change parameters?
     void redo(); //need change parameters?
     void selectedFrame(int);
-    void updatePixels(int,int);
+    void updatePixels(int,int,int = 0,int = 0);
 //    //gon
 //    void updatePixels2(int, int, int , int);
 //    //

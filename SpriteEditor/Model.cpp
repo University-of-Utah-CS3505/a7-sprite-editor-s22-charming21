@@ -209,7 +209,7 @@ void model::updateTool(std::string tool){
     else if(tool == "bucket")
         currentTool = SelectedTool::SC_Bucket;
     else if(tool == "shapeCreator")
-        currentTool = SelectedTool::Tool_ShapeCreator;
+        currentTool = SelectedTool::SC_ShapeCreator;
 }
 
 //Don't need the QList as Parameter??
@@ -259,19 +259,19 @@ void model::updateToolSize(int size){
         updatePenSize(size);
 }
 
-void model::updatePixels(int x, int y){
+void model::updatePixels(int initialX, int initialY, int endX, int endY){
     switch(currentTool){
         case SelectedTool::SC_Pen:
-            updatePixelsByPen(x,y);
+            updatePixelsByPen(initialX,initialY);
             break;
         case SelectedTool::SC_Eraser:
-            updatePixelsByEraser(x,y);
+            updatePixelsByEraser(initialX, initialY);
             break;
         case SelectedTool::SC_Bucket:
             //updatePixelsByBucket(x,y);
             break;
-        case SelectedTool::Tool_ShapeCreator:
-            //updatePixelsByShapeCreator(x,y);
+        case SelectedTool::SC_ShapeCreator:
+            updatePixelsByShapeCreator(initialX, initialY, endX, endY);
             break;
         default:
             break;
@@ -305,6 +305,17 @@ void model::updatePixels(int x, int y){
 //    //emit or call another method?
 //}
 
+
+void model::updatePixelsByPen(int x, int y){
+    QImage* AFrame = &frames[currentFrame -1];
+    QPainter Painter(AFrame);
+    QPen Pen(penColor);
+    Pen.setWidth(penSize);
+    Painter.setPen(Pen);
+    Painter.drawPoint(x,y);
+    Painter.end();
+}
+
 void model::updatePixelsByEraser(int x, int y){
     QImage* AFrame = &frames[currentFrame -1];
     QPainter Painter(AFrame);
@@ -316,14 +327,30 @@ void model::updatePixelsByEraser(int x, int y){
     Painter.end();
 }
 
-void model::updatePixelsByPen(int x, int y){
+void model::updatePixelsByShapeCreator(int initialX, int initialY, int endX, int endY){
+    // Set pen specs for shape creator
     QImage* AFrame = &frames[currentFrame -1];
     QPainter Painter(AFrame);
     QPen Pen(penColor);
     Pen.setWidth(penSize);
     Painter.setPen(Pen);
-    Painter.drawPoint(x,y);
-    Painter.end();
+
+    switch(currentShape){
+        case ShapeCreator::SC_Line:
+            Painter.drawLine(initialX, initialY, endX, endY);
+            Painter.end();
+            break;
+        case ShapeCreator::SC_Ciecle:
+            Painter.drawEllipse(initialX, initialY, initialX-endX, initialY-endY);
+            Painter.end();
+            break;
+        case ShapeCreator::SC_Rectangle:
+            Painter.drawRect(initialX, initialY, initialX-endX, initialY-endY);
+            Painter.end();
+            break;
+        default:
+            break;
+    }
 }
 
 //void model::updatePixelsByPen2(int sx, int sy, int ex, int ey){
