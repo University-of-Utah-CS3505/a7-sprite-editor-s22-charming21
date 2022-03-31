@@ -108,11 +108,6 @@ View::View(model& model, QWidget *parent)
             this,
             &View::updateFramesLabel);
 
-    connect(&model,
-            &model::goToFrame,
-            this,
-            &View::displayFrame);
-
     //connects slider with update fps method in model
     connect(ui->playBackSpeedSlider,
             &QSlider::valueChanged,
@@ -293,11 +288,6 @@ void View::pushColorButton(QColor currentColor){
 
         emit updateColor(newColor);
     }
-}
-
-
-void View::displayFrame(QPixmap map){
-    ui->canvasLabel->setPixmap(map.scaled(ui->canvasLabel->width(), ui->canvasLabel->height(), Qt::KeepAspectRatio));
 }
 
 void View::disableDeleteButton(){

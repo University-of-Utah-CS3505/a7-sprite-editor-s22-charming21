@@ -65,7 +65,6 @@ private slots:
     //Frame
     void updateFramesBox(int, int);
     void updateFramesLabel(int, int);
-    void displayFrame(QPixmap);
     void displaySprite(QImage);
 
 

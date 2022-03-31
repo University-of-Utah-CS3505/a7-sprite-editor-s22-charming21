@@ -75,8 +75,6 @@ private:
     void read(QString fileName);
 
 signals:
-    //Add methods (emit)
-    void goToFrame(QPixmap);
 
     // control buttons
     void disableDeleteButton();

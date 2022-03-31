@@ -53,7 +53,7 @@ void model::addNewFrame(){
     }
     //frames[currentFrame-1].fill(Qt::white);
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-    emit goToFrame(map);
+    emit setCanvas(map);
 }
 
 // insert a new frame to the position before current frame
@@ -76,7 +76,7 @@ void model::insertNewFrame(){
 
     //frames[currentFrame-1].fill(Qt::white);
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-    emit goToFrame(map);
+    emit setCanvas(map);
 }
 
 void model::nextFrame(){
@@ -89,7 +89,7 @@ void model::nextFrame(){
     }
 
      QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-     emit goToFrame(map);
+     emit setCanvas(map);
 }
 
 void model::lastFrame(){
@@ -102,7 +102,7 @@ void model::lastFrame(){
     }
 
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-    emit goToFrame(map);
+    emit setCanvas(map);
 }
 
 void model::deleteFrame(){
@@ -122,11 +122,11 @@ void model::deleteFrame(){
     if(currentFrame - 1 == frames.size()){
         currentFrame--;
         QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-        emit goToFrame(map);
+        emit setCanvas(map);
     }
     else{
         QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-        emit goToFrame(map);
+        emit setCanvas(map);
     }
 
     emit enableUndo();
@@ -259,7 +259,7 @@ void model::undo(){
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
     emit updateFrameNumberLabel(currentFrame, frames.size());
     emit updateFrameNumberCombo(currentFrame, frames.size());
-    emit goToFrame(map);
+    emit setCanvas(map);
 }
 
 //need change parameters?
@@ -303,7 +303,7 @@ void model::redo(){
     emit updateFrameNumberLabel(currentFrame, frames.size());
     emit updateFrameNumberCombo(currentFrame, frames.size());
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-    emit goToFrame(map);
+    emit setCanvas(map);
 }
 
 void model::saveFrameToStack(){
@@ -318,20 +318,31 @@ void model::saveFrameToStack(){
 //Frame that we are currently in
 void model::selectedFrame(int index){
     currentFrame = index + 1;
+    std::cout << "current: " << currentFrame << " size: " << frames.size() << std::endl;
+
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-    emit goToFrame(map);
+    emit setCanvas(map);
     emit updateFrameNumberLabel(currentFrame, frames.size());
 
     if(currentFrame == frames.size()){
         emit disableNextButton();
     }
-    else if(currentFrame == 1){
-        emit disableLastButton();
-    }
-    else{
+
+    if(currentFrame < frames.size()){
         emit enableNextButton();
+    }
+
+    if(currentFrame > frames.size()){
         emit enableLastButton();
     }
+
+    if(currentFrame == 1){
+        emit disableLastButton();
+    }
+    else if(frames.size() != 1){
+        emit enableLastButton();
+    }
+
 
 
 }
