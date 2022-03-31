@@ -395,3 +395,74 @@ void model::updateActualLabel(){
     if(currentIndex == frames.size())
         currentIndex = 0;
 }
+
+//save file
+void model::save(){//QJsonObject &json) const{ //change parameters
+    QJsonObject json;
+
+    int n = 0;
+    json["height"] = canvasHeight;
+    json["width"] = canvasWidth;
+    json["numberOfFrames"] = frames.size();
+
+    //*******Important******//
+    // x and y coordinate are switched, x is columns and y is rows, to fix this
+    // i will have rowNum go in the Y in the forloo for pixel when we get pixelcolor
+    // and pixelNum will go in the X in the forloop for pixe when we get pixelcolor.
+    //I'm doing this so it can fit the requirements in Q6 //
+    //*******Important*******//
+    QJsonObject framesObj;
+    for(QImage a : frames)
+    {
+        QJsonArray frame;
+        for(int rowNum = 0 ; rowNum < canvasHeight; rowNum++)
+        {
+            QJsonArray row;
+            for(int pixelNum = 0; pixelNum < canvasWidth; pixelNum++)
+            {
+                QJsonObject pixel;
+                QString pixelName = "pixel" + QString::number(pixelNum);
+                pixel["r"] = a.pixelColor(pixelNum,rowNum).red();
+                pixel["g"] = a.pixelColor(pixelNum,rowNum).green();
+                pixel["b"] = a.pixelColor(pixelNum,rowNum).blue();
+                pixel["a"] = a.pixelColor(pixelNum,rowNum).alpha();
+                row.append(pixel);
+            }
+            QString rowName = "row" + QString::number(rowNum);
+            frame.append(row);
+        }
+        QString frameName = "Frame" + QString::number(n);
+        framesObj[frameName] = frame;
+        n++;
+    }
+
+    json["frames"] = framesObj;
+    QJsonDocument doc(json);
+
+    //to print our in application output (testing)
+    //QString strJson(doc.toJson(QJsonDocument::Compact));
+    //std::cout<<strJson.toStdString()<<std::endl;
+
+    QFile jsonFile("test.ssp");
+    jsonFile.open(QFile::WriteOnly);
+    jsonFile.write(doc.toJson());
+
+
+}
+
+void model::savebtn(bool testbool){
+    save();
+}
+//Read/Open file
+void model::read(QString filePath){
+//    TODO: Still trying to figure this out (Brittney)
+//    QJsonDocument doc;
+
+//    QFile loadFile(filePath);
+//    if(loadFile.open(QIODevice::ReadOnly))
+//        doc = QJsonDocument().fromJson(loadFile.readAll());
+//    if(!doc.isEmpty())
+//    {
+
+//    }
+}

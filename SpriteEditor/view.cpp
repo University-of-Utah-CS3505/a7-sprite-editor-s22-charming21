@@ -123,14 +123,15 @@ View::View(model& model, QWidget *parent)
 
 
     //Save Project
-//    connect(ui->actionSave,
-//            &QAction::triggered,
-//            &model,
-//            &model::getList);
-    connect(&model,
-            &model::sendList,
-            this,
-            &View::saveProject);
+    connect(ui->actionSave,
+            &QAction::triggered,
+            &model,
+            &model::savebtn);
+//    connect(&model,
+//            &model::sendList,
+//            this,
+//            &View::saveProject);
+
 
     //Open a Project
 //    connect(ui->actionOpen,
@@ -248,10 +249,6 @@ void View::pushColorButton(QColor currentColor){
     if(newColor.isValid()){
         emit updateColor(newColor);
     }
-
-
-    //TODO : testing
-    //1. when we click cancel, changes color to black by default
 }
 
 
