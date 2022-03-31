@@ -5,5 +5,8 @@
         <file>Button_Redo.png</file>
         <file>Tool_ShapeCreator.png</file>
         <file>Tool_Bucket.png</file>
+        <file>Tool_Eraser.png</file>
+        <file>Button_ZoomIn.png</file>
+        <file>Button_ZoomOut.png</file>
     </qresource>
 </RCC>
