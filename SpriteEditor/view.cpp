@@ -122,18 +122,6 @@ View::View(model& model, QWidget *parent)
             this,
             &View::updateColorWheel);
 
-
-    //Save Project
-    connect(ui->actionSave,
-            &QAction::triggered,
-            &model,
-            &model::savebtn);
-//    connect(&model,
-//            &model::sendList,
-//            this,
-//            &View::saveProject);
-
-
     //Open a Project
 //    connect(ui->actionOpen,
 //            &QAction::triggered,
@@ -231,11 +219,17 @@ View::View(model& model, QWidget *parent)
             this,
             &View::displaySprite);
 
-    // save and open
+    // save file
     connect(ui->actionSave,
             &QAction::triggered,
             this,
             &View::saveFile);
+
+    connect(this,
+            &View::save,
+            &model,
+            &model::save);
+    // open file
     connect(ui->actionOpen,
             &QAction::triggered,
             this,
@@ -346,8 +340,8 @@ void View::saveProject(QList<QImage>){
 
 void View::saveFile()
 {
-    QFileDialog::getSaveFileName(this, "Save file", "C://");
-    // will have to do an emit to the model
+    QString fileName = QFileDialog::getSaveFileName(this, "Save file", "C://");
+    emit save(fileName);
 }
 
 void View::openFile()

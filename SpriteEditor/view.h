@@ -23,6 +23,7 @@ signals:
     void setTool(std::string);
     void updateColor(QColor);
     void editCanvas(QPoint);
+    void save(QString);
 
 
 private slots:

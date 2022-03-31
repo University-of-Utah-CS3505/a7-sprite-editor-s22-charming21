@@ -448,7 +448,7 @@ void model::updateActualLabel(){
 }
 
 //save file
-void model::save(){//QJsonObject &json) const{ //change parameters
+void model::save(QString fileName){//QJsonObject &json) const{ //change parameters
     QJsonObject json;
 
     int n = 0;
@@ -494,16 +494,13 @@ void model::save(){//QJsonObject &json) const{ //change parameters
     //QString strJson(doc.toJson(QJsonDocument::Compact));
     //std::cout<<strJson.toStdString()<<std::endl;
 
-    QFile jsonFile("test.ssp");
+    QFile jsonFile(fileName + ".ssp");
     jsonFile.open(QFile::WriteOnly);
     jsonFile.write(doc.toJson());
 
 
 }
 
-void model::savebtn(bool testbool){
-    save();
-}
 //Read/Open file
 void model::read(QString filePath){
 //    TODO: Still trying to figure this out (Brittney)

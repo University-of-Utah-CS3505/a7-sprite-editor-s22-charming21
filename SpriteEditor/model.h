@@ -64,8 +64,7 @@ private:
 //    //gon
 //    void updatePixelsByPen2(int, int, int, int);
 //    //
-    //Save file
-    void save(); //do i need to make it const? (Brittney)
+
     //Read/Open file //still in testing phase, need to work on.
     void read(QString fileName);
 
@@ -123,8 +122,8 @@ public slots:
     void previewOfFrames();
     void updateActualLabel();
 
-    //calls method to save frames as json
-    void savebtn(bool);
+    //Save file
+    void save(QString fileName); //do i need to make it const? (Brittney)
 };
 
 #endif // MODEL_H
