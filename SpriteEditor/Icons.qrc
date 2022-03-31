@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/new/UI_Icons">
+        <file>Tool_Pen.png</file>
+        <file>Button_Undo.png</file>
+        <file>Button_Redo.png</file>
+        <file>Tool_ShapeCreator.png</file>
+        <file>Tool_Bucket.png</file>
+    </qresource>
+</RCC>
