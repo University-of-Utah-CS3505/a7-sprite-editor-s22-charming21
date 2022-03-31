@@ -6,34 +6,91 @@ model::model(QObject *parent)
 {
 
     penColor.setRgb(0, 0, 0, 255);
-    canvasHeight = 20; //Change to have it initialized
-    canvasWidth = 20; //Change to have it initialized
-    zoomHeight = 20; //Change to have it initialized
-    zoomWidth = 20; //Change to have it initialized
+
     zoomIndex = 0;
-    ratio = 360/20; //change to have it initialized
+    ratio = 400/20; //change to have it initialized
     framesPerSec = 1;
     currentFrame = 1;
     penSize = 1;
     eraserSize = 1;
     currentIndex = 0; //for keeping track of our current index in the list when displaying a sprite.
+    canvasSize = 0; //Initialize with 0
+}
+
+
+void model::initializeCanvasSize(int index){
+    switch(index){
+    case 0:
+        canvasSize = 2;
+        zoomSize = 2;
+        break;
+    case 1:
+        canvasSize = 4;
+        zoomSize = 4;
+        break;
+    case 2:
+        canvasSize = 5;
+        zoomSize = 5;
+        break;
+    case 3:
+        canvasSize = 8;
+        zoomSize = 8;
+        break;
+    case 4:
+        canvasSize = 10;
+        zoomSize = 10;
+        break;
+    case 5:
+        canvasSize = 16;
+        zoomSize = 16;
+        break;
+    case 6:
+        canvasSize = 20;
+        zoomSize = 20;
+        break;
+    case 7:
+        canvasSize = 25;
+        zoomSize = 25;
+        break;
+    case 8:
+        canvasSize = 40;
+        zoomSize = 40;
+        break;
+    case 9:
+        canvasSize = 50;
+        zoomSize = 50;
+        break;
+    case 10:
+        canvasSize = 80;
+        zoomSize = 80;
+        break;
+    case 11:
+        canvasSize = 100;
+        zoomSize = 100;
+        break;
+    case 12:
+        canvasSize = 200;
+        zoomSize = 200;
+        break;
+    case 13:
+        canvasSize = 400;
+        zoomSize = 400;
+        break;
+    }
+
     // default values to be determined
-    frames.append(QImage (canvasHeight, canvasWidth, QImage::Format_ARGB32));
-
-//    //gon
-//    frames.append(QImage (360, 360, QImage::Format_ARGB32));
-//    //
-
+    frames.append(QImage (canvasSize, canvasSize, QImage::Format_ARGB32));
     //Make the first inage to have a white background
     frames[currentFrame-1].fill(Qt::white);
     undoStack.push(frames);
 
-
 }
+
+
 
 // add a new frame to the position next to the current frame
 void model::addNewFrame(){
-    QImage frame(canvasHeight, canvasWidth, QImage::Format_ARGB32);
+    QImage frame(canvasSize, canvasSize, QImage::Format_ARGB32);
     frame.fill(Qt::white);
     frames.insert(currentFrame, frame);
 
@@ -58,7 +115,7 @@ void model::addNewFrame(){
 
 // insert a new frame to the position before current frame
 void model::insertNewFrame(){
-    QImage frame(canvasHeight, canvasWidth, QImage::Format_ARGB32);
+    QImage frame(canvasSize, canvasSize, QImage::Format_ARGB32);
     frame.fill(Qt::white);
     frames.insert(currentFrame - 1, frame);
 
@@ -142,17 +199,16 @@ void model::deleteFrame(){
 void model::zoomIn(){
 
     //Check if it is within bounds
-    if(zoomHeight > 2 ){
+    if(zoomSize > 2 ){
         //canvas height and width changes (the display will be different)
-        zoomHeight = zoomHeight -2;
-        zoomWidth = zoomWidth -2;
+        zoomSize = zoomSize -2;
         zoomIndex++;
 
         QPixmap currentPic;
         //Convert QImage to QPixmap
         currentPic.convertFromImage(frames[currentFrame-1]); //maybe resize?
         //Return the pixmap of our QImage with the scaled version
-        emit toZoomIn(currentPic, zoomWidth, zoomIndex);
+        emit toZoomIn(currentPic, zoomSize, zoomIndex);
     }
     else
         emit disableZoom("zoomIn");
@@ -163,16 +219,15 @@ void model::zoomIn(){
 void model::zoomOut(){
 
     //Check if is within bounds
-    if(zoomHeight < canvasHeight){
-        zoomHeight = zoomHeight +2;
-        zoomWidth = zoomWidth +2;
+    if(zoomSize < canvasSize){
+        zoomSize = zoomSize +2;
         zoomIndex--;
 
         QPixmap currentPic;
         //Convert QImage to QPixmap
         currentPic.convertFromImage(frames[currentFrame-1]);
         //Return the pixmap of our QImage with the scaled version
-        emit toZoomOut(currentPic, zoomHeight, zoomIndex);
+        emit toZoomOut(currentPic, zoomSize, zoomIndex);
     }
     else
         emit disableZoom("zoomOut");
@@ -459,7 +514,7 @@ void model::updatePixelsByBucketFiller(int x, int y){
 
     for(std::tuple<int,int> coordinates : pixelsToBeFilled){
         QImage* AFrame = &frames[currentFrame -1];
-        AFrame->setPixelColor(get<0>(coordinates), get<1>(coordinates), penColor);
+        AFrame->setPixelColor(std::get<0>(coordinates), std::get<1>(coordinates), penColor);
     }
 }
 
@@ -475,7 +530,7 @@ QList<std::tuple<int,int>> model::FindPixelsWithTheSameColorInBound(QList<std::t
     if(coordinates.contains(std::tuple<int,int>(x,y)))
         return coordinates;
     // Check if it goes out of the canvas
-    if(x < 0 || x > 360 || y < 0 || y > 360)
+    if(x < 0 || x > 400 || y < 0 || y > 400)
         return coordinates;
 
     // add the current coordinate into the list of pixel coordinates.
@@ -500,43 +555,23 @@ QList<std::tuple<int,int>> model::FindPixelsWithTheSameColorInBound(QList<std::t
 //This method obtains where the current position of the mouse is in our canvas
 //then it optains the ratio
 void model::drawOnCanvas(QPoint pixelPoint){
-    //Set the canvas ratio -> Canvas Label Size / number of pixels
-    //(Choose height, but height and width should all be the same)
-    std::cout << canvasHeight << std::endl;
 
-    int x;
-    int y;
-    //1. Know if we are zoomed in
-    if(canvasHeight != zoomHeight ){
-        ratio = 360/ zoomHeight;
-        x = (pixelPoint.x()/ratio) + zoomIndex;
-        y = (pixelPoint.y()/ratio) + zoomIndex;
-
-
-    }
-    //To fix: assign the value that is given by the canvas, to the actual pixel correspondadn
-    //to our class.
-    else {
-        ratio = 360/canvasHeight;
-        //Calculate x and y position of our QImage pixels
-        x = pixelPoint.x()/ratio;
-        y = pixelPoint.y()/ratio;
+    //Check it it has been initialized with a size
+    if(canvasSize == 0){
+        //Default Values
+        canvasSize = 20;
+        zoomSize = 20;
+        // default values to be determined
+        frames.append(QImage (canvasSize, canvasSize, QImage::Format_ARGB32));
+        //Make the first inage to have a white background
+        frames[currentFrame-1].fill(Qt::white);
+        undoStack.push(frames);
     }
 
-
-
-
-    //gon added
-//    int pointStartX = x * ratio;
-//    int pointStartY = y * ratio;
-//    int pointEndX = pointStartX + (penSize * ratio);
-//    int pointEndY = pointStartY + (penSize * ratio);
-
-//    std::cout << pointStartX << " " << pointStartY << std::endl;
-//    std::cout << pointEndX << " " << pointEndY << std::endl;
-
-    //Edit the pixels of the current QImage
-    //frames[currentFrame -1].setPixelColor(x, y,penColor);
+    //Get the position to paint
+     ratio = 400/ zoomSize;
+     int x = (pixelPoint.x()/ratio) + zoomIndex;
+     int y = (pixelPoint.y()/ratio) + zoomIndex;
 
     updatePixels(x,y);
     //Create a Pixmap to return to view
@@ -545,25 +580,12 @@ void model::drawOnCanvas(QPoint pixelPoint){
     currentPic.convertFromImage(frames[currentFrame-1]);
     //Return the pixmap of our QImage
     emit setCanvas(currentPic);
-
-//    //gon//
-//    updatePixels2(pointStartX, pointStartY,pointEndX, pointEndY);
-//    QPixmap currentPic;
-//    //Convert QImage to QPixmap
-//    currentPic.convertFromImage(frames[currentFrame -1]);
-//    //Return the pixmap of our QImage
-//    emit setCanvas(currentPic);
-//    //////
-
-
-
-
 }
+
 
 void model::updateCanvasSize()
 {
-    canvasHeight += 1;
-    canvasWidth += 1;
+    canvasSize += 1;
 }
 
 void model::previewOfFrames(){
@@ -590,8 +612,8 @@ void model::save(QString fileName){//QJsonObject &json) const{ //change paramete
     QJsonObject json;
 
     int n = 0;
-    json["height"] = canvasHeight;
-    json["width"] = canvasWidth;
+    json["height"] = canvasSize;
+    json["width"] = canvasSize;
     json["numberOfFrames"] = frames.size();
 
     //*******Important******//
@@ -604,10 +626,10 @@ void model::save(QString fileName){//QJsonObject &json) const{ //change paramete
     for(QImage a : frames)
     {
         QJsonArray frame;
-        for(int rowNum = 0 ; rowNum < canvasHeight; rowNum++)
+        for(int rowNum = 0 ; rowNum < canvasSize; rowNum++)
         {
             QJsonArray row;
-            for(int pixelNum = 0; pixelNum < canvasWidth; pixelNum++)
+            for(int pixelNum = 0; pixelNum < canvasSize; pixelNum++)
             {
                 QJsonObject pixel;
                 QString pixelName = "pixel" + QString::number(pixelNum);

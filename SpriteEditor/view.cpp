@@ -12,6 +12,8 @@ View::View(model& model, QWidget *parent)
 {
     ui->setupUi(this);
 
+    initCanvasSizesComboBox();
+
    //A white image to start with in the canvas
    QPixmap startImage(ui->canvasLabel->width(), ui->canvasLabel->height());
    QPainter paint(&startImage);
@@ -26,6 +28,7 @@ View::View(model& model, QWidget *parent)
     ui->framesComboBox->setEditable(true);
     ui->framesComboBox->lineEdit()->setReadOnly(true);
     ui->framesComboBox->lineEdit()->setAlignment(Qt::AlignCenter);
+
 
     // set color label
     ui->colorLabel->setStyleSheet("background-color: black");
@@ -207,6 +210,12 @@ View::View(model& model, QWidget *parent)
             &model,
             &model::updateToolSize);
 
+    //Initialize Zanvas Size
+    connect(ui->canvasSizeComboBox,
+            &QComboBox::activated,
+            &model,
+            &model::initializeCanvasSize);
+
     //Canvas Connect
     connect(ui->canvasLabel, // mouse click
             &Canvas::sendMouseLoc,
@@ -217,12 +226,6 @@ View::View(model& model, QWidget *parent)
             &Canvas::sendMouseLoc,
             this,
             &View::on_clickMouse_released);
-
-
-
-
-
-    //Test
     connect(this,
             &View::editCanvas,
             &model,
@@ -241,7 +244,6 @@ View::View(model& model, QWidget *parent)
 
 
     //Preview actual canvas
-
     connect(ui->previewButton,
             &QPushButton::clicked,
             &model,
@@ -341,17 +343,16 @@ void View::mouseLoc(QPoint &loc) // can delete later
 //Update the canvas by outputing the QPixmap that
 //was tranformed into QImage and edited in model
 void View::updateCanvas(QPixmap currentPic){
-    int height = canvasLabelHeight;
-    int width = canvasLabelWidth;
+
     //display our QPixmap into our canvas size
-    ui->canvasLabel->setPixmap(currentPic.scaled(width, height));
-
-//    //gon
-//    ui->canvasLabel->setPixmap(currentPic);
-
-    //display on actualsize label (Brittney)
+    ui->canvasLabel->setPixmap(currentPic.scaled(canvasLabelWidth, canvasLabelHeight));
+    //display on actualsize label
     ui->actualSizeLabel->setPixmap(currentPic.scaled(ui->actualSizeLabel->width(),
                                                      ui->actualSizeLabel->height()));
+    //Disable cobo box to set up size
+    if(ui->canvasSizeComboBox->isEnabled()){
+        ui->canvasSizeComboBox->setEnabled(false);
+    }
 }
 
 void View::updateFramesBox(int page, int size){
@@ -424,8 +425,8 @@ void View::zoomInCanvas(QPixmap currentPic, int canvasSize, int zoomIndex){
     int ratio = ui->canvasLabel->height()/canvasSize;
 
 
-    canvasLabelHeight = 360 +(ratio*(2*zoomIndex));
-    canvasLabelWidth = 360 +(ratio*(2*zoomIndex));
+    canvasLabelHeight = 400 +(ratio*(2*zoomIndex));
+    canvasLabelWidth = 400 +(ratio*(2*zoomIndex));
     //display our QPixmap into our canvas size
 
     ui->canvasLabel->setPixmap(currentPic.scaled(canvasLabelWidth, canvasLabelHeight, Qt::KeepAspectRatioByExpanding));
@@ -436,8 +437,8 @@ void View::zoomOutCanvas(QPixmap currentPic, int canvasSize, int zoomIndex){
     int ratio = ui->canvasLabel->height()/canvasSize;
 
 
-    canvasLabelHeight =360 +(ratio*(2*zoomIndex));
-    canvasLabelWidth = 360 +(ratio*(2*zoomIndex));
+    canvasLabelHeight =400 +(ratio*(2*zoomIndex));
+    canvasLabelWidth = 400 +(ratio*(2*zoomIndex));
     //display our QPixmap into our canvas size
 
     ui->canvasLabel->setPixmap(currentPic.scaled(canvasLabelWidth, canvasLabelHeight));
@@ -452,8 +453,30 @@ void View::disableZoomButtons(std::string zoomType){
         ui->zoomInButton->setEnabled(false);
     else
         ui->zoomOutButton->setEnabled(false);
-
 }
+
+
+
+void View::initCanvasSizesComboBox(){
+    ui->canvasSizeComboBox->addItem("2 x 2");
+    ui->canvasSizeComboBox->addItem("4 x 4");
+    ui->canvasSizeComboBox->addItem("5 x 5");
+    ui->canvasSizeComboBox->addItem("8 x 8");
+    ui->canvasSizeComboBox->addItem("10 x 10");
+    ui->canvasSizeComboBox->addItem("16 x 16");
+    ui->canvasSizeComboBox->addItem("20 x 20");
+    ui->canvasSizeComboBox->addItem("25 x 25");
+    ui->canvasSizeComboBox->addItem("40 x 40");
+    ui->canvasSizeComboBox->addItem("50 x 50");
+    ui->canvasSizeComboBox->addItem("80 x 80");
+    ui->canvasSizeComboBox->addItem("100 x 100");
+    ui->canvasSizeComboBox->addItem("200 x 200");
+    ui->canvasSizeComboBox->addItem("400 x 400");
+
+    ui->canvasSizeComboBox->setCurrentIndex(6);
+}
+
+
 
 
 void View::on_clickMouse_released(QPoint &loc) {

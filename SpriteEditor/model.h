@@ -40,10 +40,8 @@ private:
     ShapeCreator currentShape;
     QList<QImage> frames;
     QColor penColor;
-    int canvasHeight;
-    int canvasWidth;
-    int zoomHeight;
-    int zoomWidth;
+    int canvasSize;
+    int zoomSize;
     int zoomIndex;
     int framesPerSec;
     int currentFrame;
@@ -130,6 +128,8 @@ public slots:
     void updateToolSize(int);
     void drawOnCanvas(QPoint);
     void updateCanvasSize();
+
+    void initializeCanvasSize(int);
 
     //Preview
     void previewOfFrames();

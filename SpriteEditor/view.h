@@ -78,6 +78,7 @@ private:
     Ui::View *ui;
     int canvasLabelHeight;
     int canvasLabelWidth;
+    void initCanvasSizesComboBox();
 
 };
 #endif // VIEW_H
