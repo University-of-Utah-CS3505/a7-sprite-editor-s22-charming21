@@ -353,6 +353,20 @@ void model::updatePixelsByShapeCreator(int initialX, int initialY, int endX, int
     }
 }
 
+void model::updatePixelsByBucketFiller(int x, int y){
+    QList<std::tuple<int,int>> pixelsToBeFilled;
+    pixelsToBeFilled.append(std::tuple<int,int>(x,y));
+    QColor colorToBeChanged = (frames[currentFrame -1]).pixelColor(x,y);
+    pixelsToBeFilled = FindPixelsWithTheSameColorInBound(pixelsToBeFilled,colorToBeChanged,x,y);
+}
+
+QList<std::tuple<int,int>> model::FindPixelsWithTheSameColorInBound(QList<std::tuple<int,int>> coordinates,
+                                                                    const QColor colorToBeChanged,
+                                                                    int x,
+                                                                    int y){
+
+}
+
 //void model::updatePixelsByPen2(int sx, int sy, int ex, int ey){
 //    //QPen Pen(penColor);
 //    for(int x = sx; x < ex; x++){

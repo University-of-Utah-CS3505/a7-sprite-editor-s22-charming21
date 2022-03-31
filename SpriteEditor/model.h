@@ -52,7 +52,10 @@ private:
 
     void updatePixelsByPen(int, int);
     void updatePixelsByEraser(int, int);
+    void updatePixelsByBucketFiller(int, int);
     void updatePixelsByShapeCreator(int, int, int, int);
+
+    QList<std::tuple<int,int>> FindPixelsWithTheSameColorInBound(QList<std::tuple<int,int>>, QColor, int, int);
 
 //    //gon
 //    void updatePixelsByPen2(int, int, int, int);
