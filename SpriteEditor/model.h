@@ -29,8 +29,9 @@ private:
     QColor penColor;
     int canvasHeight;
     int canvasWidth;
-    int zoomHeight; //for the zoom
-    int zoomWidth; //for the zoom
+    int zoomHeight;
+    int zoomWidth;
+    int zoomIndex;
     int framesPerSec;
     int currentFrame;
     int penSize;
@@ -71,6 +72,11 @@ signals:
 
     void showSprite(QImage);
 
+    //temp zoom in
+    void toZoomIn(QPixmap, int, int);
+    void toZoomOut(QPixmap, int, int);
+    void disableZoom(std::string);
+
 public slots:
     void addNewFrame();
     void insertNewFrame();
@@ -79,6 +85,7 @@ public slots:
     void deleteFrame();
     void zoomIn();
     void zoomOut();
+    //void zoomOut();
     void updateFPS(int);
     void updatePenSize(int);
     void updateEraserSize(int);

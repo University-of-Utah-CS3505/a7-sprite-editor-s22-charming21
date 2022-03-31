@@ -50,8 +50,9 @@ private slots:
     void enableLastButton();
 
     //Zoom
-    void zoomInCanvas(QImage);
-    void zoomOutCanvas(QImage);
+    void zoomInCanvas(QPixmap, int, int);
+    void zoomOutCanvas(QPixmap, int, int);
+    void disableZoomButtons(std::string);
 
     //Canvas
     void updateCanvas(QPixmap);
@@ -69,6 +70,8 @@ private slots:
 
 private:
     Ui::View *ui;
+    int canvasLabelHeight;
+    int canvasLabelWidth;
 
 };
 #endif // VIEW_H

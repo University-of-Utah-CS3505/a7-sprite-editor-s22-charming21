@@ -17,6 +17,9 @@ View::View(model& model, QWidget *parent)
    startImage.fill(Qt::white );
    ui->canvasLabel->setPixmap(startImage);
 
+   //Set height and width
+   canvasLabelHeight = ui->canvasLabel->height();
+   canvasLabelWidth = ui->canvasLabel->width();
 
     // set frame combo box alliment
     ui->framesComboBox->setEditable(true);
@@ -151,6 +154,14 @@ View::View(model& model, QWidget *parent)
                 &QPushButton::clicked,
                 &model,
                 &model::zoomOut);
+        connect(&model,
+                &model::toZoomIn,
+                this,
+                &View::zoomInCanvas);
+        connect(&model,
+                &model::toZoomOut,
+                this,
+                &View::zoomOutCanvas);
 
         //Redo and Undo
         connect(ui->redoButton,
@@ -257,7 +268,7 @@ void View::pushColorButton(QColor currentColor){
 
 
 void View::displayFrame(QPixmap map){
-    ui->canvasLabel->setPixmap(map.scaled(ui->canvasLabel->width(), ui->canvasLabel->height()));
+    ui->canvasLabel->setPixmap(map.scaled(ui->canvasLabel->width(), ui->canvasLabel->height(), Qt::KeepAspectRatio));
 }
 
 void View::disableDeleteButton(){
@@ -295,8 +306,8 @@ void View::mouseLoc(QPoint &loc) // can delete later
 //Update the canvas by outputing the QPixmap that
 //was tranformed into QImage and edited in model
 void View::updateCanvas(QPixmap currentPic){
-    int height = ui->canvasLabel->height();
-    int width = ui->canvasLabel->width();
+    int height = canvasLabelHeight;
+    int width = canvasLabelWidth;
     //display our QPixmap into our canvas size
     ui->canvasLabel->setPixmap(currentPic.scaled(width, height));
 
@@ -355,11 +366,42 @@ void View::on_shapeButton_clicked()
     emit setTool("shapeCreator");
 }
 
-//Zoom Mehtod -> Maybe remove??
-void View::zoomInCanvas(QImage image){
+
+void View::zoomInCanvas(QPixmap currentPic, int canvasSize, int zoomIndex){
+    int ratio = ui->canvasLabel->height()/canvasSize;
+
+
+    canvasLabelHeight = 360 +(ratio*(2*zoomIndex));
+    canvasLabelWidth = 360 +(ratio*(2*zoomIndex));
+    //display our QPixmap into our canvas size
+
+    ui->canvasLabel->setPixmap(currentPic.scaled(canvasLabelWidth, canvasLabelHeight, Qt::KeepAspectRatioByExpanding));
 }
-void View::zoomOutCanvas(QImage){
+
+//Displays the image with the given ratio to increase the size
+void View::zoomOutCanvas(QPixmap currentPic, int canvasSize, int zoomIndex){
+    int ratio = ui->canvasLabel->height()/canvasSize;
+
+
+    canvasLabelHeight =360 +(ratio*(2*zoomIndex));
+    canvasLabelWidth = 360 +(ratio*(2*zoomIndex));
+    //display our QPixmap into our canvas size
+
+    ui->canvasLabel->setPixmap(currentPic.scaled(canvasLabelWidth, canvasLabelHeight));
 }
+
+
+
+//It disables the buttons when in the model we notice that
+//zooming  in is out of bounds.
+void View::disableZoomButtons(std::string zoomType){
+    if(zoomType == "zoomIn")
+        ui->zoomInButton->setEnabled(false);
+    else
+        ui->zoomOutButton->setEnabled(false);
+
+}
+
 
 void View::on_clickMouse_released(QPoint &loc) {
 

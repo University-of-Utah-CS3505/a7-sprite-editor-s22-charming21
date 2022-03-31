@@ -5,10 +5,12 @@ model::model(QObject *parent)
     : QObject{parent}
 {
     penColor.setRgb(0, 0, 0, 255);
-    canvasHeight = 20;
-    canvasWidth = 20;
-    zoomHeight = 20;
-    zoomWidth = 20;
+    canvasHeight = 20; //Change to have it initialized
+    canvasWidth = 20; //Change to have it initialized
+    zoomHeight = 20; //Change to have it initialized
+    zoomWidth = 20; //Change to have it initialized
+    zoomIndex = 0;
+    ratio = 360/20; //change to have it initialized
     framesPerSec = 1;
     currentFrame = 1;
     penSize = 1;
@@ -123,56 +125,50 @@ void model::deleteFrame(){
     emit updateFrameNumberLabel(currentFrame, frames.size());
 }
 
-//Need to Fix
+//Need to implement the change of pixels to edit
 //This method increases the size of the image, and sends it back to the
 //view  to be displayed in the canvas
-void model::zoomIn(){    
+void model::zoomIn(){
 
-    //Decrease our height and Width if is not out of bounds
-    //CHANGE: Make another emit that sends message to vew and it desable zoom Out button
-    if(zoomHeight - 5 < 4 || zoomWidth - 5 < 4){
-        zoomHeight = zoomHeight - 5;
-        zoomWidth = zoomWidth - 5;
+    //Check if it is within bounds
+    if(zoomHeight > 2 ){
+        //canvas height and width changes (the display will be different)
+        zoomHeight = zoomHeight -2;
+        zoomWidth = zoomWidth -2;
+        zoomIndex++;
+
+        QPixmap currentPic;
+        //Convert QImage to QPixmap
+        currentPic.convertFromImage(frames[currentFrame-1]); //maybe resize?
+        //Return the pixmap of our QImage with the scaled version
+        emit toZoomIn(currentPic, zoomWidth, zoomIndex);
     }
+    else
+        emit disableZoom("zoomIn");
 
-    //Set our Image to the scaled version
-    //frames[currentFrame-1] = frames[currentFrame-1].scaled(canvasWidth, canvasHeight);
-
-    //setWorldTransform
-    //Create a Pixmap to return to view
-    QPixmap currentPic;
-    //Convert QImage to QPixmap
-    currentPic.convertFromImage(frames[currentFrame-1]);
-    //Return the pixmap of our QImage with the scaled version
-
-    emit setCanvas(currentPic.scaled(zoomWidth, zoomHeight));
-    //emit setCanvas(frames[currentFrame -1]);
 }
 
-//Need to Fix
-//This method decreases the size of the image, and sends it back to the
-//view  to be displayed in the canvas
+
 void model::zoomOut(){
-    //Increase our height and Width if is not out of bounds
-    //CHANGE: Make another emit that sends message to vew and it desable zoom Out button
-    if(zoomHeight + 5 > canvasHeight || zoomWidth + 5 > canvasWidth){
-        zoomHeight = zoomHeight + 5;
-        zoomWidth = zoomWidth + 5;
+
+    //Check if is within bounds
+    if(zoomHeight < canvasHeight){
+        zoomHeight = zoomHeight +2;
+        zoomWidth = zoomWidth +2;
+        zoomIndex--;
+
+        QPixmap currentPic;
+        //Convert QImage to QPixmap
+        currentPic.convertFromImage(frames[currentFrame-1]);
+        //Return the pixmap of our QImage with the scaled version
+        emit toZoomOut(currentPic, zoomHeight, zoomIndex);
     }
-
-    //Set our Image to the scaled version
-    //frames[currentFrame-1] = frames[currentFrame-1].scaled(canvasWidth, canvasHeight);
-
-    //Create a Pixmap to return to view
-    QPixmap currentPic;
-    //Convert QImage to QPixmap
-    currentPic.convertFromImage(frames[currentFrame-1]);
-    //Return the pixmap of our QImage with the scaled version
-    emit setCanvas(currentPic.scaled(zoomWidth, zoomHeight));
-    //emit setCanvas(frames[currentFrame -1]);
-
+    else
+        emit disableZoom("zoomOut");
 
 }
+
+
 
 void model::updateFPS(int fps){
     framesPerSec = fps;
@@ -332,19 +328,37 @@ void model::drawOnCanvas(QPoint pixelPoint){
     //Set the canvas ratio -> Canvas Label Size / number of pixels
     //(Choose height, but height and width should all be the same)
     std::cout << canvasHeight << std::endl;
-    ratio = 360/canvasHeight;
-    //Calculate x and y position of our QImage pixels
-    int x = pixelPoint.x()/ratio;
-    int y = pixelPoint.y()/ratio;
+
+    int x;
+    int y;
+    //1. Know if we are zoomed in
+    if(canvasHeight != zoomHeight ){
+        ratio = 360/ zoomHeight;
+        x = (pixelPoint.x()/ratio) * zoomIndex;
+        y = (pixelPoint.y()/ratio) * zoomIndex;
+
+
+    }
+    //To fix: assign the value that is given by the canvas, to the actual pixel correspondadn
+    //to our class.
+    else {
+        ratio = 360/canvasHeight;
+        //Calculate x and y position of our QImage pixels
+        x = pixelPoint.x()/ratio;
+        y = pixelPoint.y()/ratio;
+    }
+
+
+
 
     //gon added
-    int pointStartX = x * ratio;
-    int pointStartY = y * ratio;
-    int pointEndX = pointStartX + (penSize * ratio);
-    int pointEndY = pointStartY + (penSize * ratio);
+//    int pointStartX = x * ratio;
+//    int pointStartY = y * ratio;
+//    int pointEndX = pointStartX + (penSize * ratio);
+//    int pointEndY = pointStartY + (penSize * ratio);
 
-    std::cout << pointStartX << " " << pointStartY << std::endl;
-    std::cout << pointEndX << " " << pointEndY << std::endl;
+//    std::cout << pointStartX << " " << pointStartY << std::endl;
+//    std::cout << pointEndX << " " << pointEndY << std::endl;
 
     //Edit the pixels of the current QImage
     //frames[currentFrame -1].setPixelColor(x, y,penColor);
