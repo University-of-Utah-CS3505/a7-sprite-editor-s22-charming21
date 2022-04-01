@@ -124,6 +124,7 @@ public slots:
 
     //Save file
     void save(QString fileName); //do i need to make it const? (Brittney)
+    void open(QString fileName);
 };
 
 #endif // MODEL_H

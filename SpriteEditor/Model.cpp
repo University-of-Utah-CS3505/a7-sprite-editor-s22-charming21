@@ -441,7 +441,6 @@ void model::updateActualLabel(){
 
     emit showSprite(frames[currentIndex]);
 
-    //is there a way to access an index in frames without a instance current variable.
     currentIndex++;
     if(currentIndex == frames.size())
         currentIndex = 0;
@@ -471,15 +470,14 @@ void model::save(QString fileName){//QJsonObject &json) const{ //change paramete
             QJsonArray row;
             for(int pixelNum = 0; pixelNum < canvasWidth; pixelNum++)
             {
-                QJsonObject pixel;
+                QJsonArray pixelColor;
                 QString pixelName = "pixel" + QString::number(pixelNum);
-                pixel["r"] = a.pixelColor(pixelNum,rowNum).red();
-                pixel["g"] = a.pixelColor(pixelNum,rowNum).green();
-                pixel["b"] = a.pixelColor(pixelNum,rowNum).blue();
-                pixel["a"] = a.pixelColor(pixelNum,rowNum).alpha();
-                row.append(pixel);
+                pixelColor.append(a.pixelColor(pixelNum,rowNum).red());
+                pixelColor.append(a.pixelColor(pixelNum,rowNum).green());
+                pixelColor.append(a.pixelColor(pixelNum,rowNum).blue());
+                pixelColor.append(a.pixelColor(pixelNum,rowNum).alpha());
+                row.append(pixelColor);
             }
-            QString rowName = "row" + QString::number(rowNum);
             frame.append(row);
         }
         QString frameName = "Frame" + QString::number(n);
@@ -490,27 +488,117 @@ void model::save(QString fileName){//QJsonObject &json) const{ //change paramete
     json["frames"] = framesObj;
     QJsonDocument doc(json);
 
-    //to print our in application output (testing)
-    //QString strJson(doc.toJson(QJsonDocument::Compact));
-    //std::cout<<strJson.toStdString()<<std::endl;
-
     QFile jsonFile(fileName + ".ssp");
     jsonFile.open(QFile::WriteOnly);
     jsonFile.write(doc.toJson());
+}
 
-
+void model::open(QString fileName){
+    read(fileName);
 }
 
 //Read/Open file
-void model::read(QString filePath){
-//    TODO: Still trying to figure this out (Brittney)
-//    QJsonDocument doc;
+void model::read(QString fileName){
+    //opening the file and saving the information to a QByteArray
+    QJsonDocument doc;
+    QByteArray saveData;
+    QFile loadFile(fileName);
+    QList<QColor> colorList;
+    if(loadFile.open(QIODevice::ReadOnly))
+    {
+        saveData = loadFile.readAll();
+    }
+    else
+        qWarning("Couldn't open save File");
 
-//    QFile loadFile(filePath);
-//    if(loadFile.open(QIODevice::ReadOnly))
-//        doc = QJsonDocument().fromJson(loadFile.readAll());
-//    if(!doc.isEmpty())
-//    {
+    //convert the information to a QJsonDocument, and open it with QJsonObject
+    QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
+    QJsonObject jsonFromLoadFile = loadDoc.object();
 
-//    }
+    int frameCount = 0; //starting number of frames
+    int numberOfFrames = 0;
+    if(jsonFromLoadFile.contains("height") && jsonFromLoadFile["height"].isDouble() && jsonFromLoadFile.contains("width") && jsonFromLoadFile["width"].isDouble())
+    {
+        double somevalue = jsonFromLoadFile["height"].toDouble();
+        double othervalue = jsonFromLoadFile["width"].toDouble();
+        if(somevalue == othervalue)
+        {
+            canvasHeight = somevalue;
+            canvasWidth = somevalue; //canvasSize = somevalue; //uncomment this code
+        }
+        else
+        {
+            qWarning("File size is not valid, needs to be a perfect square"); //TODO, I need to stop the upload if the canvas size isn't a perfect square.
+        }
+
+    }
+    if(jsonFromLoadFile.contains("numberOfFrames") && jsonFromLoadFile["numberOfFrames"].isDouble())
+    {
+        numberOfFrames = jsonFromLoadFile["numberOfFrames"].toDouble();
+    }
+
+    if(jsonFromLoadFile.contains("frames") && jsonFromLoadFile["frames"].isObject())
+    {
+        QJsonObject frame = jsonFromLoadFile["frames"].toObject();
+        while(frameCount < numberOfFrames)
+        {
+            if(frame.contains("Frame"+ QString::number(frameCount)) && frame["Frame" + QString::number(frameCount)].isArray())
+            {
+                QJsonArray rowArray = frame["Frame" + QString::number(frameCount)].toArray();
+                for(QJsonValue value: rowArray)
+                {
+                    QJsonArray pixelArray = value.toArray();
+                    for(QJsonValue valueP : pixelArray)
+                    {
+                        QJsonArray colorArray = valueP.toArray();
+                        QColor color;
+                        int cIndex =0;
+                        for(QJsonValue colorVal : colorArray)
+                        {
+                            int colorValues = colorVal.toDouble();
+                            if(cIndex == 0)
+                                color.setRed(colorValues);
+                            else if(cIndex ==1)
+                                color.setGreen(colorValues);
+                            else if(cIndex ==2)
+                                color.setBlue(colorValues);
+                            else
+                                color.setAlpha(colorValues);
+                            cIndex++;
+                        }
+                        colorList.append(color);
+                    }
+                }
+                frameCount++;
+            }
+        }
+    }
+
+    //emptys our current qlist<Qimage> list in model
+    if(!frames.isEmpty())
+    {
+        QList<QImage> empty;
+        frames = empty;
+    }
+
+    //This is where we add everything to the model, such as : frames, canvassize
+    int frameCounter =0;
+    int colorCounter =0;
+    while(frameCounter < numberOfFrames)
+    {
+        frames.append(QImage(canvasHeight,canvasHeight,QImage::Format_ARGB32));
+        frames[frameCounter].fill(Qt::white);
+
+        for(int y=0; y < canvasHeight; y++)
+        {
+            for(int x=0; x <canvasHeight; x++)
+            {
+                frames[frameCounter].setPixelColor(x,y,colorList[colorCounter]);
+                colorCounter++;
+            }
+        }
+        frameCounter++;
+    }
+
+    //update in the view : TODO
 }

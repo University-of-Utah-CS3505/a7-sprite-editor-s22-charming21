@@ -24,6 +24,7 @@ signals:
     void updateColor(QColor);
     void editCanvas(QPoint);
     void save(QString);
+    void open(QString);
 
 
 private slots:

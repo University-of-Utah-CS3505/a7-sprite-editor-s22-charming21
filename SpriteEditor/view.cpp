@@ -234,11 +234,15 @@ View::View(model& model, QWidget *parent)
             &QAction::triggered,
             this,
             &View::openFile);
+    connect(this,
+            &View::open,
+            &model,
+            &model::open);
 
 }
 
 void View::displaySprite(QImage currentFrame){
-    //fix scaling issue of the qimage
+
     ui->actualSizeLabel->setPixmap(QPixmap::fromImage(currentFrame));
 }
 View::~View()
@@ -346,8 +350,9 @@ void View::saveFile()
 
 void View::openFile()
 {
-    QFileDialog::getOpenFileName(this, "Open file", "C://");
+    QString fileName = QFileDialog::getOpenFileName(this, "Open file", "C://");
     // will have to do an emit to the model
+    emit open(fileName);
 
 }
 
