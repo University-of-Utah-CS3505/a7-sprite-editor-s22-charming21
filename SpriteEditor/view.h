@@ -5,6 +5,7 @@
 #include <QColorDialog>
 #include <QPixmap>
 #include "model.h"
+#include "canvaspreview.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class View; }
@@ -76,10 +77,12 @@ private slots:
      void openFile();
 
 
+     void on_actualSizeButton_clicked(QImage);
+
 private:
     Ui::View *ui;
     int canvasLabelSize;
     void initCanvasSizesComboBox();
-
+    canvaspreview canvasPreview;
 };
 #endif // VIEW_H

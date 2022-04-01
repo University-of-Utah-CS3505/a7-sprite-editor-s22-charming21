@@ -270,6 +270,10 @@ View::View(model& model, QWidget *parent)
             &model::showSprite,
             this,
             &View::displaySprite);
+    connect(&model,
+            &model::showSprite,
+            this,
+            &View::on_actualSizeButton_clicked);
 
     // save file
     connect(ui->actionSave,
@@ -497,6 +501,15 @@ void View::enableStartButtons(){
 
 
 void View::on_clickMouse_released(QPoint &loc) {
+
+}
+
+
+void View::on_actualSizeButton_clicked(QImage currentFrame)
+{
+    canvasPreview.updateCanvas(currentFrame);
+
+    canvasPreview.show();
 
 }
 

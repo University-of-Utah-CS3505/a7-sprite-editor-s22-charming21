@@ -153,7 +153,7 @@ public:
 
         verticalLayoutWidget_4 = new QWidget(centralwidget);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
-        verticalLayoutWidget_4->setGeometry(QRect(0, 110, 181, 431));
+        verticalLayoutWidget_4->setGeometry(QRect(0, 110, 181, 456));
         toolBarAndFrame = new QVBoxLayout(verticalLayoutWidget_4);
         toolBarAndFrame->setObjectName(QString::fromUtf8("toolBarAndFrame"));
         toolBarAndFrame->setContentsMargins(0, 0, 0, 0);
@@ -326,7 +326,7 @@ public:
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 17));
+        menubar->setGeometry(QRect(0, 0, 800, 24));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuAbout = new QMenu(menubar);
