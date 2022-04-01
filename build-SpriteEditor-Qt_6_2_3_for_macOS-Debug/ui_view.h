@@ -228,13 +228,13 @@ public:
 
         addFrameButton = new QPushButton(verticalLayoutWidget_4);
         addFrameButton->setObjectName(QString::fromUtf8("addFrameButton"));
-        addFrameButton->setEnabled(true);
+        addFrameButton->setEnabled(false);
 
         frameLayout->addWidget(addFrameButton);
 
         insertFrameButton = new QPushButton(verticalLayoutWidget_4);
         insertFrameButton->setObjectName(QString::fromUtf8("insertFrameButton"));
-        insertFrameButton->setEnabled(true);
+        insertFrameButton->setEnabled(false);
 
         frameLayout->addWidget(insertFrameButton);
 
@@ -252,13 +252,13 @@ public:
 
         copyButton = new QPushButton(verticalLayoutWidget_4);
         copyButton->setObjectName(QString::fromUtf8("copyButton"));
-        copyButton->setEnabled(true);
+        copyButton->setEnabled(false);
 
         frameLayout->addWidget(copyButton);
 
         ClearButton = new QPushButton(verticalLayoutWidget_4);
         ClearButton->setObjectName(QString::fromUtf8("ClearButton"));
-        ClearButton->setEnabled(true);
+        ClearButton->setEnabled(false);
 
         frameLayout->addWidget(ClearButton);
 

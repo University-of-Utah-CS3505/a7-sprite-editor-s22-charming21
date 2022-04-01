@@ -230,7 +230,7 @@
          <item>
           <widget class="QPushButton" name="addFrameButton">
            <property name="enabled">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
            <property name="text">
             <string>Insert After</string>
@@ -240,7 +240,7 @@
          <item>
           <widget class="QPushButton" name="insertFrameButton">
            <property name="enabled">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
            <property name="text">
             <string>Insert Before</string>
@@ -270,7 +270,7 @@
          <item>
           <widget class="QPushButton" name="copyButton">
            <property name="enabled">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
            <property name="text">
             <string>Copy</string>
@@ -280,7 +280,7 @@
          <item>
           <widget class="QPushButton" name="ClearButton">
            <property name="enabled">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
            <property name="text">
             <string>Clear</string>

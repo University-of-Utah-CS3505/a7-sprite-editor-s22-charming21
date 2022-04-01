@@ -250,7 +250,6 @@ void model::swapDown(){
 void model::clearCanvas(){
     QImage frame(canvasSize, canvasSize, QImage::Format_ARGB32);
     frame.fill(Qt::white);
-    std::cout << currentFrame << " " << frames.size() << std::endl;
     frames.replace(currentFrame - 1, frame);
 
     emit enableUndo();
@@ -478,7 +477,6 @@ void model::saveFrameToStack(){
 //Frame that we are currently in
 void model::selectedFrame(int index){
     currentFrame = index + 1;
-    std::cout << "current: " << currentFrame << " size: " << frames.size() << std::endl;
 
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
     emit setCanvas(map);
@@ -486,25 +484,21 @@ void model::selectedFrame(int index){
 
     if(currentFrame == frames.size()){
         emit disableNextButton();
+        emit disableSwapDown();
     }
-
-    if(currentFrame < frames.size()){
+    else if(currentFrame < frames.size()){
         emit enableNextButton();
-    }
-
-    if(currentFrame > frames.size()){
-        emit enableLastButton();
+        emit enableSwapDown();
     }
 
     if(currentFrame == 1){
         emit disableLastButton();
+        emit disableSwapUp();
     }
-    else if(frames.size() != 1){
+    else if(currentFrame > 1){
         emit enableLastButton();
+        emit enableSwapUp();
     }
-
-
-
 }
 
 //updates the toolsize, we first check our selected tool
