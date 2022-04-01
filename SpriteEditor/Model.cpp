@@ -78,17 +78,20 @@ void model::initializeCanvasSize(int index){
         break;
     }
 
-    // default values to be determined
+    //set up default values
     frames.append(QImage (canvasSize, canvasSize, QImage::Format_ARGB32));
+    currentTool = SelectedTool::SC_Pen;
+
     //Make the first inage to have a white background
     frames[currentFrame-1].fill(Qt::white);
     undoStack.push(frames);
+    emit startButtons();
 
 }
 
 
 
-// add a new frame to the position next to the current frame
+// Add a new frame to the position next to the current frame
 void model::addNewFrame(){
     QImage frame(canvasSize, canvasSize, QImage::Format_ARGB32);
     frame.fill(Qt::white);
@@ -193,6 +196,36 @@ void model::deleteFrame(){
     emit updateFrameNumberLabel(currentFrame, frames.size());
 }
 
+void model::clearCanvas(){
+    QImage frame(canvasSize, canvasSize, QImage::Format_ARGB32);
+    frame.fill(Qt::white);
+    frames.replace(currentFrame - 1, frame);
+    QPixmap map = QPixmap::fromImage(frame);
+    emit setCanvas(map);
+    emit enableUndo();
+    undoStack.push(frames);
+}
+
+void model::copyFrame(){
+    QImage frame = QImage(frames.at(currentFrame - 1));
+    frames.insert(currentFrame++, frame);
+
+    emit updateFrameNumberCombo(currentFrame, frames.size());
+    emit updateFrameNumberLabel(currentFrame, frames.size());
+    emit enableDeleteButton();
+    emit enableLastButton();
+    emit enableUndo();
+    undoStack.push(frames);
+
+    // if the new frame is at the end of the list, disale next button
+    if(currentFrame == frames.size()){
+        emit disableNextButton();
+    }
+    //frames[currentFrame-1].fill(Qt::white);
+    QPixmap map = QPixmap::fromImage(frame);
+    emit setCanvas(map);
+}
+
 //Need to implement the change of pixels to edit
 //This method increases the size of the image, and sends it back to the
 //view  to be displayed in the canvas
@@ -209,6 +242,7 @@ void model::zoomIn(){
         currentPic.convertFromImage(frames[currentFrame-1]); //maybe resize?
         //Return the pixmap of our QImage with the scaled version
         emit toZoomIn(currentPic, zoomSize, zoomIndex);
+        emit enableZoomOut();
     }
     else
         emit disableZoom("zoomIn");
@@ -228,6 +262,7 @@ void model::zoomOut(){
         currentPic.convertFromImage(frames[currentFrame-1]);
         //Return the pixmap of our QImage with the scaled version
         emit toZoomOut(currentPic, zoomSize, zoomIndex);
+        emit enableZoomIn();
     }
     else
         emit disableZoom("zoomOut");
@@ -261,6 +296,7 @@ void model::updatePenColor(QColor color){
     penColor = color;
     emit setColorLabel(penColor);
 }
+
 //updates our current tool we are using
 void model::updateTool(std::string tool){
     //Should we do a switch case? if we do, we have to change parameters (bri)
@@ -291,11 +327,16 @@ void model::undo(){
 
     QList<QImage> previousFrames = undoStack.at(undoStack.size() - 1);
 
+    if(previousFrames.size() > frames.size()){
+        currentFrame++;
+    }
+
     if(frames.size() > previousFrames.size() && currentFrame == previousFrames.size() + 1){
         currentFrame--;
     }
 
     frames = previousFrames;
+
 
     if(frames.size() > currentFrame){
         emit enableNextButton();
@@ -321,15 +362,12 @@ void model::undo(){
 void model::redo(){
     frames = redoStack.pop();
 
-    if(frames.size() > currentFrame){
-        currentFrame++;
-    }
-
     undoStack.push(frames);
 
     emit enableUndo();
 
     if(frames.size() > currentFrame){
+        currentFrame++;
         emit enableNextButton();
     }
     else if(frames.size() == currentFrame){
@@ -343,17 +381,12 @@ void model::redo(){
         emit disableRedo();
     }
 
-
-
-
     if(currentFrame > 1){
         emit enableLastButton();
     }
     else{
         emit disableLastButton();
     }
-
-
 
     emit updateFrameNumberLabel(currentFrame, frames.size());
     emit updateFrameNumberCombo(currentFrame, frames.size());
@@ -364,10 +397,6 @@ void model::redo(){
 void model::saveFrameToStack(){
     emit enableUndo();
     undoStack.push(frames);
-
-    if(undoStack.size() > 10000){
-        undoStack.pop_back();
-    }
 }
 
 //Frame that we are currently in
@@ -561,11 +590,13 @@ void model::drawOnCanvas(QPoint pixelPoint){
         //Default Values
         canvasSize = 20;
         zoomSize = 20;
-        // default values to be determined
+        // default values to be determined        
         frames.append(QImage (canvasSize, canvasSize, QImage::Format_ARGB32));
+        currentTool = SelectedTool::SC_Pen;
         //Make the first inage to have a white background
         frames[currentFrame-1].fill(Qt::white);
         undoStack.push(frames);
+        emit startButtons();
     }
 
     //Get the position to paint

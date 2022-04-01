@@ -229,6 +229,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="addFrameButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Insert After</string>
            </property>
@@ -236,8 +239,51 @@
          </item>
          <item>
           <widget class="QPushButton" name="insertFrameButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Insert Before</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="swapUpButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Swap(up)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="swapDownButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Swap(down)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="copyButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Copy</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="ClearButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Clear</string>
            </property>
           </widget>
          </item>
@@ -282,6 +328,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="zoomInButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Zoom In</string>
        </property>
@@ -289,6 +338,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="zoomOutButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Zoom Out</string>
        </property>

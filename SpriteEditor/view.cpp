@@ -21,14 +21,12 @@ View::View(model& model, QWidget *parent)
    ui->canvasLabel->setPixmap(startImage);
 
    //Set height and width
-   canvasLabelHeight = ui->canvasLabel->height();
-   canvasLabelWidth = ui->canvasLabel->width();
+   canvasLabelSize = ui->canvasLabel->height();
 
     // set frame combo box alliment
     ui->framesComboBox->setEditable(true);
     ui->framesComboBox->lineEdit()->setReadOnly(true);
     ui->framesComboBox->lineEdit()->setAlignment(Qt::AlignCenter);
-
 
     // set color label
     ui->colorLabel->setStyleSheet("background-color: black");
@@ -137,6 +135,10 @@ View::View(model& model, QWidget *parent)
             &model::disableUndo,
             this,
             &View::disableUndoButton);
+    connect(&model,
+            &model::setCanvas,
+            this,
+            &View::enableStartButtons);
 
     // color wheel
     connect(&model,
@@ -166,11 +168,19 @@ View::View(model& model, QWidget *parent)
         connect(&model,
                 &model::toZoomIn,
                 this,
-                &View::zoomInCanvas);
+                &View::zoomCanvas);
         connect(&model,
                 &model::toZoomOut,
                 this,
-                &View::zoomOutCanvas);
+                &View::zoomCanvas);
+        connect(&model,
+                &model::enableZoomIn,
+                this,
+                &View::enableZoomInButton);
+        connect(&model,
+                &model::enableZoomOut,
+                this,
+                &View::enableZoomOutButton);
 
         //Redo and Undo
         connect(ui->redoButton,
@@ -234,6 +244,14 @@ View::View(model& model, QWidget *parent)
             &model::setCanvas,
             this,
             &View::updateCanvas);
+    connect(ui->ClearButton,
+            &QPushButton::clicked,
+            &model,
+            &model::clearCanvas);
+    connect(ui->copyButton,
+            &QPushButton::clicked,
+            &model,
+            &model::copyFrame);
 
     // gon
     // connections for increasing and decreasing canvas button and pen size
@@ -345,7 +363,7 @@ void View::mouseLoc(QPoint &loc) // can delete later
 void View::updateCanvas(QPixmap currentPic){
 
     //display our QPixmap into our canvas size
-    ui->canvasLabel->setPixmap(currentPic.scaled(canvasLabelWidth, canvasLabelHeight));
+    ui->canvasLabel->setPixmap(currentPic.scaled(canvasLabelSize, canvasLabelSize));
     //display on actualsize label
     ui->actualSizeLabel->setPixmap(currentPic.scaled(ui->actualSizeLabel->width(),
                                                      ui->actualSizeLabel->height()));
@@ -365,6 +383,7 @@ void View::updateFramesBox(int page, int size){
     }
 
     ui->framesComboBox->setCurrentText(QString::number(page));
+    ui->framesComboBox->setCurrentIndex(page - 1);
 }
 
 void View::updateFramesLabel(int page, int size){
@@ -421,29 +440,21 @@ void View::on_shapeButton_clicked()
 
 
 //Displays the image with the given ratio to increase the size
-void View::zoomInCanvas(QPixmap currentPic, int canvasSize, int zoomIndex){
+void View::zoomCanvas(QPixmap currentPic, int canvasSize, int zoomIndex){
     int ratio = ui->canvasLabel->height()/canvasSize;
 
-
-    canvasLabelHeight = 400 +(ratio*(2*zoomIndex));
-    canvasLabelWidth = 400 +(ratio*(2*zoomIndex));
+    canvasLabelSize = 400 +(ratio*(2*zoomIndex));
     //display our QPixmap into our canvas size
 
-    ui->canvasLabel->setPixmap(currentPic.scaled(canvasLabelWidth, canvasLabelHeight, Qt::KeepAspectRatioByExpanding));
+    ui->canvasLabel->setPixmap(currentPic.scaled(canvasLabelSize, canvasLabelSize, Qt::KeepAspectRatioByExpanding));
 }
 
-//Displays the image with the given ratio to decrease the size
-void View::zoomOutCanvas(QPixmap currentPic, int canvasSize, int zoomIndex){
-    int ratio = ui->canvasLabel->height()/canvasSize;
-
-
-    canvasLabelHeight =400 +(ratio*(2*zoomIndex));
-    canvasLabelWidth = 400 +(ratio*(2*zoomIndex));
-    //display our QPixmap into our canvas size
-
-    ui->canvasLabel->setPixmap(currentPic.scaled(canvasLabelWidth, canvasLabelHeight));
+void View::enableZoomInButton(){
+    ui->zoomInButton->setEnabled(true);
 }
-
+void View::enableZoomOutButton(){
+    ui->zoomOutButton->setEnabled(true);
+}
 
 
 //It disables the buttons when in the model we notice that
@@ -476,7 +487,13 @@ void View::initCanvasSizesComboBox(){
     ui->canvasSizeComboBox->setCurrentIndex(6);
 }
 
-
+void View::enableStartButtons(){
+    ui->insertFrameButton->setEnabled(true);
+    ui->addFrameButton->setEnabled(true);
+    ui->copyButton->setEnabled(true);
+    ui->ClearButton->setEnabled(true);
+    ui->zoomInButton->setEnabled(true);
+}
 
 
 void View::on_clickMouse_released(QPoint &loc) {

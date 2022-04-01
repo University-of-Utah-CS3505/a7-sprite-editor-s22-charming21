@@ -62,6 +62,10 @@ public:
     QPushButton *nextFrameButton;
     QPushButton *addFrameButton;
     QPushButton *insertFrameButton;
+    QPushButton *swapUpButton;
+    QPushButton *swapDownButton;
+    QPushButton *copyButton;
+    QPushButton *ClearButton;
     QPushButton *deleteFrameButton;
     QLabel *posLabel;
     QWidget *horizontalLayoutWidget;
@@ -224,13 +228,39 @@ public:
 
         addFrameButton = new QPushButton(verticalLayoutWidget_4);
         addFrameButton->setObjectName(QString::fromUtf8("addFrameButton"));
+        addFrameButton->setEnabled(false);
 
         frameLayout->addWidget(addFrameButton);
 
         insertFrameButton = new QPushButton(verticalLayoutWidget_4);
         insertFrameButton->setObjectName(QString::fromUtf8("insertFrameButton"));
+        insertFrameButton->setEnabled(false);
 
         frameLayout->addWidget(insertFrameButton);
+
+        swapUpButton = new QPushButton(verticalLayoutWidget_4);
+        swapUpButton->setObjectName(QString::fromUtf8("swapUpButton"));
+        swapUpButton->setEnabled(false);
+
+        frameLayout->addWidget(swapUpButton);
+
+        swapDownButton = new QPushButton(verticalLayoutWidget_4);
+        swapDownButton->setObjectName(QString::fromUtf8("swapDownButton"));
+        swapDownButton->setEnabled(false);
+
+        frameLayout->addWidget(swapDownButton);
+
+        copyButton = new QPushButton(verticalLayoutWidget_4);
+        copyButton->setObjectName(QString::fromUtf8("copyButton"));
+        copyButton->setEnabled(false);
+
+        frameLayout->addWidget(copyButton);
+
+        ClearButton = new QPushButton(verticalLayoutWidget_4);
+        ClearButton->setObjectName(QString::fromUtf8("ClearButton"));
+        ClearButton->setEnabled(false);
+
+        frameLayout->addWidget(ClearButton);
 
         deleteFrameButton = new QPushButton(verticalLayoutWidget_4);
         deleteFrameButton->setObjectName(QString::fromUtf8("deleteFrameButton"));
@@ -255,11 +285,13 @@ public:
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
         zoomInButton = new QPushButton(horizontalLayoutWidget);
         zoomInButton->setObjectName(QString::fromUtf8("zoomInButton"));
+        zoomInButton->setEnabled(false);
 
         horizontalLayout->addWidget(zoomInButton);
 
         zoomOutButton = new QPushButton(horizontalLayoutWidget);
         zoomOutButton->setObjectName(QString::fromUtf8("zoomOutButton"));
+        zoomOutButton->setEnabled(false);
 
         horizontalLayout->addWidget(zoomOutButton);
 
@@ -340,6 +372,10 @@ public:
         nextFrameButton->setText(QCoreApplication::translate("View", "Next Frame", nullptr));
         addFrameButton->setText(QCoreApplication::translate("View", "Insert After", nullptr));
         insertFrameButton->setText(QCoreApplication::translate("View", "Insert Before", nullptr));
+        swapUpButton->setText(QCoreApplication::translate("View", "Swap(up)", nullptr));
+        swapDownButton->setText(QCoreApplication::translate("View", "Swap(down)", nullptr));
+        copyButton->setText(QCoreApplication::translate("View", "Copy", nullptr));
+        ClearButton->setText(QCoreApplication::translate("View", "Clear", nullptr));
         deleteFrameButton->setText(QCoreApplication::translate("View", "Delete Frame", nullptr));
         posLabel->setText(QString());
         zoomInButton->setText(QCoreApplication::translate("View", "Zoom In", nullptr));

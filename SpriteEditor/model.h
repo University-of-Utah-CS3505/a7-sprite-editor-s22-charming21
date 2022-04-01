@@ -90,15 +90,17 @@ signals:
     void disableUndo();
     void enableRedo();
     void disableRedo();
-
+    void startButtons();
     void setCanvas(QPixmap);
 
     void showSprite(QImage);
 
-    //temp zoom in
+    //zoom
     void toZoomIn(QPixmap, int, int);
     void toZoomOut(QPixmap, int, int);
     void disableZoom(std::string);
+    void enableZoomIn();
+    void enableZoomOut();
 
 public slots:
     void addNewFrame();
@@ -117,6 +119,9 @@ public slots:
     void updateTool(std::string); //Change parameter from Selected tools to std::string
     void getList(QList<QImage>);
     void checkCurrentColor(QColor);
+    void clearCanvas();
+    void copyFrame();
+
     //Added
     void undo(); //need change parameters?
     void redo(); //need change parameters?
