@@ -14,14 +14,24 @@ View::View(model& model, QWidget *parent)
 
     initCanvasSizesComboBox();
 
-   //A white image to start with in the canvas
-   QPixmap startImage(ui->canvasLabel->width(), ui->canvasLabel->height());
-   QPainter paint(&startImage);
-   startImage.fill(Qt::white );
-   ui->canvasLabel->setPixmap(startImage);
+    // Set icons
+    ui->penButton->setIcon(QIcon(":/new/UI_Icons/Tool_Pen.png"));
+    ui->eraserButton->setIcon(QIcon(":/new/UI_Icons/Tool_Eraser.png"));
+    ui->bucketButton->setIcon(QIcon(":/new/UI_Icons/Tool_Bucket.png"));
+    ui->shapeButton->setIcon(QIcon(":/new/UI_Icons/Tool_ShapeCreator.png"));
+    ui->undoButton->setIcon(QIcon(":/new/UI_Icons/Button_Undo.png"));
+    ui->redoButton->setIcon(QIcon(":/new/UI_Icons/Button_Redo.png"));
+    ui->zoomInButton->setIcon(QIcon(":/new/UI_Icons/Button_ZoomIn.png"));
+    ui->zoomOutButton->setIcon(QIcon(":/new/UI_Icons/Button_ZoomOut.png"));
 
-   //Set height and width
-   canvasLabelSize = ui->canvasLabel->height();
+    // A white image to start with in the canvas
+    QPixmap startImage(ui->canvasLabel->width(), ui->canvasLabel->height());
+    QPainter paint(&startImage);
+    startImage.fill(Qt::white );
+    ui->canvasLabel->setPixmap(startImage);
+
+    // Set height and width
+    canvasLabelSize = ui->canvasLabel->height();
 
     // set frame combo box alliment
     ui->framesComboBox->setEditable(true);

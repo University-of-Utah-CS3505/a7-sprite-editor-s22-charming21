@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QColorDialog>
 #include <QPixmap>
+#include <QIcon>
 #include "model.h"
 #include "canvaspreview.h"
 
