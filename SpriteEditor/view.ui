@@ -19,8 +19,8 @@
      <rect>
       <x>190</x>
       <y>20</y>
-      <width>360</width>
-      <height>360</height>
+      <width>400</width>
+      <height>400</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -117,9 +117,9 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>20</y>
+      <y>110</y>
       <width>181</width>
-      <height>521</height>
+      <height>431</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="toolBarAndFrame">
@@ -229,6 +229,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="addFrameButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Insert After</string>
            </property>
@@ -236,8 +239,51 @@
          </item>
          <item>
           <widget class="QPushButton" name="insertFrameButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Insert Before</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="swapUpButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Swap(up)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="swapDownButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Swap(down)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="copyButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Copy</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="ClearButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Clear</string>
            </property>
           </widget>
          </item>
@@ -282,6 +328,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="zoomInButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Zoom In</string>
        </property>
@@ -289,24 +338,55 @@
      </item>
      <item>
       <widget class="QPushButton" name="zoomOutButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Zoom Out</string>
        </property>
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="undoButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Undo</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="redoButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Redo</string>
        </property>
       </widget>
      </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>20</y>
+      <width>181</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QPushButton" name="undoButton">
+      <widget class="QLabel" name="canvasSizeLabel">
        <property name="text">
-        <string>Undo</string>
+        <string>Canvas Size </string>
        </property>
       </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="canvasSizeComboBox"/>
      </item>
     </layout>
    </widget>

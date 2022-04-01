@@ -50,10 +50,16 @@ private slots:
     void disableLastButton();
     void enableNextButton();
     void enableLastButton();
+    void enableUndoButton();
+    void disableUndoButton();
+    void enableRedoButton();
+    void disableRedoButton();
 
     //Zoom
-    void zoomInCanvas(QImage);
-    void zoomOutCanvas(QImage);
+    void zoomCanvas(QPixmap, int, int);
+    void disableZoomButtons(std::string);
+    void enableZoomInButton();
+    void enableZoomOutButton();
 
     //Canvas
     void updateCanvas(QPixmap);
@@ -61,8 +67,8 @@ private slots:
     //Frame
     void updateFramesBox(int, int);
     void updateFramesLabel(int, int);
-    void displayFrame(QPixmap);
     void displaySprite(QImage);
+    void enableStartButtons();
 
 
      //Save and Load
@@ -73,6 +79,8 @@ private slots:
 
 private:
     Ui::View *ui;
+    int canvasLabelSize;
+    void initCanvasSizesComboBox();
 
 };
 #endif // VIEW_H

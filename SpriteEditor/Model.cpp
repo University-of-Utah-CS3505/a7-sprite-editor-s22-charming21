@@ -4,33 +4,97 @@
 model::model(QObject *parent)
     : QObject{parent}
 {
+
     penColor.setRgb(0, 0, 0, 255);
-    canvasHeight = 20;
-    canvasWidth = 20;
-    zoomHeight = 20;
-    zoomWidth = 20;
+
+    zoomIndex = 0;
+    ratio = 400/20; //change to have it initialized
     framesPerSec = 1;
     currentFrame = 1;
     penSize = 1;
     eraserSize = 1;
     currentIndex = 0; //for keeping track of our current index in the list when displaying a sprite.
-    // default values to be determined
-    frames.append(QImage (canvasHeight, canvasWidth, QImage::Format_ARGB32));
+    canvasSize = 0; //Initialize with 0
+}
 
-//    //gon
-//    frames.append(QImage (360, 360, QImage::Format_ARGB32));
-//    //
+
+void model::initializeCanvasSize(int index){
+    switch(index){
+    case 0:
+        canvasSize = 2;
+        zoomSize = 2;
+        break;
+    case 1:
+        canvasSize = 4;
+        zoomSize = 4;
+        break;
+    case 2:
+        canvasSize = 5;
+        zoomSize = 5;
+        break;
+    case 3:
+        canvasSize = 8;
+        zoomSize = 8;
+        break;
+    case 4:
+        canvasSize = 10;
+        zoomSize = 10;
+        break;
+    case 5:
+        canvasSize = 16;
+        zoomSize = 16;
+        break;
+    case 6:
+        canvasSize = 20;
+        zoomSize = 20;
+        break;
+    case 7:
+        canvasSize = 25;
+        zoomSize = 25;
+        break;
+    case 8:
+        canvasSize = 40;
+        zoomSize = 40;
+        break;
+    case 9:
+        canvasSize = 50;
+        zoomSize = 50;
+        break;
+    case 10:
+        canvasSize = 80;
+        zoomSize = 80;
+        break;
+    case 11:
+        canvasSize = 100;
+        zoomSize = 100;
+        break;
+    case 12:
+        canvasSize = 200;
+        zoomSize = 200;
+        break;
+    case 13:
+        canvasSize = 400;
+        zoomSize = 400;
+        break;
+    }
+
+    //set up default values
+    frames.append(QImage (canvasSize, canvasSize, QImage::Format_ARGB32));
+    currentTool = SelectedTool::SC_Pen;
 
     //Make the first inage to have a white background
     frames[currentFrame-1].fill(Qt::white);
-
-
+    undoStack.push(frames);
+    emit startButtons();
 
 }
 
-// add a new frame to the position next to the current frame
+
+
+// Add a new frame to the position next to the current frame
 void model::addNewFrame(){
-    QImage frame(canvasHeight, canvasWidth, QImage::Format_ARGB32);
+    QImage frame(canvasSize, canvasSize, QImage::Format_ARGB32);
+    frame.fill(Qt::white);
     frames.insert(currentFrame, frame);
 
     // move to the new frame
@@ -40,20 +104,26 @@ void model::addNewFrame(){
     emit updateFrameNumberLabel(currentFrame, frames.size());
     emit enableDeleteButton();
     emit enableLastButton();
+    emit enableUndo();
+    undoStack.push(frames);
 
     // if the new frame is at the end of the list, disale next button
     if(currentFrame == frames.size()){
         emit disableNextButton();
     }
-    frames[currentFrame-1].fill(Qt::white);
+    //frames[currentFrame-1].fill(Qt::white);
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-    emit goToFrame(map);
+    emit setCanvas(map);
 }
 
 // insert a new frame to the position before current frame
 void model::insertNewFrame(){
-    QImage frame(canvasHeight, canvasWidth, QImage::Format_ARGB32);
+    QImage frame(canvasSize, canvasSize, QImage::Format_ARGB32);
+    frame.fill(Qt::white);
     frames.insert(currentFrame - 1, frame);
+
+    emit enableUndo();
+    undoStack.push(frames);
 
     emit updateFrameNumberCombo(currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
@@ -64,9 +134,9 @@ void model::insertNewFrame(){
         emit disableLastButton();
     }
 
-    frames[currentFrame-1].fill(Qt::white);
+    //frames[currentFrame-1].fill(Qt::white);
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-    emit goToFrame(map);
+    emit setCanvas(map);
 }
 
 void model::nextFrame(){
@@ -79,7 +149,7 @@ void model::nextFrame(){
     }
 
      QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-     emit goToFrame(map);
+     emit setCanvas(map);
 }
 
 void model::lastFrame(){
@@ -92,7 +162,7 @@ void model::lastFrame(){
     }
 
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-    emit goToFrame(map);
+    emit setCanvas(map);
 }
 
 void model::deleteFrame(){
@@ -112,67 +182,94 @@ void model::deleteFrame(){
     if(currentFrame - 1 == frames.size()){
         currentFrame--;
         QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-        emit goToFrame(map);
+        emit setCanvas(map);
     }
     else{
         QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-        emit goToFrame(map);
+        emit setCanvas(map);
     }
+
+    emit enableUndo();
+    undoStack.push(frames);
 
     emit updateFrameNumberCombo(currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
 }
 
-//Need to Fix
+void model::clearCanvas(){
+    QImage frame(canvasSize, canvasSize, QImage::Format_ARGB32);
+    frame.fill(Qt::white);
+    frames.replace(currentFrame - 1, frame);
+    QPixmap map = QPixmap::fromImage(frame);
+    emit setCanvas(map);
+    emit enableUndo();
+    undoStack.push(frames);
+}
+
+void model::copyFrame(){
+    QImage frame = QImage(frames.at(currentFrame - 1));
+    frames.insert(currentFrame++, frame);
+
+    emit updateFrameNumberCombo(currentFrame, frames.size());
+    emit updateFrameNumberLabel(currentFrame, frames.size());
+    emit enableDeleteButton();
+    emit enableLastButton();
+    emit enableUndo();
+    undoStack.push(frames);
+
+    // if the new frame is at the end of the list, disale next button
+    if(currentFrame == frames.size()){
+        emit disableNextButton();
+    }
+    //frames[currentFrame-1].fill(Qt::white);
+    QPixmap map = QPixmap::fromImage(frame);
+    emit setCanvas(map);
+}
+
+//Need to implement the change of pixels to edit
 //This method increases the size of the image, and sends it back to the
 //view  to be displayed in the canvas
-void model::zoomIn(){    
+void model::zoomIn(){
 
-    //Decrease our height and Width if is not out of bounds
-    //CHANGE: Make another emit that sends message to vew and it desable zoom Out button
-    if(zoomHeight - 5 < 4 || zoomWidth - 5 < 4){
-        zoomHeight = zoomHeight - 5;
-        zoomWidth = zoomWidth - 5;
+    //Check if it is within bounds
+    if(zoomSize > 2 ){
+        //canvas height and width changes (the display will be different)
+        zoomSize = zoomSize -2;
+        zoomIndex++;
+
+        QPixmap currentPic;
+        //Convert QImage to QPixmap
+        currentPic.convertFromImage(frames[currentFrame-1]); //maybe resize?
+        //Return the pixmap of our QImage with the scaled version
+        emit toZoomIn(currentPic, zoomSize, zoomIndex);
+        emit enableZoomOut();
     }
+    else
+        emit disableZoom("zoomIn");
 
-    //Set our Image to the scaled version
-    //frames[currentFrame-1] = frames[currentFrame-1].scaled(canvasWidth, canvasHeight);
-
-    //setWorldTransform
-    //Create a Pixmap to return to view
-    QPixmap currentPic;
-    //Convert QImage to QPixmap
-    currentPic.convertFromImage(frames[currentFrame-1]);
-    //Return the pixmap of our QImage with the scaled version
-
-    emit setCanvas(currentPic.scaled(zoomWidth, zoomHeight));
-    //emit setCanvas(frames[currentFrame -1]);
 }
 
-//Need to Fix
-//This method decreases the size of the image, and sends it back to the
-//view  to be displayed in the canvas
+
 void model::zoomOut(){
-    //Increase our height and Width if is not out of bounds
-    //CHANGE: Make another emit that sends message to vew and it desable zoom Out button
-    if(zoomHeight + 5 > canvasHeight || zoomWidth + 5 > canvasWidth){
-        zoomHeight = zoomHeight + 5;
-        zoomWidth = zoomWidth + 5;
+
+    //Check if is within bounds
+    if(zoomSize < canvasSize){
+        zoomSize = zoomSize +2;
+        zoomIndex--;
+
+        QPixmap currentPic;
+        //Convert QImage to QPixmap
+        currentPic.convertFromImage(frames[currentFrame-1]);
+        //Return the pixmap of our QImage with the scaled version
+        emit toZoomOut(currentPic, zoomSize, zoomIndex);
+        emit enableZoomIn();
     }
-
-    //Set our Image to the scaled version
-    //frames[currentFrame-1] = frames[currentFrame-1].scaled(canvasWidth, canvasHeight);
-
-    //Create a Pixmap to return to view
-    QPixmap currentPic;
-    //Convert QImage to QPixmap
-    currentPic.convertFromImage(frames[currentFrame-1]);
-    //Return the pixmap of our QImage with the scaled version
-    emit setCanvas(currentPic.scaled(zoomWidth, zoomHeight));
-    //emit setCanvas(frames[currentFrame -1]);
-
+    else
+        emit disableZoom("zoomOut");
 
 }
+
+
 
 void model::updateFPS(int fps){
     framesPerSec = fps;
@@ -199,6 +296,7 @@ void model::updatePenColor(QColor color){
     penColor = color;
     emit setColorLabel(penColor);
 }
+
 //updates our current tool we are using
 void model::updateTool(std::string tool){
     //Should we do a switch case? if we do, we have to change parameters (bri)
@@ -220,31 +318,115 @@ void model::getList(QList<QImage>){
 
 //need change parameters?
 void model::undo(){
-    //TODO
+    redoStack.push(undoStack.pop());
+    emit enableRedo();
+    if(undoStack.size() == 1){
+        emit disableUndo();
+    }
+
+
+    QList<QImage> previousFrames = undoStack.at(undoStack.size() - 1);
+
+    if(previousFrames.size() > frames.size()){
+        currentFrame++;
+    }
+
+    if(frames.size() > previousFrames.size() && currentFrame == previousFrames.size() + 1){
+        currentFrame--;
+    }
+
+    frames = previousFrames;
+
+
+    if(frames.size() > currentFrame){
+        emit enableNextButton();
+    }
+    else if(frames.size() == currentFrame){
+        emit disableNextButton();
+    }
+
+    if(currentFrame > 1){
+        emit enableLastButton();
+    }
+    else{
+        emit disableLastButton();
+    }
+
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
+    emit updateFrameNumberLabel(currentFrame, frames.size());
+    emit updateFrameNumberCombo(currentFrame, frames.size());
+    emit setCanvas(map);
 }
 
 //need change parameters?
 void model::redo(){
-    //TODO
+    frames = redoStack.pop();
+
+    undoStack.push(frames);
+
+    emit enableUndo();
+
+    if(frames.size() > currentFrame){
+        currentFrame++;
+        emit enableNextButton();
+    }
+    else if(frames.size() == currentFrame){
+        emit disableNextButton();
+    }
+    else{
+        currentFrame = frames.size();
+    }
+
+    if(redoStack.size() == 0){
+        emit disableRedo();
+    }
+
+    if(currentFrame > 1){
+        emit enableLastButton();
+    }
+    else{
+        emit disableLastButton();
+    }
+
+    emit updateFrameNumberLabel(currentFrame, frames.size());
+    emit updateFrameNumberCombo(currentFrame, frames.size());
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
+    emit setCanvas(map);
+}
+
+void model::saveFrameToStack(){
+    emit enableUndo();
+    undoStack.push(frames);
 }
 
 //Frame that we are currently in
 void model::selectedFrame(int index){
     currentFrame = index + 1;
+    std::cout << "current: " << currentFrame << " size: " << frames.size() << std::endl;
+
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-    emit goToFrame(map);
+    emit setCanvas(map);
     emit updateFrameNumberLabel(currentFrame, frames.size());
 
     if(currentFrame == frames.size()){
         emit disableNextButton();
     }
-    else if(currentFrame == 1){
-        emit disableLastButton();
-    }
-    else{
+
+    if(currentFrame < frames.size()){
         emit enableNextButton();
+    }
+
+    if(currentFrame > frames.size()){
         emit enableLastButton();
     }
+
+    if(currentFrame == 1){
+        emit disableLastButton();
+    }
+    else if(frames.size() != 1){
+        emit enableLastButton();
+    }
+
 
 
 }
@@ -357,14 +539,36 @@ void model::updatePixelsByBucketFiller(int x, int y){
     QList<std::tuple<int,int>> pixelsToBeFilled;
     pixelsToBeFilled.append(std::tuple<int,int>(x,y));
     QColor colorToBeChanged = (frames[currentFrame -1]).pixelColor(x,y);
-    pixelsToBeFilled = FindPixelsWithTheSameColorInBound(pixelsToBeFilled,colorToBeChanged,x,y);
+    pixelsToBeFilled = FindPixelsWithTheSameColorInBound(pixelsToBeFilled, frames[currentFrame-1], colorToBeChanged,x,y);
+
+    for(std::tuple<int,int> coordinates : pixelsToBeFilled){
+        QImage* AFrame = &frames[currentFrame -1];
+        AFrame->setPixelColor(std::get<0>(coordinates), std::get<1>(coordinates), penColor);
+    }
 }
 
 QList<std::tuple<int,int>> model::FindPixelsWithTheSameColorInBound(QList<std::tuple<int,int>> coordinates,
+                                                                    const QImage frame,
                                                                     const QColor colorToBeChanged,
                                                                     int x,
                                                                     int y){
+    // If it is not the color we wanna change (reach the edge)
+    if(frame.pixelColor(x,y) != colorToBeChanged)
+        return coordinates;
+    // If we have arrived the current pixel earlier, return
+    if(coordinates.contains(std::tuple<int,int>(x,y)))
+        return coordinates;
+    // Check if it goes out of the canvas
+    if(x < 0 || x > 400 || y < 0 || y > 400)
+        return coordinates;
 
+    // add the current coordinate into the list of pixel coordinates.
+    coordinates.append(std::tuple<int,int>(x,y));
+
+    FindPixelsWithTheSameColorInBound(coordinates, frame, colorToBeChanged, x + 1, y);
+    FindPixelsWithTheSameColorInBound(coordinates, frame, colorToBeChanged, x, y + 1);
+    FindPixelsWithTheSameColorInBound(coordinates, frame, colorToBeChanged, x - 1, y);
+    FindPixelsWithTheSameColorInBound(coordinates, frame, colorToBeChanged, x, y - 1);
 }
 
 //void model::updatePixelsByPen2(int sx, int sy, int ex, int ey){
@@ -380,25 +584,25 @@ QList<std::tuple<int,int>> model::FindPixelsWithTheSameColorInBound(QList<std::t
 //This method obtains where the current position of the mouse is in our canvas
 //then it optains the ratio
 void model::drawOnCanvas(QPoint pixelPoint){
-    //Set the canvas ratio -> Canvas Label Size / number of pixels
-    //(Choose height, but height and width should all be the same)
-    std::cout << canvasHeight << std::endl;
-    ratio = 360/canvasHeight;
-    //Calculate x and y position of our QImage pixels
-    int x = pixelPoint.x()/ratio;
-    int y = pixelPoint.y()/ratio;
 
-    //gon added
-    int pointStartX = x * ratio;
-    int pointStartY = y * ratio;
-    int pointEndX = pointStartX + (penSize * ratio);
-    int pointEndY = pointStartY + (penSize * ratio);
+    //Check it it has been initialized with a size
+    if(canvasSize == 0){
+        //Default Values
+        canvasSize = 20;
+        zoomSize = 20;
+        // default values to be determined        
+        frames.append(QImage (canvasSize, canvasSize, QImage::Format_ARGB32));
+        currentTool = SelectedTool::SC_Pen;
+        //Make the first inage to have a white background
+        frames[currentFrame-1].fill(Qt::white);
+        undoStack.push(frames);
+        emit startButtons();
+    }
 
-    std::cout << pointStartX << " " << pointStartY << std::endl;
-    std::cout << pointEndX << " " << pointEndY << std::endl;
-
-    //Edit the pixels of the current QImage
-    //frames[currentFrame -1].setPixelColor(x, y,penColor);
+    //Get the position to paint
+     ratio = 400/ zoomSize;
+     int x = (pixelPoint.x()/ratio) + zoomIndex;
+     int y = (pixelPoint.y()/ratio) + zoomIndex;
 
     updatePixels(x,y);
     //Create a Pixmap to return to view
@@ -407,25 +611,12 @@ void model::drawOnCanvas(QPoint pixelPoint){
     currentPic.convertFromImage(frames[currentFrame-1]);
     //Return the pixmap of our QImage
     emit setCanvas(currentPic);
-
-//    //gon//
-//    updatePixels2(pointStartX, pointStartY,pointEndX, pointEndY);
-//    QPixmap currentPic;
-//    //Convert QImage to QPixmap
-//    currentPic.convertFromImage(frames[currentFrame -1]);
-//    //Return the pixmap of our QImage
-//    emit setCanvas(currentPic);
-//    //////
-
-
-
-
 }
+
 
 void model::updateCanvasSize()
 {
-    canvasHeight += 1;
-    canvasWidth += 1;
+    canvasSize += 1;
 }
 
 void model::previewOfFrames(){
@@ -451,8 +642,8 @@ void model::save(QString fileName){//QJsonObject &json) const{ //change paramete
     QJsonObject json;
 
     int n = 0;
-    json["height"] = canvasHeight;
-    json["width"] = canvasWidth;
+    json["height"] = canvasSize;
+    json["width"] = canvasSize;
     json["numberOfFrames"] = frames.size();
 
     //*******Important******//
@@ -465,10 +656,10 @@ void model::save(QString fileName){//QJsonObject &json) const{ //change paramete
     for(QImage a : frames)
     {
         QJsonArray frame;
-        for(int rowNum = 0 ; rowNum < canvasHeight; rowNum++)
+        for(int rowNum = 0 ; rowNum < canvasSize; rowNum++)
         {
             QJsonArray row;
-            for(int pixelNum = 0; pixelNum < canvasWidth; pixelNum++)
+            for(int pixelNum = 0; pixelNum < canvasSize; pixelNum++)
             {
                 QJsonArray pixelColor;
                 QString pixelName = "pixel" + QString::number(pixelNum);
@@ -519,12 +710,11 @@ void model::read(QString fileName){
     int numberOfFrames = 0;
     if(jsonFromLoadFile.contains("height") && jsonFromLoadFile["height"].isDouble() && jsonFromLoadFile.contains("width") && jsonFromLoadFile["width"].isDouble())
     {
-        double somevalue = jsonFromLoadFile["height"].toDouble();
-        double othervalue = jsonFromLoadFile["width"].toDouble();
-        if(somevalue == othervalue)
+        double height = jsonFromLoadFile["height"].toDouble();
+        double width = jsonFromLoadFile["width"].toDouble();
+        if(height == width)
         {
-            canvasHeight = somevalue;
-            canvasWidth = somevalue; //canvasSize = somevalue; //uncomment this code
+            canvasSize = width;
         }
         else
         {
@@ -586,12 +776,12 @@ void model::read(QString fileName){
     int colorCounter =0;
     while(frameCounter < numberOfFrames)
     {
-        frames.append(QImage(canvasHeight,canvasHeight,QImage::Format_ARGB32));
+        frames.append(QImage(canvasSize,canvasSize,QImage::Format_ARGB32));
         frames[frameCounter].fill(Qt::white);
 
-        for(int y=0; y < canvasHeight; y++)
+        for(int y=0; y < canvasSize; y++)
         {
-            for(int x=0; x <canvasHeight; x++)
+            for(int x=0; x <canvasSize; x++)
             {
                 frames[frameCounter].setPixelColor(x,y,colorList[colorCounter]);
                 colorCounter++;
@@ -599,6 +789,6 @@ void model::read(QString fileName){
         }
         frameCounter++;
     }
-
     //update in the view : TODO
+    //emit something to the view
 }

@@ -12,12 +12,16 @@ View::View(model& model, QWidget *parent)
 {
     ui->setupUi(this);
 
+    initCanvasSizesComboBox();
+
    //A white image to start with in the canvas
    QPixmap startImage(ui->canvasLabel->width(), ui->canvasLabel->height());
    QPainter paint(&startImage);
    startImage.fill(Qt::white );
    ui->canvasLabel->setPixmap(startImage);
 
+   //Set height and width
+   canvasLabelSize = ui->canvasLabel->height();
 
     // set frame combo box alliment
     ui->framesComboBox->setEditable(true);
@@ -105,16 +109,36 @@ View::View(model& model, QWidget *parent)
             this,
             &View::updateFramesLabel);
 
-    connect(&model,
-            &model::goToFrame,
-            this,
-            &View::displayFrame);
-
     //connects slider with update fps method in model
     connect(ui->playBackSpeedSlider,
             &QSlider::valueChanged,
             &model,
             &model::updateFPS);
+
+    // enable and disable buttons
+    connect(&model,
+            &model::enableRedo,
+            this,
+            &View::enableRedoButton);
+
+    connect(&model,
+            &model::enableUndo,
+            this,
+            &View::enableUndoButton);
+
+    connect(&model,
+            &model::disableRedo,
+            this,
+            &View::disableRedoButton);
+
+    connect(&model,
+            &model::disableUndo,
+            this,
+            &View::disableUndoButton);
+    connect(&model,
+            &model::setCanvas,
+            this,
+            &View::enableStartButtons);
 
     // color wheel
     connect(&model,
@@ -141,6 +165,22 @@ View::View(model& model, QWidget *parent)
                 &QPushButton::clicked,
                 &model,
                 &model::zoomOut);
+        connect(&model,
+                &model::toZoomIn,
+                this,
+                &View::zoomCanvas);
+        connect(&model,
+                &model::toZoomOut,
+                this,
+                &View::zoomCanvas);
+        connect(&model,
+                &model::enableZoomIn,
+                this,
+                &View::enableZoomInButton);
+        connect(&model,
+                &model::enableZoomOut,
+                this,
+                &View::enableZoomOutButton);
 
         //Redo and Undo
         connect(ui->redoButton,
@@ -151,6 +191,11 @@ View::View(model& model, QWidget *parent)
                 &QPushButton::clicked,
                 &model,
                 &model::undo);
+
+        connect(ui->canvasLabel, // mouse click
+                &Canvas::saveToStack,
+                &model,
+                &model::saveFrameToStack);
 
 
     //ColorUpdate
@@ -175,6 +220,12 @@ View::View(model& model, QWidget *parent)
             &model,
             &model::updateToolSize);
 
+    //Initialize Zanvas Size
+    connect(ui->canvasSizeComboBox,
+            &QComboBox::activated,
+            &model,
+            &model::initializeCanvasSize);
+
     //Canvas Connect
     connect(ui->canvasLabel, // mouse click
             &Canvas::sendMouseLoc,
@@ -185,12 +236,6 @@ View::View(model& model, QWidget *parent)
             &Canvas::sendMouseLoc,
             this,
             &View::on_clickMouse_released);
-
-
-
-
-
-    //Test
     connect(this,
             &View::editCanvas,
             &model,
@@ -199,6 +244,14 @@ View::View(model& model, QWidget *parent)
             &model::setCanvas,
             this,
             &View::updateCanvas);
+    connect(ui->ClearButton,
+            &QPushButton::clicked,
+            &model,
+            &model::clearCanvas);
+    connect(ui->copyButton,
+            &QPushButton::clicked,
+            &model,
+            &model::copyFrame);
 
     // gon
     // connections for increasing and decreasing canvas button and pen size
@@ -209,7 +262,6 @@ View::View(model& model, QWidget *parent)
 
 
     //Preview actual canvas
-
     connect(ui->previewButton,
             &QPushButton::clicked,
             &model,
@@ -242,8 +294,8 @@ View::View(model& model, QWidget *parent)
 }
 
 void View::displaySprite(QImage currentFrame){
-
-    ui->actualSizeLabel->setPixmap(QPixmap::fromImage(currentFrame));
+    ui->actualSizeLabel->setPixmap(QPixmap::fromImage(currentFrame).scaled(ui->actualSizeLabel->width(),
+                                                                            ui->actualSizeLabel->height()));
 }
 View::~View()
 {
@@ -256,13 +308,9 @@ void View::pushColorButton(QColor currentColor){
     QColor newColor = QColorDialog::getColor(currentColor, nullptr, QString(), {QColorDialog::DontUseNativeDialog, QColorDialog::ShowAlphaChannel});
 
     if(newColor.isValid()){
+
         emit updateColor(newColor);
     }
-}
-
-
-void View::displayFrame(QPixmap map){
-    ui->canvasLabel->setPixmap(map.scaled(ui->canvasLabel->width(), ui->canvasLabel->height()));
 }
 
 void View::disableDeleteButton(){
@@ -289,6 +337,22 @@ void View::disableLastButton(){
     ui->lastFrameButton->setEnabled(false);
 }
 
+void View::enableUndoButton(){
+    ui->undoButton->setEnabled(true);
+}
+
+void View::enableRedoButton(){
+    ui->redoButton->setEnabled(true);
+}
+
+void View::disableUndoButton(){
+    ui->undoButton->setEnabled(false);
+}
+
+void View::disableRedoButton(){
+    ui->redoButton->setEnabled(false);
+}
+
 void View::mouseLoc(QPoint &loc) // can delete later
 {
     ui->posLabel->setText("x: " + QString::number(loc.x()) + " y: " + QString::number(loc.y()));
@@ -300,16 +364,16 @@ void View::mouseLoc(QPoint &loc) // can delete later
 //Update the canvas by outputing the QPixmap that
 //was tranformed into QImage and edited in model
 void View::updateCanvas(QPixmap currentPic){
-    int height = ui->canvasLabel->height();
-    int width = ui->canvasLabel->width();
+
     //display our QPixmap into our canvas size
-    ui->canvasLabel->setPixmap(currentPic.scaled(width, height));
-
-//    //gon
-//    ui->canvasLabel->setPixmap(currentPic);
-
-    //display on actualsize label (Brittney)
-    ui->actualSizeLabel->setPixmap(currentPic);
+    ui->canvasLabel->setPixmap(currentPic.scaled(canvasLabelSize, canvasLabelSize));
+    //display on actualsize label
+    ui->actualSizeLabel->setPixmap(currentPic.scaled(ui->actualSizeLabel->width(),
+                                                     ui->actualSizeLabel->height()));
+    //Disable cobo box to set up size
+    if(ui->canvasSizeComboBox->isEnabled()){
+        ui->canvasSizeComboBox->setEnabled(false);
+    }
 }
 
 void View::updateFramesBox(int page, int size){
@@ -322,6 +386,7 @@ void View::updateFramesBox(int page, int size){
     }
 
     ui->framesComboBox->setCurrentText(QString::number(page));
+    ui->framesComboBox->setCurrentIndex(page - 1);
 }
 
 void View::updateFramesLabel(int page, int size){
@@ -377,12 +442,65 @@ void View::on_shapeButton_clicked()
     emit setTool("shapeCreator");
 }
 
-//Zoom Mehtod -> Maybe remove??
-void View::zoomInCanvas(QImage image){
+
+//Displays the image with the given ratio to increase the size
+void View::zoomCanvas(QPixmap currentPic, int canvasSize, int zoomIndex){
+    int ratio = ui->canvasLabel->height()/canvasSize;
+
+    canvasLabelSize = 400 +(ratio*(2*zoomIndex));
+    //display our QPixmap into our canvas size
+
+    ui->canvasLabel->setPixmap(currentPic.scaled(canvasLabelSize, canvasLabelSize, Qt::KeepAspectRatioByExpanding));
 }
-void View::zoomOutCanvas(QImage){
+
+void View::enableZoomInButton(){
+    ui->zoomInButton->setEnabled(true);
 }
+void View::enableZoomOutButton(){
+    ui->zoomOutButton->setEnabled(true);
+}
+
+
+//It disables the buttons when in the model we notice that
+//zooming  in is out of bounds.
+void View::disableZoomButtons(std::string zoomType){
+    if(zoomType == "zoomIn")
+        ui->zoomInButton->setEnabled(false);
+    else
+        ui->zoomOutButton->setEnabled(false);
+}
+
+
+
+void View::initCanvasSizesComboBox(){
+    ui->canvasSizeComboBox->addItem("2 x 2");
+    ui->canvasSizeComboBox->addItem("4 x 4");
+    ui->canvasSizeComboBox->addItem("5 x 5");
+    ui->canvasSizeComboBox->addItem("8 x 8");
+    ui->canvasSizeComboBox->addItem("10 x 10");
+    ui->canvasSizeComboBox->addItem("16 x 16");
+    ui->canvasSizeComboBox->addItem("20 x 20");
+    ui->canvasSizeComboBox->addItem("25 x 25");
+    ui->canvasSizeComboBox->addItem("40 x 40");
+    ui->canvasSizeComboBox->addItem("50 x 50");
+    ui->canvasSizeComboBox->addItem("80 x 80");
+    ui->canvasSizeComboBox->addItem("100 x 100");
+    ui->canvasSizeComboBox->addItem("200 x 200");
+    ui->canvasSizeComboBox->addItem("400 x 400");
+
+    ui->canvasSizeComboBox->setCurrentIndex(6);
+}
+
+void View::enableStartButtons(){
+    ui->insertFrameButton->setEnabled(true);
+    ui->addFrameButton->setEnabled(true);
+    ui->copyButton->setEnabled(true);
+    ui->ClearButton->setEnabled(true);
+    ui->zoomInButton->setEnabled(true);
+}
+
 
 void View::on_clickMouse_released(QPoint &loc) {
 
 }
+

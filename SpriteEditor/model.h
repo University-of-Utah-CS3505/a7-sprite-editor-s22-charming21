@@ -12,6 +12,8 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QFile>
+#include <QStack>
+
 
 //We add enum (jinwen)
 enum class SelectedTool{
@@ -38,16 +40,18 @@ private:
     ShapeCreator currentShape;
     QList<QImage> frames;
     QColor penColor;
-    int canvasHeight;
-    int canvasWidth;
-    int zoomHeight; //for the zoom
-    int zoomWidth; //for the zoom
+    int canvasSize;
+    int zoomSize;
+    int zoomIndex;
     int framesPerSec;
     int currentFrame;
     int penSize;
     int eraserSize;
     double ratio;
 
+    // redo and undo
+    QStack<QList<QImage>> undoStack;
+    QStack<QList<QImage>> redoStack;
     //
     int numOfPixels;
     int pixelLength;
@@ -59,7 +63,7 @@ private:
     void updatePixelsByBucketFiller(int, int);
     void updatePixelsByShapeCreator(int, int, int, int);
 
-    QList<std::tuple<int,int>> FindPixelsWithTheSameColorInBound(QList<std::tuple<int,int>>, QColor, int, int);
+    QList<std::tuple<int,int>> FindPixelsWithTheSameColorInBound(QList<std::tuple<int,int>>, QImage, QColor, int, int);
 
 //    //gon
 //    void updatePixelsByPen2(int, int, int, int);
@@ -69,8 +73,6 @@ private:
     void read(QString fileName);
 
 signals:
-    //Add methods (emit)
-    void goToFrame(QPixmap);
 
     // control buttons
     void disableDeleteButton();
@@ -84,11 +86,21 @@ signals:
     void updateFrameNumberCombo(int, int);
     void updateFrameNumberLabel(int, int);
     void setColorLabel(QColor);
-
-
+    void enableUndo();
+    void disableUndo();
+    void enableRedo();
+    void disableRedo();
+    void startButtons();
     void setCanvas(QPixmap);
 
     void showSprite(QImage);
+
+    //zoom
+    void toZoomIn(QPixmap, int, int);
+    void toZoomOut(QPixmap, int, int);
+    void disableZoom(std::string);
+    void enableZoomIn();
+    void enableZoomOut();
 
 public slots:
     void addNewFrame();
@@ -98,14 +110,18 @@ public slots:
     void deleteFrame();
     void zoomIn();
     void zoomOut();
+    //void zoomOut();
     void updateFPS(int);
     void updatePenSize(int);
     void updateEraserSize(int);
     void setStartingArea(int, int);
     void updatePenColor(QColor);
-    void updateTool(std::string); //Change parameter from Selected tools to std::string
+    void updateTool(std::string);
     void getList(QList<QImage>);
     void checkCurrentColor(QColor);
+    void clearCanvas();
+    void copyFrame();
+
     //Added
     void undo(); //need change parameters?
     void redo(); //need change parameters?
@@ -118,13 +134,17 @@ public slots:
     void drawOnCanvas(QPoint);
     void updateCanvasSize();
 
+    void initializeCanvasSize(int);
+
     //Preview
     void previewOfFrames();
     void updateActualLabel();
 
+
     //Save file
-    void save(QString fileName); //do i need to make it const? (Brittney)
+    void save(QString fileName);
     void open(QString fileName);
+    void saveFrameToStack();
 };
 
 #endif // MODEL_H
