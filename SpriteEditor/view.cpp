@@ -109,6 +109,36 @@ View::View(model& model, QWidget *parent)
             this,
             &View::updateFramesLabel);
 
+    connect(ui->swapUpButton,
+            &QPushButton::clicked,
+            &model,
+            &model::swapUp);
+
+    connect(ui->swapDownButton,
+            &QPushButton::clicked,
+            &model,
+            &model::swapDown);
+
+    connect(&model,
+            &model::enableSwapUp,
+            this,
+            &View::enableSwapUpButton);
+
+    connect(&model,
+            &model::disableSwapUp,
+            this,
+            &View::disableSwapUpButton);
+
+    connect(&model,
+            &model::enableSwapDown,
+            this,
+            &View::enableSwapDownButton);
+
+    connect(&model,
+            &model::disableSwapDown,
+            this,
+            &View::disableSwapDownButton);
+
     //connects slider with update fps method in model
     connect(ui->playBackSpeedSlider,
             &QSlider::valueChanged,
@@ -353,6 +383,23 @@ void View::disableUndoButton(){
 void View::disableRedoButton(){
     ui->redoButton->setEnabled(false);
 }
+
+void View::enableSwapUpButton(){
+    ui->swapUpButton->setEnabled(true);
+}
+
+void View::enableSwapDownButton(){
+    ui->swapDownButton->setEnabled(true);
+}
+
+void View::disableSwapUpButton(){
+    ui->swapUpButton->setEnabled(false);
+}
+
+void View::disableSwapDownButton(){
+    ui->swapDownButton->setEnabled(false);
+}
+
 
 void View::mouseLoc(QPoint &loc) // can delete later
 {

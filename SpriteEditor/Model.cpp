@@ -104,6 +104,8 @@ void model::addNewFrame(){
     emit updateFrameNumberLabel(currentFrame, frames.size());
     emit enableDeleteButton();
     emit enableLastButton();
+    emit enableSwapUp();
+
     emit enableUndo();
     undoStack.push(frames);
 
@@ -111,6 +113,7 @@ void model::addNewFrame(){
     if(currentFrame == frames.size()){
         emit disableNextButton();
     }
+
     //frames[currentFrame-1].fill(Qt::white);
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
     emit setCanvas(map);
@@ -122,13 +125,14 @@ void model::insertNewFrame(){
     frame.fill(Qt::white);
     frames.insert(currentFrame - 1, frame);
 
-    emit enableUndo();
-    undoStack.push(frames);
-
     emit updateFrameNumberCombo(currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
     emit enableDeleteButton();
     emit enableNextButton();
+    emit enableSwapDown();
+
+    emit enableUndo();
+    undoStack.push(frames);
 
     if(currentFrame == 1){
         emit disableLastButton();
@@ -144,8 +148,11 @@ void model::nextFrame(){
     emit updateFrameNumberLabel(currentFrame, frames.size());
 
     emit enableLastButton();
+    emit enableSwapUp();
+
     if(currentFrame == frames.size()){
         emit disableNextButton();
+        emit disableSwapDown();
     }
 
      QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
@@ -157,8 +164,11 @@ void model::lastFrame(){
     emit updateFrameNumberLabel(currentFrame, frames.size());
 
     emit enableNextButton();
+    emit enableSwapDown();
+
     if(currentFrame == 1){
         emit disableLastButton();
+        emit disableSwapUp();
     }
 
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
@@ -172,38 +182,82 @@ void model::deleteFrame(){
         emit disableNextButton();
         emit disableLastButton();
         emit disableDeleteButton();
-    }
-
-    if(currentFrame == frames.size()){
-        emit disableNextButton();
+        emit disableSwapDown();
+        emit disableSwapUp();
     }
 
     // if the last frame is deleted
     if(currentFrame - 1 == frames.size()){
         currentFrame--;
-        QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-        emit setCanvas(map);
-    }
-    else{
-        QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-        emit setCanvas(map);
+        emit disableNextButton();
+        emit disableSwapDown();
     }
 
     emit enableUndo();
     undoStack.push(frames);
+
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
+    emit setCanvas(map);
 
     emit updateFrameNumberCombo(currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
 }
 
+void model::swapUp(){
+    frames.swapItemsAt(currentFrame - 1, currentFrame - 2);
+    currentFrame--;
+
+    undoStack.push(frames);
+    emit enableUndo();
+
+    emit enableNextButton();
+    emit enableSwapDown();
+
+    if(currentFrame == 1){
+        emit disableLastButton();
+        emit disableSwapUp();
+    }
+
+    emit updateFrameNumberCombo(currentFrame, frames.size());
+    emit updateFrameNumberLabel(currentFrame, frames.size());
+
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
+    emit setCanvas(map);
+}
+
+void model::swapDown(){
+    frames.swapItemsAt(currentFrame - 1, currentFrame);
+    currentFrame++;
+
+    undoStack.push(frames);
+    emit enableUndo();
+
+    emit enableLastButton();
+    emit enableSwapUp();
+
+    if(currentFrame == frames.size()){
+        emit disableNextButton();
+        emit disableSwapDown();
+    }
+
+    emit updateFrameNumberCombo(currentFrame, frames.size());
+    emit updateFrameNumberLabel(currentFrame, frames.size());
+
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
+    emit setCanvas(map);
+}
+
 void model::clearCanvas(){
     QImage frame(canvasSize, canvasSize, QImage::Format_ARGB32);
     frame.fill(Qt::white);
+    std::cout << currentFrame << " " << frames.size() << std::endl;
     frames.replace(currentFrame - 1, frame);
-    QPixmap map = QPixmap::fromImage(frame);
-    emit setCanvas(map);
+
     emit enableUndo();
     undoStack.push(frames);
+
+    QPixmap map = QPixmap::fromImage(frame);
+    emit setCanvas(map); 
 }
 
 void model::copyFrame(){
@@ -213,14 +267,11 @@ void model::copyFrame(){
     emit updateFrameNumberCombo(currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
     emit enableDeleteButton();
+    emit enableSwapUp();
     emit enableLastButton();
     emit enableUndo();
     undoStack.push(frames);
 
-    // if the new frame is at the end of the list, disale next button
-    if(currentFrame == frames.size()){
-        emit disableNextButton();
-    }
     //frames[currentFrame-1].fill(Qt::white);
     QPixmap map = QPixmap::fromImage(frame);
     emit setCanvas(map);
@@ -337,19 +388,31 @@ void model::undo(){
 
     frames = previousFrames;
 
+    if(frames.size() == 1){
+        emit disableDeleteButton();
+    }
+    else{
+        emit enableDeleteButton();
+    }
+
 
     if(frames.size() > currentFrame){
         emit enableNextButton();
+        emit enableSwapDown();
     }
     else if(frames.size() == currentFrame){
         emit disableNextButton();
+        emit disableSwapDown();
     }
 
     if(currentFrame > 1){
         emit enableLastButton();
+        emit enableSwapUp();
     }
     else{
         emit disableLastButton();
+        emit disableSwapUp();
+        emit disableSwapDown();
     }
 
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
@@ -368,13 +431,25 @@ void model::redo(){
 
     if(frames.size() > currentFrame){
         currentFrame++;
-        emit enableNextButton();
+        emit disableNextButton();
+        emit disableSwapDown();
     }
     else if(frames.size() == currentFrame){
         emit disableNextButton();
+        emit disableSwapDown();
     }
     else{
         currentFrame = frames.size();
+        emit disableSwapDown();
+    }
+
+    if(frames.size() == 1){
+        emit disableDeleteButton();
+        emit disableSwapUp();
+        emit disableSwapDown();
+    }
+    else{
+        emit enableDeleteButton();
     }
 
     if(redoStack.size() == 0){
@@ -383,6 +458,7 @@ void model::redo(){
 
     if(currentFrame > 1){
         emit enableLastButton();
+        emit enableSwapUp();
     }
     else{
         emit disableLastButton();

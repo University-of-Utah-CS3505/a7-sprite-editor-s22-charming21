@@ -54,6 +54,10 @@ private slots:
     void disableUndoButton();
     void enableRedoButton();
     void disableRedoButton();
+    void disableSwapUpButton();
+    void disableSwapDownButton();
+    void enableSwapUpButton();
+    void enableSwapDownButton();
 
     //Zoom
     void zoomCanvas(QPixmap, int, int);
