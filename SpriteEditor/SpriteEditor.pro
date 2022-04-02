@@ -10,16 +10,19 @@ CONFIG += c++11
 
 SOURCES += \
     canvas.cpp \
+    canvaspreview.cpp \
     main.cpp \
     model.cpp \
     view.cpp
 
 HEADERS += \
     canvas.h \
+    canvaspreview.h \
     model.h \
     view.h
 
 FORMS += \
+    canvaspreview.ui \
     view.ui
 
 # Default rules for deployment.

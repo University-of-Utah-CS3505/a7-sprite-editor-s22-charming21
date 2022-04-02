@@ -4,7 +4,9 @@
 #include <QMainWindow>
 #include <QColorDialog>
 #include <QPixmap>
+#include <QIcon>
 #include "model.h"
+#include "canvaspreview.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class View; }
@@ -54,6 +56,10 @@ private slots:
     void disableUndoButton();
     void enableRedoButton();
     void disableRedoButton();
+    void disableSwapUpButton();
+    void disableSwapDownButton();
+    void enableSwapUpButton();
+    void enableSwapDownButton();
 
     //Zoom
     void zoomCanvas(QPixmap, int, int);
@@ -77,10 +83,12 @@ private slots:
      void openFile();
 
 
+     void on_actualSizeButton_clicked(QImage);
+
 private:
     Ui::View *ui;
     int canvasLabelSize;
     void initCanvasSizesComboBox();
-
+    canvaspreview canvasPreview;
 };
 #endif // VIEW_H

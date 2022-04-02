@@ -104,6 +104,8 @@ void model::addNewFrame(){
     emit updateFrameNumberLabel(currentFrame, frames.size());
     emit enableDeleteButton();
     emit enableLastButton();
+    emit enableSwapUp();
+
     emit enableUndo();
     undoStack.push(frames);
 
@@ -111,6 +113,7 @@ void model::addNewFrame(){
     if(currentFrame == frames.size()){
         emit disableNextButton();
     }
+
     //frames[currentFrame-1].fill(Qt::white);
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
     emit setCanvas(map);
@@ -122,13 +125,14 @@ void model::insertNewFrame(){
     frame.fill(Qt::white);
     frames.insert(currentFrame - 1, frame);
 
-    emit enableUndo();
-    undoStack.push(frames);
-
     emit updateFrameNumberCombo(currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
     emit enableDeleteButton();
     emit enableNextButton();
+    emit enableSwapDown();
+
+    emit enableUndo();
+    undoStack.push(frames);
 
     if(currentFrame == 1){
         emit disableLastButton();
@@ -144,8 +148,11 @@ void model::nextFrame(){
     emit updateFrameNumberLabel(currentFrame, frames.size());
 
     emit enableLastButton();
+    emit enableSwapUp();
+
     if(currentFrame == frames.size()){
         emit disableNextButton();
+        emit disableSwapDown();
     }
 
      QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
@@ -157,8 +164,11 @@ void model::lastFrame(){
     emit updateFrameNumberLabel(currentFrame, frames.size());
 
     emit enableNextButton();
+    emit enableSwapDown();
+
     if(currentFrame == 1){
         emit disableLastButton();
+        emit disableSwapUp();
     }
 
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
@@ -172,38 +182,81 @@ void model::deleteFrame(){
         emit disableNextButton();
         emit disableLastButton();
         emit disableDeleteButton();
-    }
-
-    if(currentFrame == frames.size()){
-        emit disableNextButton();
+        emit disableSwapDown();
+        emit disableSwapUp();
     }
 
     // if the last frame is deleted
     if(currentFrame - 1 == frames.size()){
         currentFrame--;
-        QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-        emit setCanvas(map);
-    }
-    else{
-        QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-        emit setCanvas(map);
+        emit disableNextButton();
+        emit disableSwapDown();
     }
 
     emit enableUndo();
     undoStack.push(frames);
 
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
+    emit setCanvas(map);
+
     emit updateFrameNumberCombo(currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
+}
+
+void model::swapUp(){
+    frames.swapItemsAt(currentFrame - 1, currentFrame - 2);
+    currentFrame--;
+
+    undoStack.push(frames);
+    emit enableUndo();
+
+    emit enableNextButton();
+    emit enableSwapDown();
+
+    if(currentFrame == 1){
+        emit disableLastButton();
+        emit disableSwapUp();
+    }
+
+    emit updateFrameNumberCombo(currentFrame, frames.size());
+    emit updateFrameNumberLabel(currentFrame, frames.size());
+
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
+    emit setCanvas(map);
+}
+
+void model::swapDown(){
+    frames.swapItemsAt(currentFrame - 1, currentFrame);
+    currentFrame++;
+
+    undoStack.push(frames);
+    emit enableUndo();
+
+    emit enableLastButton();
+    emit enableSwapUp();
+
+    if(currentFrame == frames.size()){
+        emit disableNextButton();
+        emit disableSwapDown();
+    }
+
+    emit updateFrameNumberCombo(currentFrame, frames.size());
+    emit updateFrameNumberLabel(currentFrame, frames.size());
+
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
+    emit setCanvas(map);
 }
 
 void model::clearCanvas(){
     QImage frame(canvasSize, canvasSize, QImage::Format_ARGB32);
     frame.fill(Qt::white);
     frames.replace(currentFrame - 1, frame);
-    QPixmap map = QPixmap::fromImage(frame);
-    emit setCanvas(map);
+
     emit enableUndo();
     undoStack.push(frames);
+
+    QPixmap map = QPixmap::fromImage(frame);
+    emit setCanvas(map); 
 }
 
 void model::copyFrame(){
@@ -213,14 +266,11 @@ void model::copyFrame(){
     emit updateFrameNumberCombo(currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
     emit enableDeleteButton();
+    emit enableSwapUp();
     emit enableLastButton();
     emit enableUndo();
     undoStack.push(frames);
 
-    // if the new frame is at the end of the list, disale next button
-    if(currentFrame == frames.size()){
-        emit disableNextButton();
-    }
     //frames[currentFrame-1].fill(Qt::white);
     QPixmap map = QPixmap::fromImage(frame);
     emit setCanvas(map);
@@ -337,19 +387,31 @@ void model::undo(){
 
     frames = previousFrames;
 
+    if(frames.size() == 1){
+        emit disableDeleteButton();
+    }
+    else{
+        emit enableDeleteButton();
+    }
+
 
     if(frames.size() > currentFrame){
         emit enableNextButton();
+        emit enableSwapDown();
     }
     else if(frames.size() == currentFrame){
         emit disableNextButton();
+        emit disableSwapDown();
     }
 
     if(currentFrame > 1){
         emit enableLastButton();
+        emit enableSwapUp();
     }
     else{
         emit disableLastButton();
+        emit disableSwapUp();
+        emit disableSwapDown();
     }
 
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
@@ -368,13 +430,25 @@ void model::redo(){
 
     if(frames.size() > currentFrame){
         currentFrame++;
-        emit enableNextButton();
+        emit disableNextButton();
+        emit disableSwapDown();
     }
     else if(frames.size() == currentFrame){
         emit disableNextButton();
+        emit disableSwapDown();
     }
     else{
         currentFrame = frames.size();
+        emit disableSwapDown();
+    }
+
+    if(frames.size() == 1){
+        emit disableDeleteButton();
+        emit disableSwapUp();
+        emit disableSwapDown();
+    }
+    else{
+        emit enableDeleteButton();
     }
 
     if(redoStack.size() == 0){
@@ -383,6 +457,7 @@ void model::redo(){
 
     if(currentFrame > 1){
         emit enableLastButton();
+        emit enableSwapUp();
     }
     else{
         emit disableLastButton();
@@ -402,7 +477,6 @@ void model::saveFrameToStack(){
 //Frame that we are currently in
 void model::selectedFrame(int index){
     currentFrame = index + 1;
-    std::cout << "current: " << currentFrame << " size: " << frames.size() << std::endl;
 
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
     emit setCanvas(map);
@@ -410,25 +484,21 @@ void model::selectedFrame(int index){
 
     if(currentFrame == frames.size()){
         emit disableNextButton();
+        emit disableSwapDown();
     }
-
-    if(currentFrame < frames.size()){
+    else if(currentFrame < frames.size()){
         emit enableNextButton();
-    }
-
-    if(currentFrame > frames.size()){
-        emit enableLastButton();
+        emit enableSwapDown();
     }
 
     if(currentFrame == 1){
         emit disableLastButton();
+        emit disableSwapUp();
     }
-    else if(frames.size() != 1){
+    else if(currentFrame > 1){
         emit enableLastButton();
+        emit enableSwapUp();
     }
-
-
-
 }
 
 //updates the toolsize, we first check our selected tool
@@ -450,7 +520,7 @@ void model::updatePixels(int initialX, int initialY, int endX, int endY){
             updatePixelsByEraser(initialX, initialY);
             break;
         case SelectedTool::SC_Bucket:
-            //updatePixelsByBucket(x,y);
+            updatePixelsByBucketFiller(initialX, initialY);
             break;
         case SelectedTool::SC_ShapeCreator:
             updatePixelsByShapeCreator(initialX, initialY, endX, endY);
@@ -458,35 +528,7 @@ void model::updatePixels(int initialX, int initialY, int endX, int endY){
         default:
             break;
     }
-
-    //emit or call another method?
 }
-
-// gon
-
-//void model::updatePixels2(int sx, int sy, int ex, int ey){
-//    std::cout << "hit" << std::endl;
-
-//    switch(currentTool){
-//        case SelectedTool::Tool_Pen:
-//            updatePixelsByPen2(sx,sy,ex,ey);
-//            break;
-//        case SelectedTool::Tool_Eraser:
-//            //updatePixelsByEraser(x,y);
-//            break;
-//        case SelectedTool::Tool_Bucket:
-//            //updatePixelsByBucket(x,y);
-//            break;
-//        case SelectedTool::Tool_ShapeCreator:
-//            //updatePixelsByShapeCreator(x,y);
-//            break;
-//        default:
-//            break;
-//    }
-
-//    //emit or call another method?
-//}
-
 
 void model::updatePixelsByPen(int x, int y){
     QImage* AFrame = &frames[currentFrame -1];
@@ -536,49 +578,17 @@ void model::updatePixelsByShapeCreator(int initialX, int initialY, int endX, int
 }
 
 void model::updatePixelsByBucketFiller(int x, int y){
-    QList<std::tuple<int,int>> pixelsToBeFilled;
-    pixelsToBeFilled.append(std::tuple<int,int>(x,y));
     QColor colorToBeChanged = (frames[currentFrame -1]).pixelColor(x,y);
-    pixelsToBeFilled = FindPixelsWithTheSameColorInBound(pixelsToBeFilled, frames[currentFrame-1], colorToBeChanged,x,y);
 
-    for(std::tuple<int,int> coordinates : pixelsToBeFilled){
-        QImage* AFrame = &frames[currentFrame -1];
-        AFrame->setPixelColor(std::get<0>(coordinates), std::get<1>(coordinates), penColor);
+    QSize sizeOfFrame = frames[currentFrame-1].size();
+
+    for(int pixelX=0; pixelX<sizeOfFrame.width(); pixelX++){
+        for(int pixelY=0; pixelY<sizeOfFrame.height(); pixelY++){
+            if(frames[currentFrame-1].pixelColor(pixelX, pixelY) == colorToBeChanged)
+                frames[currentFrame-1].setPixelColor(pixelX, pixelY, penColor);
+        }
     }
 }
-
-QList<std::tuple<int,int>> model::FindPixelsWithTheSameColorInBound(QList<std::tuple<int,int>> coordinates,
-                                                                    const QImage frame,
-                                                                    const QColor colorToBeChanged,
-                                                                    int x,
-                                                                    int y){
-    // If it is not the color we wanna change (reach the edge)
-    if(frame.pixelColor(x,y) != colorToBeChanged)
-        return coordinates;
-    // If we have arrived the current pixel earlier, return
-    if(coordinates.contains(std::tuple<int,int>(x,y)))
-        return coordinates;
-    // Check if it goes out of the canvas
-    if(x < 0 || x > 400 || y < 0 || y > 400)
-        return coordinates;
-
-    // add the current coordinate into the list of pixel coordinates.
-    coordinates.append(std::tuple<int,int>(x,y));
-
-    FindPixelsWithTheSameColorInBound(coordinates, frame, colorToBeChanged, x + 1, y);
-    FindPixelsWithTheSameColorInBound(coordinates, frame, colorToBeChanged, x, y + 1);
-    FindPixelsWithTheSameColorInBound(coordinates, frame, colorToBeChanged, x - 1, y);
-    FindPixelsWithTheSameColorInBound(coordinates, frame, colorToBeChanged, x, y - 1);
-}
-
-//void model::updatePixelsByPen2(int sx, int sy, int ex, int ey){
-//    //QPen Pen(penColor);
-//    for(int x = sx; x < ex; x++){
-//        for(int y = sy; y < ey; y++){
-//            frames[currentFrame -1].setPixel(x,y,penColor.rgba());
-//        }
-//    }
-//}
 
 
 //This method obtains where the current position of the mouse is in our canvas

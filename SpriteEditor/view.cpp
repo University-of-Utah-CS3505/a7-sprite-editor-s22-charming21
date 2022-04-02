@@ -14,14 +14,24 @@ View::View(model& model, QWidget *parent)
 
     initCanvasSizesComboBox();
 
-   //A white image to start with in the canvas
-   QPixmap startImage(ui->canvasLabel->width(), ui->canvasLabel->height());
-   QPainter paint(&startImage);
-   startImage.fill(Qt::white );
-   ui->canvasLabel->setPixmap(startImage);
+    // Set icons
+    ui->penButton->setIcon(QIcon(":/new/UI_Icons/Tool_Pen.png"));
+    ui->eraserButton->setIcon(QIcon(":/new/UI_Icons/Tool_Eraser.png"));
+    ui->bucketButton->setIcon(QIcon(":/new/UI_Icons/Tool_Bucket.png"));
+    ui->shapeButton->setIcon(QIcon(":/new/UI_Icons/Tool_ShapeCreator.png"));
+    ui->undoButton->setIcon(QIcon(":/new/UI_Icons/Button_Undo.png"));
+    ui->redoButton->setIcon(QIcon(":/new/UI_Icons/Button_Redo.png"));
+    ui->zoomInButton->setIcon(QIcon(":/new/UI_Icons/Button_ZoomIn.png"));
+    ui->zoomOutButton->setIcon(QIcon(":/new/UI_Icons/Button_ZoomOut.png"));
 
-   //Set height and width
-   canvasLabelSize = ui->canvasLabel->height();
+    // A white image to start with in the canvas
+    QPixmap startImage(ui->canvasLabel->width(), ui->canvasLabel->height());
+    QPainter paint(&startImage);
+    startImage.fill(Qt::white );
+    ui->canvasLabel->setPixmap(startImage);
+
+    // Set height and width
+    canvasLabelSize = ui->canvasLabel->height();
 
     // set frame combo box alliment
     ui->framesComboBox->setEditable(true);
@@ -108,6 +118,36 @@ View::View(model& model, QWidget *parent)
             &model::updateFrameNumberLabel,
             this,
             &View::updateFramesLabel);
+
+    connect(ui->swapUpButton,
+            &QPushButton::clicked,
+            &model,
+            &model::swapUp);
+
+    connect(ui->swapDownButton,
+            &QPushButton::clicked,
+            &model,
+            &model::swapDown);
+
+    connect(&model,
+            &model::enableSwapUp,
+            this,
+            &View::enableSwapUpButton);
+
+    connect(&model,
+            &model::disableSwapUp,
+            this,
+            &View::disableSwapUpButton);
+
+    connect(&model,
+            &model::enableSwapDown,
+            this,
+            &View::enableSwapDownButton);
+
+    connect(&model,
+            &model::disableSwapDown,
+            this,
+            &View::disableSwapDownButton);
 
     //connects slider with update fps method in model
     connect(ui->playBackSpeedSlider,
@@ -270,6 +310,10 @@ View::View(model& model, QWidget *parent)
             &model::showSprite,
             this,
             &View::displaySprite);
+    connect(&model,
+            &model::showSprite,
+            this,
+            &View::on_actualSizeButton_clicked);
 
     // save file
     connect(ui->actionSave,
@@ -352,6 +396,23 @@ void View::disableUndoButton(){
 void View::disableRedoButton(){
     ui->redoButton->setEnabled(false);
 }
+
+void View::enableSwapUpButton(){
+    ui->swapUpButton->setEnabled(true);
+}
+
+void View::enableSwapDownButton(){
+    ui->swapDownButton->setEnabled(true);
+}
+
+void View::disableSwapUpButton(){
+    ui->swapUpButton->setEnabled(false);
+}
+
+void View::disableSwapDownButton(){
+    ui->swapDownButton->setEnabled(false);
+}
+
 
 void View::mouseLoc(QPoint &loc) // can delete later
 {
@@ -501,6 +562,15 @@ void View::enableStartButtons(){
 
 
 void View::on_clickMouse_released(QPoint &loc) {
+
+}
+
+
+void View::on_actualSizeButton_clicked(QImage currentFrame)
+{
+    canvasPreview.updateCanvas(currentFrame);
+
+    canvasPreview.show();
 
 }
 

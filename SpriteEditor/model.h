@@ -63,8 +63,6 @@ private:
     void updatePixelsByBucketFiller(int, int);
     void updatePixelsByShapeCreator(int, int, int, int);
 
-    QList<std::tuple<int,int>> FindPixelsWithTheSameColorInBound(QList<std::tuple<int,int>>, QImage, QColor, int, int);
-
 //    //gon
 //    void updatePixelsByPen2(int, int, int, int);
 //    //
@@ -81,6 +79,10 @@ signals:
     void enableNextButton();
     void disableLastButton();
     void enableLastButton();
+    void enableSwapUp();
+    void enableSwapDown();
+    void disableSwapUp();
+    void disableSwapDown();
     void sendCurrentColor(QColor);
     void sendList(QList<QImage>);
     void updateFrameNumberCombo(int, int);
@@ -121,6 +123,8 @@ public slots:
     void checkCurrentColor(QColor);
     void clearCanvas();
     void copyFrame();
+    void swapUp();
+    void swapDown();
 
     //Added
     void undo(); //need change parameters?

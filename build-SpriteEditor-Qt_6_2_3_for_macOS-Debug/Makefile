@@ -53,18 +53,22 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../SpriteEditor/canvas.cpp \
+		../SpriteEditor/canvaspreview.cpp \
 		../SpriteEditor/main.cpp \
 		../SpriteEditor/model.cpp \
 		../SpriteEditor/view.cpp qrc_Icons.cpp \
 		moc_canvas.cpp \
+		moc_canvaspreview.cpp \
 		moc_model.cpp \
 		moc_view.cpp
 OBJECTS       = canvas.o \
+		canvaspreview.o \
 		main.o \
 		model.o \
 		view.o \
 		qrc_Icons.o \
 		moc_canvas.o \
+		moc_canvaspreview.o \
 		moc_model.o \
 		moc_view.o
 DIST          = /Users/november19/Qt/6.2.3/macos/mkspecs/features/spec_pre.prf \
@@ -208,8 +212,10 @@ DIST          = /Users/november19/Qt/6.2.3/macos/mkspecs/features/spec_pre.prf \
 		/Users/november19/Qt/6.2.3/macos/mkspecs/features/yacc.prf \
 		/Users/november19/Qt/6.2.3/macos/mkspecs/features/lex.prf \
 		../SpriteEditor/SpriteEditor.pro ../SpriteEditor/canvas.h \
+		../SpriteEditor/canvaspreview.h \
 		../SpriteEditor/model.h \
 		../SpriteEditor/view.h ../SpriteEditor/canvas.cpp \
+		../SpriteEditor/canvaspreview.cpp \
 		../SpriteEditor/main.cpp \
 		../SpriteEditor/model.cpp \
 		../SpriteEditor/view.cpp
@@ -233,7 +239,7 @@ include /Users/november19/Qt/6.2.3/macos/mkspecs/features/mac/sdk.mk
 first: all
 ####### Build rules
 
-SpriteEditor.app/Contents/MacOS/SpriteEditor: ui_view.h $(OBJECTS)  
+SpriteEditor.app/Contents/MacOS/SpriteEditor: ui_canvaspreview.h ui_view.h $(OBJECTS)  
 	@test -d SpriteEditor.app/Contents/MacOS/ || mkdir -p SpriteEditor.app/Contents/MacOS/
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
@@ -558,9 +564,9 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../SpriteEditor/Icons.qrc $(DISTDIR)/
-	$(COPY_FILE) --parents ../SpriteEditor/canvas.h ../SpriteEditor/model.h ../SpriteEditor/view.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../SpriteEditor/canvas.cpp ../SpriteEditor/main.cpp ../SpriteEditor/model.cpp ../SpriteEditor/view.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../SpriteEditor/view.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../SpriteEditor/canvas.h ../SpriteEditor/canvaspreview.h ../SpriteEditor/model.h ../SpriteEditor/view.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../SpriteEditor/canvas.cpp ../SpriteEditor/canvaspreview.cpp ../SpriteEditor/main.cpp ../SpriteEditor/model.cpp ../SpriteEditor/view.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../SpriteEditor/canvaspreview.ui ../SpriteEditor/view.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -592,16 +598,19 @@ compiler_rcc_clean:
 	-$(DEL_FILE) qrc_Icons.cpp
 qrc_Icons.cpp: ../SpriteEditor/Icons.qrc \
 		/Users/november19/Qt/6.2.3/macos/libexec/rcc \
+		../SpriteEditor/Button_ZoomIn.png \
 		../SpriteEditor/Tool_Pen.png \
 		../SpriteEditor/Button_Undo.png \
 		../SpriteEditor/Tool_Bucket.png \
+		../SpriteEditor/Tool_Eraser.png \
 		../SpriteEditor/Button_Redo.png \
-		../SpriteEditor/Tool_ShapeCreator.png
+		../SpriteEditor/Tool_ShapeCreator.png \
+		../SpriteEditor/Button_ZoomOut.png
 	/Users/november19/Qt/6.2.3/macos/libexec/rcc -name Icons ../SpriteEditor/Icons.qrc -o qrc_Icons.cpp
 
-compiler_moc_header_make_all: moc_canvas.cpp moc_model.cpp moc_view.cpp
+compiler_moc_header_make_all: moc_canvas.cpp moc_canvaspreview.cpp moc_model.cpp moc_view.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_canvas.cpp moc_model.cpp moc_view.cpp
+	-$(DEL_FILE) moc_canvas.cpp moc_canvaspreview.cpp moc_model.cpp moc_view.cpp
 moc_canvas.cpp: ../SpriteEditor/canvas.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/QLabel \
 		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qlabel.h \
@@ -615,6 +624,12 @@ moc_canvas.cpp: ../SpriteEditor/canvas.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpixmap.h \
 		/Users/november19/Qt/6.2.3/macos/libexec/moc
 	/Users/november19/Qt/6.2.3/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=13 -D__clang_minor__=1 -D__clang_patchlevel__=6 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/november19/Qt/6.2.3/macos/mkspecs/macx-clang -I/Users/november19/Downloads/Github/A7/A7/a7-sprite-editor-s22-charming21/SpriteEditor -I/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers -I/Users/november19/Qt/6.2.3/macos/lib/QtGui.framework/Headers -I/Users/november19/Qt/6.2.3/macos/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/13.1.6/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/Users/november19/Qt/6.2.3/macos/lib ../SpriteEditor/canvas.h -o moc_canvas.cpp
+
+moc_canvaspreview.cpp: ../SpriteEditor/canvaspreview.h \
+		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/QDialog \
+		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qdialog.h \
+		/Users/november19/Qt/6.2.3/macos/libexec/moc
+	/Users/november19/Qt/6.2.3/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=13 -D__clang_minor__=1 -D__clang_patchlevel__=6 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/november19/Qt/6.2.3/macos/mkspecs/macx-clang -I/Users/november19/Downloads/Github/A7/A7/a7-sprite-editor-s22-charming21/SpriteEditor -I/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers -I/Users/november19/Qt/6.2.3/macos/lib/QtGui.framework/Headers -I/Users/november19/Qt/6.2.3/macos/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/13.1.6/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/Users/november19/Qt/6.2.3/macos/lib ../SpriteEditor/canvaspreview.h -o moc_canvaspreview.cpp
 
 moc_model.cpp: ../SpriteEditor/model.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtCore.framework/Headers/QObject \
@@ -649,6 +664,8 @@ moc_view.cpp: ../SpriteEditor/view.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qcolordialog.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPixmap \
 		/Users/november19/Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpixmap.h \
+		/Users/november19/Qt/6.2.3/macos/lib/QtGui.framework/Headers/QIcon \
+		/Users/november19/Qt/6.2.3/macos/lib/QtGui.framework/Headers/qicon.h \
 		../SpriteEditor/model.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtCore.framework/Headers/QObject \
 		/Users/november19/Qt/6.2.3/macos/lib/QtCore.framework/Headers/qobject.h \
@@ -670,6 +687,9 @@ moc_view.cpp: ../SpriteEditor/view.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtCore.framework/Headers/qfile.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtCore.framework/Headers/QStack \
 		/Users/november19/Qt/6.2.3/macos/lib/QtCore.framework/Headers/qstack.h \
+		../SpriteEditor/canvaspreview.h \
+		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/QDialog \
+		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qdialog.h \
 		/Users/november19/Qt/6.2.3/macos/libexec/moc
 	/Users/november19/Qt/6.2.3/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=13 -D__clang_minor__=1 -D__clang_patchlevel__=6 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/november19/Qt/6.2.3/macos/mkspecs/macx-clang -I/Users/november19/Downloads/Github/A7/A7/a7-sprite-editor-s22-charming21/SpriteEditor -I/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers -I/Users/november19/Qt/6.2.3/macos/lib/QtGui.framework/Headers -I/Users/november19/Qt/6.2.3/macos/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/13.1.6/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/Users/november19/Qt/6.2.3/macos/lib ../SpriteEditor/view.h -o moc_view.cpp
 
@@ -677,9 +697,13 @@ compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_view.h
+compiler_uic_make_all: ui_canvaspreview.h ui_view.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_view.h
+	-$(DEL_FILE) ui_canvaspreview.h ui_view.h
+ui_canvaspreview.h: ../SpriteEditor/canvaspreview.ui \
+		/Users/november19/Qt/6.2.3/macos/libexec/uic
+	/Users/november19/Qt/6.2.3/macos/libexec/uic ../SpriteEditor/canvaspreview.ui -o ui_canvaspreview.h
+
 ui_view.h: ../SpriteEditor/view.ui \
 		/Users/november19/Qt/6.2.3/macos/libexec/uic \
 		../SpriteEditor/canvas.h \
@@ -720,6 +744,12 @@ canvas.o: ../SpriteEditor/canvas.cpp ../SpriteEditor/canvas.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpixmap.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o canvas.o ../SpriteEditor/canvas.cpp
 
+canvaspreview.o: ../SpriteEditor/canvaspreview.cpp ../SpriteEditor/canvaspreview.h \
+		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/QDialog \
+		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qdialog.h \
+		ui_canvaspreview.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o canvaspreview.o ../SpriteEditor/canvaspreview.cpp
+
 main.o: ../SpriteEditor/main.cpp ../SpriteEditor/view.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/QMainWindow \
 		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qmainwindow.h \
@@ -727,6 +757,8 @@ main.o: ../SpriteEditor/main.cpp ../SpriteEditor/view.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qcolordialog.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPixmap \
 		/Users/november19/Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpixmap.h \
+		/Users/november19/Qt/6.2.3/macos/lib/QtGui.framework/Headers/QIcon \
+		/Users/november19/Qt/6.2.3/macos/lib/QtGui.framework/Headers/qicon.h \
 		../SpriteEditor/model.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtCore.framework/Headers/QObject \
 		/Users/november19/Qt/6.2.3/macos/lib/QtCore.framework/Headers/qobject.h \
@@ -748,6 +780,9 @@ main.o: ../SpriteEditor/main.cpp ../SpriteEditor/view.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtCore.framework/Headers/qfile.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtCore.framework/Headers/QStack \
 		/Users/november19/Qt/6.2.3/macos/lib/QtCore.framework/Headers/qstack.h \
+		../SpriteEditor/canvaspreview.h \
+		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/QDialog \
+		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qdialog.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/QApplication \
 		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qapplication.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../SpriteEditor/main.cpp
@@ -785,6 +820,8 @@ view.o: ../SpriteEditor/view.cpp ../SpriteEditor/view.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qcolordialog.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtGui.framework/Headers/QPixmap \
 		/Users/november19/Qt/6.2.3/macos/lib/QtGui.framework/Headers/qpixmap.h \
+		/Users/november19/Qt/6.2.3/macos/lib/QtGui.framework/Headers/QIcon \
+		/Users/november19/Qt/6.2.3/macos/lib/QtGui.framework/Headers/qicon.h \
 		../SpriteEditor/model.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtCore.framework/Headers/QObject \
 		/Users/november19/Qt/6.2.3/macos/lib/QtCore.framework/Headers/qobject.h \
@@ -806,6 +843,9 @@ view.o: ../SpriteEditor/view.cpp ../SpriteEditor/view.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtCore.framework/Headers/qfile.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtCore.framework/Headers/QStack \
 		/Users/november19/Qt/6.2.3/macos/lib/QtCore.framework/Headers/qstack.h \
+		../SpriteEditor/canvaspreview.h \
+		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/QDialog \
+		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qdialog.h \
 		ui_view.h \
 		../SpriteEditor/canvas.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/QLabel \
@@ -839,7 +879,6 @@ view.o: ../SpriteEditor/view.cpp ../SpriteEditor/view.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qdatawidgetmapper.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qdatetimeedit.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qdial.h \
-		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qdialog.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qdialogbuttonbox.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qdockwidget.h \
 		/Users/november19/Qt/6.2.3/macos/lib/QtWidgets.framework/Headers/qdrawutil.h \
@@ -942,6 +981,9 @@ qrc_Icons.o: qrc_Icons.cpp
 
 moc_canvas.o: moc_canvas.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_canvas.o moc_canvas.cpp
+
+moc_canvaspreview.o: moc_canvaspreview.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_canvaspreview.o moc_canvaspreview.cpp
 
 moc_model.o: moc_model.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_model.o moc_model.cpp
