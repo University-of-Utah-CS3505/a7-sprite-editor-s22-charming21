@@ -520,7 +520,7 @@ void model::updatePixels(int initialX, int initialY, int endX, int endY){
             updatePixelsByEraser(initialX, initialY);
             break;
         case SelectedTool::SC_Bucket:
-            //updatePixelsByBucket(x,y);
+            updatePixelsByBucketFiller(initialX, initialY);
             break;
         case SelectedTool::SC_ShapeCreator:
             updatePixelsByShapeCreator(initialX, initialY, endX, endY);
@@ -528,35 +528,7 @@ void model::updatePixels(int initialX, int initialY, int endX, int endY){
         default:
             break;
     }
-
-    //emit or call another method?
 }
-
-// gon
-
-//void model::updatePixels2(int sx, int sy, int ex, int ey){
-//    std::cout << "hit" << std::endl;
-
-//    switch(currentTool){
-//        case SelectedTool::Tool_Pen:
-//            updatePixelsByPen2(sx,sy,ex,ey);
-//            break;
-//        case SelectedTool::Tool_Eraser:
-//            //updatePixelsByEraser(x,y);
-//            break;
-//        case SelectedTool::Tool_Bucket:
-//            //updatePixelsByBucket(x,y);
-//            break;
-//        case SelectedTool::Tool_ShapeCreator:
-//            //updatePixelsByShapeCreator(x,y);
-//            break;
-//        default:
-//            break;
-//    }
-
-//    //emit or call another method?
-//}
-
 
 void model::updatePixelsByPen(int x, int y){
     QImage* AFrame = &frames[currentFrame -1];
@@ -606,49 +578,17 @@ void model::updatePixelsByShapeCreator(int initialX, int initialY, int endX, int
 }
 
 void model::updatePixelsByBucketFiller(int x, int y){
-    QList<std::tuple<int,int>> pixelsToBeFilled;
-    pixelsToBeFilled.append(std::tuple<int,int>(x,y));
     QColor colorToBeChanged = (frames[currentFrame -1]).pixelColor(x,y);
-    pixelsToBeFilled = FindPixelsWithTheSameColorInBound(pixelsToBeFilled, frames[currentFrame-1], colorToBeChanged,x,y);
 
-    for(std::tuple<int,int> coordinates : pixelsToBeFilled){
-        QImage* AFrame = &frames[currentFrame -1];
-        AFrame->setPixelColor(std::get<0>(coordinates), std::get<1>(coordinates), penColor);
+    QSize sizeOfFrame = frames[currentFrame-1].size();
+
+    for(int pixelX=0; pixelX<sizeOfFrame.width(); pixelX++){
+        for(int pixelY=0; pixelY<sizeOfFrame.height(); pixelY++){
+            if(frames[currentFrame-1].pixelColor(pixelX, pixelY) == colorToBeChanged)
+                frames[currentFrame-1].setPixelColor(pixelX, pixelY, penColor);
+        }
     }
 }
-
-QList<std::tuple<int,int>> model::FindPixelsWithTheSameColorInBound(QList<std::tuple<int,int>> coordinates,
-                                                                    const QImage frame,
-                                                                    const QColor colorToBeChanged,
-                                                                    int x,
-                                                                    int y){
-    // If it is not the color we wanna change (reach the edge)
-    if(frame.pixelColor(x,y) != colorToBeChanged)
-        return coordinates;
-    // If we have arrived the current pixel earlier, return
-    if(coordinates.contains(std::tuple<int,int>(x,y)))
-        return coordinates;
-    // Check if it goes out of the canvas
-    if(x < 0 || x > 400 || y < 0 || y > 400)
-        return coordinates;
-
-    // add the current coordinate into the list of pixel coordinates.
-    coordinates.append(std::tuple<int,int>(x,y));
-
-    FindPixelsWithTheSameColorInBound(coordinates, frame, colorToBeChanged, x + 1, y);
-    FindPixelsWithTheSameColorInBound(coordinates, frame, colorToBeChanged, x, y + 1);
-    FindPixelsWithTheSameColorInBound(coordinates, frame, colorToBeChanged, x - 1, y);
-    FindPixelsWithTheSameColorInBound(coordinates, frame, colorToBeChanged, x, y - 1);
-}
-
-//void model::updatePixelsByPen2(int sx, int sy, int ex, int ey){
-//    //QPen Pen(penColor);
-//    for(int x = sx; x < ex; x++){
-//        for(int y = sy; y < ey; y++){
-//            frames[currentFrame -1].setPixel(x,y,penColor.rgba());
-//        }
-//    }
-//}
 
 
 //This method obtains where the current position of the mouse is in our canvas
