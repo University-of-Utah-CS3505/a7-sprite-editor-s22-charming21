@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QColorDialog>
+#include <QWidget>
 #include <QPixmap>
 #include <QIcon>
 #include "model.h"
