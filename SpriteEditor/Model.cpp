@@ -439,22 +439,25 @@ void model::undo(){
 
 //need change parameters?
 void model::redo(){
-    frames = redoStack.pop();
+    QList<QImage> previousFrame = redoStack.pop();
+
+    if(previousFrame.size() > frames.size()){
+        currentFrame++;
+        emit disableNextButton();
+        emit disableSwapDown();
+    }
+    frames = previousFrame;
 
     undoStack.push(frames);
 
     emit enableUndo();
 
-    if(frames.size() > currentFrame){
-        currentFrame++;
+
+    if(frames.size() == currentFrame){
         emit disableNextButton();
         emit disableSwapDown();
     }
-    else if(frames.size() == currentFrame){
-        emit disableNextButton();
-        emit disableSwapDown();
-    }
-    else{
+    else if (frames.size() < currentFrame){
         currentFrame = frames.size();
         emit disableSwapDown();
     }
@@ -813,7 +816,7 @@ void model::read(QString fileName){
     zoomSize =canvasSize;
     //Make the first inage to have a white background
     frames[currentFrame-1].fill(Qt::white);
-    undoStack.push(frames);
+
     emit startButtons();
     //finishes the setup of the canvas
 
@@ -881,9 +884,11 @@ void model::read(QString fileName){
         frameCounter++;
         emit updateFrameNumberCombo(frameCounter, frames.size());
     }
+
+    undoStack.push(frames);
     //update in the view :
     emit updateFrameNumberLabel(1, frames.size());
-    updateFrameNumberCombo(1,frames.size());
+    emit updateFrameNumberCombo(1,frames.size());
 
     //should we make this a helper method? (same method was used in drawCanvas method)
     //Create a Pixmap to return to view

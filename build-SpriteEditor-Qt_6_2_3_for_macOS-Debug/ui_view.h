@@ -53,7 +53,7 @@ public:
     QPushButton *eraserButton;
     QHBoxLayout *bucketAndShape;
     QPushButton *bucketButton;
-    QPushButton *shapeButton;
+    QComboBox *shapeToolComboBox;
     QSpinBox *toolSizeBox;
     QVBoxLayout *frameLayout;
     QComboBox *framesComboBox;
@@ -78,6 +78,7 @@ public:
     QVBoxLayout *verticalLayout;
     QLabel *canvasSizeLabel;
     QComboBox *canvasSizeComboBox;
+    QLabel *modifiedLabel;
     QMenuBar *menubar;
     QMenu *menuFile;
     QMenu *menuAbout;
@@ -181,10 +182,10 @@ public:
 
         bucketAndShape->addWidget(bucketButton);
 
-        shapeButton = new QPushButton(verticalLayoutWidget_4);
-        shapeButton->setObjectName(QString::fromUtf8("shapeButton"));
+        shapeToolComboBox = new QComboBox(verticalLayoutWidget_4);
+        shapeToolComboBox->setObjectName(QString::fromUtf8("shapeToolComboBox"));
 
-        bucketAndShape->addWidget(shapeButton);
+        bucketAndShape->addWidget(shapeToolComboBox);
 
 
         toolBarVerticalLayout->addLayout(bucketAndShape);
@@ -323,10 +324,13 @@ public:
 
         verticalLayout->addWidget(canvasSizeComboBox);
 
+        modifiedLabel = new QLabel(centralwidget);
+        modifiedLabel->setObjectName(QString::fromUtf8("modifiedLabel"));
+        modifiedLabel->setGeometry(QRect(210, 560, 271, 16));
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 22));
+        menubar->setGeometry(QRect(0, 0, 800, 24));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuAbout = new QMenu(menubar);
@@ -364,7 +368,6 @@ public:
         penButton->setText(QCoreApplication::translate("View", "Pen", nullptr));
         eraserButton->setText(QCoreApplication::translate("View", "Eraser", nullptr));
         bucketButton->setText(QCoreApplication::translate("View", "Bucket", nullptr));
-        shapeButton->setText(QCoreApplication::translate("View", "Shape", nullptr));
         framesComboBox->setItemText(0, QCoreApplication::translate("View", "1", nullptr));
 
         frameNumberLabel->setText(QCoreApplication::translate("View", "1/1", nullptr));
@@ -383,6 +386,7 @@ public:
         undoButton->setText(QCoreApplication::translate("View", "Undo", nullptr));
         redoButton->setText(QCoreApplication::translate("View", "Redo", nullptr));
         canvasSizeLabel->setText(QCoreApplication::translate("View", "Canvas Size ", nullptr));
+        modifiedLabel->setText(QCoreApplication::translate("View", "No Changes", nullptr));
         menuFile->setTitle(QCoreApplication::translate("View", "File", nullptr));
         menuAbout->setTitle(QCoreApplication::translate("View", "About", nullptr));
         menuHelp_me->setTitle(QCoreApplication::translate("View", "Help me", nullptr));
