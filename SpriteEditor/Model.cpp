@@ -594,6 +594,8 @@ void model::updatePixelsByBucketFiller(int x, int y){
 //This method obtains where the current position of the mouse is in our canvas
 //then it optains the ratio
 void model::drawOnCanvas(QPoint pixelPoint){
+    //if there have been any changes on the canvas
+    isChanged = true;
 
     //Check it it has been initialized with a size
     if(canvasSize == 0){
@@ -649,6 +651,9 @@ void model::updateActualLabel(){
 
 //save file
 void model::save(QString fileName){//QJsonObject &json) const{ //change parameters
+    //Since the file is beening saved, we change this to false
+    isChanged = false;
+
     QJsonObject json;
 
     int n = 0;
@@ -700,6 +705,8 @@ void model::open(QString fileName){
 
 //Read/Open file
 void model::read(QString fileName){
+
+
     //opening the file and saving the information to a QByteArray
     QJsonDocument doc;
     QByteArray saveData;
@@ -736,6 +743,16 @@ void model::read(QString fileName){
     {
         numberOfFrames = jsonFromLoadFile["numberOfFrames"].toDouble();
     }
+
+    //sets up the canvas (might be repetivite, double check later)
+    frames.append(QImage (canvasSize, canvasSize, QImage::Format_ARGB32));
+    currentTool = SelectedTool::SC_Pen;
+    zoomSize =canvasSize;
+    //Make the first inage to have a white background
+    frames[currentFrame-1].fill(Qt::white);
+    undoStack.push(frames);
+    emit startButtons();
+    //finishes the setup of the canvas
 
     if(jsonFromLoadFile.contains("frames") && jsonFromLoadFile["frames"].isObject())
     {
@@ -782,8 +799,8 @@ void model::read(QString fileName){
     }
 
     //This is where we add everything to the model, such as : frames, canvassize
-    int frameCounter =0;
-    int colorCounter =0;
+    int frameCounter = 0;
+    int colorCounter = 0;
     while(frameCounter < numberOfFrames)
     {
         frames.append(QImage(canvasSize,canvasSize,QImage::Format_ARGB32));
@@ -797,8 +814,28 @@ void model::read(QString fileName){
                 colorCounter++;
             }
         }
+
         frameCounter++;
+        emit updateFrameNumberCombo(frameCounter, frames.size());
     }
-    //update in the view : TODO
-    //emit something to the view
+    //update in the view :
+    emit updateFrameNumberLabel(1, frames.size());
+    updateFrameNumberCombo(1,frames.size());
+
+    //should we make this a helper method? (same method was used in drawCanvas method)
+    //Create a Pixmap to return to view
+    QPixmap currentPic;
+    //Convert QImage to QPixmap
+    currentPic.convertFromImage(frames[0]);
+    //Return the pixmap of our QImage
+    emit setCanvas(currentPic);
+
+    //enables the next button and swapdown button
+    if(frames.size() > 1)
+    {
+        emit enableNextButton();
+        emit enableSwapDown();
+
+    }
+
 }

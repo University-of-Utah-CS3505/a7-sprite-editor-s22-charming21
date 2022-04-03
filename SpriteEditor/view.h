@@ -7,6 +7,7 @@
 #include <QIcon>
 #include "model.h"
 #include "canvaspreview.h"
+#include <QCloseEvent>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class View; }
@@ -44,7 +45,6 @@ private slots:
     void pushColorButton(QColor);
     void updateColorWheel(QColor);
 
-
     //Control buttons
     void disableDeleteButton();
     void enableDeleteButton();
@@ -76,19 +76,24 @@ private slots:
     void displaySprite(QImage);
     void enableStartButtons();
 
-
      //Save and Load
-     void saveProject(QList<QImage>);
      void saveFile();
      void openFile();
 
-
      void on_actualSizeButton_clicked(QImage);
+
+     //check before closing
+     void closeEvent(QCloseEvent *event);
 
 private:
     Ui::View *ui;
+
     int canvasLabelSize;
     void initCanvasSizesComboBox();
     canvaspreview canvasPreview;
+
+    //second Window
+    model secWindowModel;
+    View *secWindow;
 };
 #endif // VIEW_H

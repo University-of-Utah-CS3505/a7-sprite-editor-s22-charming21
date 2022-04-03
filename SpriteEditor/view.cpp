@@ -176,7 +176,7 @@ View::View(model& model, QWidget *parent)
             this,
             &View::disableUndoButton);
     connect(&model,
-            &model::setCanvas,
+            &model::startButtons,
             this,
             &View::enableStartButtons);
 
@@ -332,15 +332,31 @@ View::View(model& model, QWidget *parent)
             &View::openFile);
     connect(this,
             &View::open,
-            &model,
+            &secWindowModel,
             &model::open);
-
 }
 
 void View::displaySprite(QImage currentFrame){
     ui->actualSizeLabel->setPixmap(QPixmap::fromImage(currentFrame).scaled(ui->actualSizeLabel->width(),
                                                                             ui->actualSizeLabel->height()));
 }
+
+void View::closeEvent(QCloseEvent *event){
+
+    if(ui->modifiedLabel->text() == "Has been modified"){
+        QMessageBox::StandardButton resBtn = QMessageBox::question(this, "Sprite Editor",
+                                                                   tr("Are you sure you want to close the Sprite Editor? \n Your work won't be saved."),
+                                                            QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
+                                                                   QMessageBox::Yes);
+        if(resBtn != QMessageBox::Yes){
+            event->ignore();
+        }
+        else{
+            event->accept();
+        }
+    }
+}
+
 View::~View()
 {
     delete ui;
@@ -435,6 +451,10 @@ void View::updateCanvas(QPixmap currentPic){
     if(ui->canvasSizeComboBox->isEnabled()){
         ui->canvasSizeComboBox->setEnabled(false);
     }
+
+    //updates the modified label
+    ui->modifiedLabel->setText("Has been modified");
+
 }
 
 void View::updateFramesBox(int page, int size){
@@ -464,20 +484,24 @@ void View::updateColorWheel(QColor color){
     ui->colorLabel->setStyleSheet(style.arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()));
 }
 
-void View::saveProject(QList<QImage>){
-    //TODO
-}
 
 void View::saveFile()
 {
     QString fileName = QFileDialog::getSaveFileName(this, "Save file", "C://");
     emit save(fileName);
+
+    //updates the text in the modified label to "no changes"
+    ui->modifiedLabel->setText("No Changes");
 }
 
 void View::openFile()
 {
+
     QString fileName = QFileDialog::getOpenFileName(this, "Open file", "C://");
     // will have to do an emit to the model
+    //secWindow->connect(this, &View::open, &test,&model::open);
+    secWindow = new View(secWindowModel);
+    secWindow->show();
     emit open(fileName);
 
 }

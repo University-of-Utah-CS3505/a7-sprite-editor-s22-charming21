@@ -57,6 +57,7 @@ private:
     int pixelLength;
 
     int currentIndex; //index counter to access frames.
+    bool isChanged = false; // checks if there were any changes on the frame.
 
     void updatePixelsByPen(int, int);
     void updatePixelsByEraser(int, int);
@@ -147,7 +148,9 @@ public slots:
 
     //Save file
     void save(QString fileName);
+
     void open(QString fileName);
+
     void saveFrameToStack();
 };
 

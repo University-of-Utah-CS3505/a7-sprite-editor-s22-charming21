@@ -78,6 +78,7 @@ public:
     QVBoxLayout *verticalLayout;
     QLabel *canvasSizeLabel;
     QComboBox *canvasSizeComboBox;
+    QLabel *modifiedLabel;
     QMenuBar *menubar;
     QMenu *menuFile;
     QMenu *menuAbout;
@@ -88,7 +89,7 @@ public:
     {
         if (View->objectName().isEmpty())
             View->setObjectName(QString::fromUtf8("View"));
-        View->resize(800, 600);
+        View->resize(800, 658);
         actionSave = new QAction(View);
         actionSave->setObjectName(QString::fromUtf8("actionSave"));
         actionOpen = new QAction(View);
@@ -153,7 +154,7 @@ public:
 
         verticalLayoutWidget_4 = new QWidget(centralwidget);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
-        verticalLayoutWidget_4->setGeometry(QRect(0, 110, 181, 456));
+        verticalLayoutWidget_4->setGeometry(QRect(0, 110, 181, 487));
         toolBarAndFrame = new QVBoxLayout(verticalLayoutWidget_4);
         toolBarAndFrame->setObjectName(QString::fromUtf8("toolBarAndFrame"));
         toolBarAndFrame->setContentsMargins(0, 0, 0, 0);
@@ -323,10 +324,13 @@ public:
 
         verticalLayout->addWidget(canvasSizeComboBox);
 
+        modifiedLabel = new QLabel(centralwidget);
+        modifiedLabel->setObjectName(QString::fromUtf8("modifiedLabel"));
+        modifiedLabel->setGeometry(QRect(210, 560, 271, 16));
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 24));
+        menubar->setGeometry(QRect(0, 0, 800, 22));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuAbout = new QMenu(menubar);
@@ -383,6 +387,7 @@ public:
         undoButton->setText(QCoreApplication::translate("View", "Undo", nullptr));
         redoButton->setText(QCoreApplication::translate("View", "Redo", nullptr));
         canvasSizeLabel->setText(QCoreApplication::translate("View", "Canvas Size ", nullptr));
+        modifiedLabel->setText(QCoreApplication::translate("View", "No Changes", nullptr));
         menuFile->setTitle(QCoreApplication::translate("View", "File", nullptr));
         menuAbout->setTitle(QCoreApplication::translate("View", "About", nullptr));
         menuHelp_me->setTitle(QCoreApplication::translate("View", "Help me", nullptr));
