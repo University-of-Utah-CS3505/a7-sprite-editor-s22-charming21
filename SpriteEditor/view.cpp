@@ -13,12 +13,13 @@ View::View(model& model, QWidget *parent)
     ui->setupUi(this);
 
     initCanvasSizesComboBox();
+    initShapeToolComboBox();
 
     // Set icons
     ui->penButton->setIcon(QIcon(":/new/UI_Icons/Tool_Pen.png"));
     ui->eraserButton->setIcon(QIcon(":/new/UI_Icons/Tool_Eraser.png"));
     ui->bucketButton->setIcon(QIcon(":/new/UI_Icons/Tool_Bucket.png"));
-    ui->shapeButton->setIcon(QIcon(":/new/UI_Icons/Tool_ShapeCreator.png"));
+    //ui->shapeButton->setIcon(QIcon(":/new/UI_Icons/Tool_ShapeCreator.png"));
     ui->undoButton->setIcon(QIcon(":/new/UI_Icons/Button_Undo.png"));
     ui->redoButton->setIcon(QIcon(":/new/UI_Icons/Button_Redo.png"));
     ui->zoomInButton->setIcon(QIcon(":/new/UI_Icons/Button_ZoomIn.png"));
@@ -266,6 +267,12 @@ View::View(model& model, QWidget *parent)
             &model,
             &model::initializeCanvasSize);
 
+    //Initialize Shape Tool
+    connect(ui->shapeToolComboBox,
+            &QComboBox::activated,
+            &model,
+            &model::initializeShapeTool);
+
     //Canvas Connect
     connect(ui->canvasLabel, // mouse click
             &Canvas::sendMouseLoc,
@@ -334,6 +341,12 @@ View::View(model& model, QWidget *parent)
             &View::open,
             &secWindowModel,
             &model::open);
+
+    // mouse release for shapes
+    connect(ui->canvasLabel, // mouse click
+            &Canvas::sendMouseReleaseLoc,
+            &model,
+            &model::mouseRelease);
 }
 
 void View::displaySprite(QImage currentFrame){
@@ -522,10 +535,6 @@ void View::on_bucketButton_clicked()
 {
     emit setTool("bucket");
 }
-void View::on_shapeButton_clicked()
-{
-    emit setTool("shapeCreator");
-}
 
 
 //Displays the image with the given ratio to increase the size
@@ -574,6 +583,13 @@ void View::initCanvasSizesComboBox(){
     ui->canvasSizeComboBox->addItem("400 x 400");
 
     ui->canvasSizeComboBox->setCurrentIndex(6);
+}
+
+void View::initShapeToolComboBox(){
+    ui->shapeToolComboBox->addItem("Line");
+    ui->shapeToolComboBox->addItem("Ellipse");
+    ui->shapeToolComboBox->addItem("Rectangle");
+
 }
 
 void View::enableStartButtons(){

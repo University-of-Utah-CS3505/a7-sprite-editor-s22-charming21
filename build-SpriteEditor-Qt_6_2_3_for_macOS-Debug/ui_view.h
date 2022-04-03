@@ -368,15 +368,15 @@ public:
         framesComboBox->setItemText(0, QCoreApplication::translate("View", "1", nullptr));
 
         frameNumberLabel->setText(QCoreApplication::translate("View", "1/1", nullptr));
-        lastFrameButton->setText(QCoreApplication::translate("View", "Previous Frame", nullptr));
-        nextFrameButton->setText(QCoreApplication::translate("View", "Next Frame", nullptr));
-        addFrameButton->setText(QCoreApplication::translate("View", "Insert After", nullptr));
-        insertFrameButton->setText(QCoreApplication::translate("View", "Insert Before", nullptr));
-        swapUpButton->setText(QCoreApplication::translate("View", "Swap(up)", nullptr));
-        swapDownButton->setText(QCoreApplication::translate("View", "Swap(down)", nullptr));
+        lastFrameButton->setText(QCoreApplication::translate("View", "Move (up)", nullptr));
+        nextFrameButton->setText(QCoreApplication::translate("View", "Move (down)", nullptr));
+        addFrameButton->setText(QCoreApplication::translate("View", "Add (below)", nullptr));
+        insertFrameButton->setText(QCoreApplication::translate("View", "Add (above)", nullptr));
+        swapUpButton->setText(QCoreApplication::translate("View", "Swap (up)", nullptr));
+        swapDownButton->setText(QCoreApplication::translate("View", "Swap (down)", nullptr));
         copyButton->setText(QCoreApplication::translate("View", "Copy", nullptr));
         ClearButton->setText(QCoreApplication::translate("View", "Clear", nullptr));
-        deleteFrameButton->setText(QCoreApplication::translate("View", "Delete Frame", nullptr));
+        deleteFrameButton->setText(QCoreApplication::translate("View", "Delete", nullptr));
         posLabel->setText(QString());
         zoomInButton->setText(QCoreApplication::translate("View", "Zoom In", nullptr));
         zoomOutButton->setText(QCoreApplication::translate("View", "Zoom Out", nullptr));

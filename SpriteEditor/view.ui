@@ -153,11 +153,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="shapeButton">
-           <property name="text">
-            <string>Shape</string>
-           </property>
-          </widget>
+          <widget class="QComboBox" name="shapeToolComboBox"/>
          </item>
         </layout>
        </item>
@@ -213,7 +209,7 @@
             <bool>false</bool>
            </property>
            <property name="text">
-            <string>Previous Frame</string>
+            <string>Move (up)</string>
            </property>
           </widget>
          </item>
@@ -223,7 +219,7 @@
             <bool>false</bool>
            </property>
            <property name="text">
-            <string>Next Frame</string>
+            <string>Move (down)</string>
            </property>
           </widget>
          </item>
@@ -233,7 +229,7 @@
             <bool>false</bool>
            </property>
            <property name="text">
-            <string>Insert After</string>
+            <string>Add (below)</string>
            </property>
           </widget>
          </item>
@@ -243,7 +239,7 @@
             <bool>false</bool>
            </property>
            <property name="text">
-            <string>Insert Before</string>
+            <string>Add (above)</string>
            </property>
           </widget>
          </item>
@@ -253,7 +249,7 @@
             <bool>false</bool>
            </property>
            <property name="text">
-            <string>Swap(up)</string>
+            <string>Swap (up)</string>
            </property>
           </widget>
          </item>
@@ -263,7 +259,7 @@
             <bool>false</bool>
            </property>
            <property name="text">
-            <string>Swap(down)</string>
+            <string>Swap (down)</string>
            </property>
           </widget>
          </item>
@@ -293,7 +289,7 @@
             <bool>false</bool>
            </property>
            <property name="text">
-            <string>Delete Frame</string>
+            <string>Delete</string>
            </property>
           </widget>
          </item>
@@ -410,7 +406,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

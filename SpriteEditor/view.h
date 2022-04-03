@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QColorDialog>
+#include <QWidget>
 #include <QPixmap>
 #include <QIcon>
 #include "model.h"
@@ -35,7 +36,6 @@ private slots:
     void on_penButton_clicked();
     void on_eraserButton_clicked();
     void on_bucketButton_clicked();
-    void on_shapeButton_clicked();
 
     //Mouse events
     void on_clickMouse_released(QPoint& loc);
@@ -90,6 +90,7 @@ private:
 
     int canvasLabelSize;
     void initCanvasSizesComboBox();
+    void initShapeToolComboBox();
     canvaspreview canvasPreview;
 
     //second Window

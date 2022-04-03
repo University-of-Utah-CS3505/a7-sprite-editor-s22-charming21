@@ -27,7 +27,9 @@ void Canvas::mousePressEvent(QMouseEvent *pressEvent){
 }
 
 void Canvas::mouseReleaseEvent(QMouseEvent *releaseEvent){
+    QPoint mouseRleaseLoc = releaseEvent->pos();
     emit saveToStack();
+    emit sendMouseReleaseLoc(mouseRleaseLoc); // send coordinate when user unclicks
     if(releaseEvent->button() == Qt::LeftButton){
         //std::cout << "Mouse Released x: " << releaseEvent->pos().x() << " y: "  << releaseEvent->pos().y() << std::endl;
         //send to model

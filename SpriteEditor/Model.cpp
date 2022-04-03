@@ -89,6 +89,23 @@ void model::initializeCanvasSize(int index){
 
 }
 
+void model::initializeShapeTool(int index)
+{
+    currentTool = SelectedTool::SC_ShapeCreator;
+    switch(index){
+    case 0:
+        currentShape = ShapeCreator::SC_Line;
+        break;
+    case 1:
+        currentShape = ShapeCreator::SC_Ciecle;
+        break;
+    case 2:
+        currentShape = ShapeCreator::SC_Rectangle;
+        break;
+    }
+
+}
+
 
 
 // Add a new frame to the position next to the current frame
@@ -474,6 +491,24 @@ void model::saveFrameToStack(){
     undoStack.push(frames);
 }
 
+void model::mouseRelease(QPoint &loc)
+{
+    if(startEndLoc.size() ==1 ){
+    startEndLoc.insert(1,loc);
+    }
+    switch(currentTool){
+        case SelectedTool::SC_ShapeCreator: // might need to delete
+                std::cout << "shape tool: " << startEndLoc.size() << std::endl;
+                if(startEndLoc.size() ==2 ){
+                        updatePixelsByShapeCreator((int) (startEndLoc[0].x()/ratio) + zoomIndex,
+                                (int) (startEndLoc[0].y()/ratio) + zoomIndex,
+                                (int) (startEndLoc[1].x()/ratio) + zoomIndex,
+                                (int) (startEndLoc[1].y()/ratio) + zoomIndex);
+                 }
+        break;
+    }
+}
+
 //Frame that we are currently in
 void model::selectedFrame(int index){
     currentFrame = index + 1;
@@ -514,6 +549,7 @@ void model::updateToolSize(int size){
 void model::updatePixels(int initialX, int initialY, int endX, int endY){
     switch(currentTool){
         case SelectedTool::SC_Pen:
+            std::cout << "hit pen " << std::endl;
             updatePixelsByPen(initialX,initialY);
             break;
         case SelectedTool::SC_Eraser:
@@ -522,9 +558,15 @@ void model::updatePixels(int initialX, int initialY, int endX, int endY){
         case SelectedTool::SC_Bucket:
             updatePixelsByBucketFiller(initialX, initialY);
             break;
-        case SelectedTool::SC_ShapeCreator:
-            updatePixelsByShapeCreator(initialX, initialY, endX, endY);
-            break;
+//        case SelectedTool::SC_ShapeCreator: // might need to delete
+//            if(startEndLoc.size() == 2){
+//                std::cout << "hit" << std::endl;
+
+//                std::cout << startEndLoc.size() << std::endl;
+
+//            updatePixelsByShapeCreator(initialX, initialY, endX, endY);
+//            break;
+          //  }
         default:
             break;
     }
@@ -538,6 +580,8 @@ void model::updatePixelsByPen(int x, int y){
     Painter.setPen(Pen);
     Painter.drawPoint(x,y);
     Painter.end();
+    startEndLoc.clear();
+
 }
 
 void model::updatePixelsByEraser(int x, int y){
@@ -561,20 +605,33 @@ void model::updatePixelsByShapeCreator(int initialX, int initialY, int endX, int
 
     switch(currentShape){
         case ShapeCreator::SC_Line:
+            std::cout << "shoudl draw line " << std::endl;
             Painter.drawLine(initialX, initialY, endX, endY);
+            //Painter.drawRect(initialX,initialY,endX-initialX,endY-initialY);
+            //startEndLoc.clear();
+
             Painter.end();
             break;
         case ShapeCreator::SC_Ciecle:
-            Painter.drawEllipse(initialX, initialY, initialX-endX, initialY-endY);
+            //Painter.drawEllipse(initialX, initialY, initialX-endX, initialY-endY);
+            Painter.drawEllipse(initialX,initialY,endX-initialX,endY-initialY);
             Painter.end();
             break;
         case ShapeCreator::SC_Rectangle:
-            Painter.drawRect(initialX, initialY, initialX-endX, initialY-endY);
+            Painter.drawRect(initialX,initialY,endX-initialX,endY-initialY);
+            //Painter.drawRect(initialX, initialY, initialX-endX, initialY-endY);
             Painter.end();
             break;
         default:
             break;
+
     }
+    startEndLoc.clear();
+    QPixmap currentPic;
+    //Convert QImage to QPixmap
+    currentPic.convertFromImage(frames[currentFrame-1]);
+    //Return the pixmap of our QImage
+    emit setCanvas(currentPic);
 }
 
 void model::updatePixelsByBucketFiller(int x, int y){
@@ -616,7 +673,13 @@ void model::drawOnCanvas(QPoint pixelPoint){
      int x = (pixelPoint.x()/ratio) + zoomIndex;
      int y = (pixelPoint.y()/ratio) + zoomIndex;
 
-    updatePixels(x,y);
+     if (startEndLoc.size() < 1){ // assures to get only one
+         startEndLoc.insert(0,pixelPoint);
+     }
+
+       updatePixels(x,y);
+
+
     //Create a Pixmap to return to view
     QPixmap currentPic;
     //Convert QImage to QPixmap

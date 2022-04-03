@@ -39,6 +39,7 @@ private:
     SelectedTool currentTool;
     ShapeCreator currentShape;
     QList<QImage> frames;
+    QList<QPoint> startEndLoc;
     QColor penColor;
     int canvasSize;
     int zoomSize;
@@ -140,6 +141,7 @@ public slots:
     void updateCanvasSize();
 
     void initializeCanvasSize(int);
+    void initializeShapeTool(int);
 
     //Preview
     void previewOfFrames();
@@ -152,6 +154,10 @@ public slots:
     void open(QString fileName);
 
     void saveFrameToStack();
+
+    //Release Button
+    void mouseRelease(QPoint& loc);
+
 };
 
 #endif // MODEL_H

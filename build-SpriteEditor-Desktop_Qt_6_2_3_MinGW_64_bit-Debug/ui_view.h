@@ -53,7 +53,7 @@ public:
     QPushButton *eraserButton;
     QHBoxLayout *bucketAndShape;
     QPushButton *bucketButton;
-    QPushButton *shapeButton;
+    QComboBox *shapeToolComboBox;
     QSpinBox *toolSizeBox;
     QVBoxLayout *frameLayout;
     QComboBox *framesComboBox;
@@ -182,10 +182,10 @@ public:
 
         bucketAndShape->addWidget(bucketButton);
 
-        shapeButton = new QPushButton(verticalLayoutWidget_4);
-        shapeButton->setObjectName(QString::fromUtf8("shapeButton"));
+        shapeToolComboBox = new QComboBox(verticalLayoutWidget_4);
+        shapeToolComboBox->setObjectName(QString::fromUtf8("shapeToolComboBox"));
 
-        bucketAndShape->addWidget(shapeButton);
+        bucketAndShape->addWidget(shapeToolComboBox);
 
 
         toolBarVerticalLayout->addLayout(bucketAndShape);
@@ -368,7 +368,6 @@ public:
         penButton->setText(QCoreApplication::translate("View", "Pen", nullptr));
         eraserButton->setText(QCoreApplication::translate("View", "Eraser", nullptr));
         bucketButton->setText(QCoreApplication::translate("View", "Bucket", nullptr));
-        shapeButton->setText(QCoreApplication::translate("View", "Shape", nullptr));
         framesComboBox->setItemText(0, QCoreApplication::translate("View", "1", nullptr));
 
         frameNumberLabel->setText(QCoreApplication::translate("View", "1/1", nullptr));
