@@ -53,7 +53,7 @@ public:
     QPushButton *eraserButton;
     QHBoxLayout *bucketAndShape;
     QPushButton *bucketButton;
-    QPushButton *shapeButton;
+    QComboBox *shapeToolComboBox;
     QSpinBox *toolSizeBox;
     QVBoxLayout *frameLayout;
     QComboBox *framesComboBox;
@@ -88,7 +88,7 @@ public:
     {
         if (View->objectName().isEmpty())
             View->setObjectName(QString::fromUtf8("View"));
-        View->resize(800, 600);
+        View->resize(800, 658);
         actionSave = new QAction(View);
         actionSave->setObjectName(QString::fromUtf8("actionSave"));
         actionOpen = new QAction(View);
@@ -153,7 +153,7 @@ public:
 
         verticalLayoutWidget_4 = new QWidget(centralwidget);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
-        verticalLayoutWidget_4->setGeometry(QRect(0, 110, 181, 456));
+        verticalLayoutWidget_4->setGeometry(QRect(0, 110, 181, 487));
         toolBarAndFrame = new QVBoxLayout(verticalLayoutWidget_4);
         toolBarAndFrame->setObjectName(QString::fromUtf8("toolBarAndFrame"));
         toolBarAndFrame->setContentsMargins(0, 0, 0, 0);
@@ -181,10 +181,10 @@ public:
 
         bucketAndShape->addWidget(bucketButton);
 
-        shapeButton = new QPushButton(verticalLayoutWidget_4);
-        shapeButton->setObjectName(QString::fromUtf8("shapeButton"));
+        shapeToolComboBox = new QComboBox(verticalLayoutWidget_4);
+        shapeToolComboBox->setObjectName(QString::fromUtf8("shapeToolComboBox"));
 
-        bucketAndShape->addWidget(shapeButton);
+        bucketAndShape->addWidget(shapeToolComboBox);
 
 
         toolBarVerticalLayout->addLayout(bucketAndShape);
@@ -364,7 +364,6 @@ public:
         penButton->setText(QCoreApplication::translate("View", "Pen", nullptr));
         eraserButton->setText(QCoreApplication::translate("View", "Eraser", nullptr));
         bucketButton->setText(QCoreApplication::translate("View", "Bucket", nullptr));
-        shapeButton->setText(QCoreApplication::translate("View", "Shape", nullptr));
         framesComboBox->setItemText(0, QCoreApplication::translate("View", "1", nullptr));
 
         frameNumberLabel->setText(QCoreApplication::translate("View", "1/1", nullptr));

@@ -35,7 +35,6 @@ private slots:
     void on_penButton_clicked();
     void on_eraserButton_clicked();
     void on_bucketButton_clicked();
-    void on_shapeButton_clicked();
 
     //Mouse events
     void on_clickMouse_released(QPoint& loc);
@@ -90,6 +89,7 @@ private:
     Ui::View *ui;
     int canvasLabelSize;
     void initCanvasSizesComboBox();
+    void initShapeToolComboBox();
     canvaspreview canvasPreview;
 };
 #endif // VIEW_H
