@@ -716,24 +716,43 @@ void model::updateActualLabel(){
         currentIndex = 0;
 }
 
-//save file
-void model::save(QString fileName){
+//saves our drawings/frames to a .ssp file
+void model::saveToFile(QString fileName){
 
-    QJsonObject json;
-    int numOfFramesCount = 0;
+    QJsonObject spriteSheetProject;
 
     //creates json fields
-    json["height"] = canvasSize;
-    json["width"] = canvasSize;
-    json["numberOfFrames"] = frames.size();
+    spriteSheetProject["height"] = canvasSize;
+    spriteSheetProject["width"] = canvasSize;
+    spriteSheetProject["numberOfFrames"] = frames.size();
+
+    //creates a frame object and adds it to the spriteSheetProject json.
+    QJsonObject framesObj;
+    saveFramesInfoToJson(framesObj);
+    spriteSheetProject["frames"] = framesObj;
+
+    //create the document and add it to the file
+    QJsonDocument doc(spriteSheetProject);
+    QFile jsonFile(fileName + ".ssp");
+    if(!jsonFile.open(QFile::WriteOnly))
+    {
+        emit errorMessage("We were not able to save your file, please try again.");
+    }
+    jsonFile.write(doc.toJson());
+
+    //Since the file is beening saved, we change this to false
+    isChanged = false;
+}
+
+void model::saveFramesInfoToJson(QJsonObject& framesObj) const{
 
     //*******Important******//
     // x and y coordinate are switched, x is columns and y is rows, to fix this
-    // i will have rowNum go in the Y in the forloo for pixel when we get pixelcolor
-    // and pixelNum will go in the X in the forloop for pixe when we get pixelcolor.
+    // i will have rowNum go in the Y in the forloop for pixel when we get pixelcolor
+    // and pixelNum will go in the X in the forloop for pixel when we get pixelcolor.
     //I'm doing this so it can fit the requirements in Q6 //
     //*******Important*******//
-    QJsonObject framesObj;
+    int numOfFramesCount = 0;
     for(QImage a : frames)
     {
         QJsonArray frame;
@@ -748,35 +767,24 @@ void model::save(QString fileName){
                 pixelColor.append(a.pixelColor(pixelNum,rowNum).green());
                 pixelColor.append(a.pixelColor(pixelNum,rowNum).blue());
                 pixelColor.append(a.pixelColor(pixelNum,rowNum).alpha());
+                //add the color to our pixelColor array
                 row.append(pixelColor);
             }
+            //add the row to our frame Array
             frame.append(row);
         }
         QString frameName = "Frame" + QString::number(numOfFramesCount);
+        //create the frame'n' (n = a int) field name and adds that array to the framesObj
         framesObj[frameName] = frame;
         numOfFramesCount++;
     }
-
-    json["frames"] = framesObj;
-    QJsonDocument doc(json);
-
-    QFile jsonFile(fileName + ".ssp");
-    if(!jsonFile.open(QFile::WriteOnly))
-    {
-        emit errorMessage("We were not able to save your file, please try again.");
-    }
-
-    jsonFile.write(doc.toJson());
-
-    //Since the file is beening saved, we change this to false
-    isChanged = false;
 }
 
-void model::open(QString fileName){
+void model::openFile(QString fileName){
     read(fileName);
 }
 
-//Read/Open file
+//Read and Opens the file on the application.
 void model::read(QString fileName){
 
     //opening the file and saving the information to a QByteArray
@@ -784,6 +792,7 @@ void model::read(QString fileName){
     QByteArray saveData;
     QFile loadFile(fileName);
     QList<QColor> colorList;
+    int numberOfFrames = 0;
     if(loadFile.open(QIODevice::ReadOnly))
     {
         saveData = loadFile.readAll();
@@ -798,112 +807,10 @@ void model::read(QString fileName){
     QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
     QJsonObject jsonFromLoadFile = loadDoc.object();
 
-    int frameCount = 0; //starting number of frames
-    int numberOfFrames = 0;
-
-    //Json fields checks if they are in the saved file, becomes true if that field exists.
-    bool hasHeight = jsonFromLoadFile.contains("height");
-    bool hasWidth = jsonFromLoadFile.contains("width");
-    bool hasNumberOfFrames = jsonFromLoadFile.contains("numberOfFrames");
-    bool hasFrames = jsonFromLoadFile.contains("frames");
-
-    bool isHeightDbl = jsonFromLoadFile["height"].isDouble();
-    bool isWidthDbl = jsonFromLoadFile["width"].isDouble();
-    bool isNumberOfFramesDbl = jsonFromLoadFile["numberOfFrames"].isDouble();
-    bool isFramesAnObj = jsonFromLoadFile["frames"].isObject();
-
-    //if the Json doesn't have these fields it is not a valid file.
-    if(!hasHeight || !hasWidth || !hasNumberOfFrames || !hasFrames || !isHeightDbl || !isWidthDbl || !isNumberOfFramesDbl || !isFramesAnObj)
+    if(loadInfoFromJson(jsonFromLoadFile,colorList,canvasSize,zoomSize,currentTool, numberOfFrames))
     {
-        emit errorMessage("Not a valid File");
-        return;
+        emit errorMessage("This is not a valid File");
     }
-    //*********Checks if height and width are int ***************///
-    //Conversion from double to int, it is an int if the outcome is equal to 1.
-    double heightToInt = jsonFromLoadFile["height"].toDouble()/std::floor(jsonFromLoadFile["height"].toDouble());
-    double widthToInt = jsonFromLoadFile["width"].toDouble()/std::floor(jsonFromLoadFile["width"].toDouble());
-    //Image height and width
-    double height = jsonFromLoadFile["height"].toDouble();
-    double width = jsonFromLoadFile["width"].toDouble();
-
-    //checks if height and width have int values and if it is a perfect square
-    if((heightToInt == 1.0) && (widthToInt == 1.0) && height == width)
-    {
-        //sets the canvas size and zoom size, and setsup currentTool
-        canvasSize = width;
-        zoomSize = canvasSize;
-        currentTool = SelectedTool::SC_Pen;
-    }
-    else
-    {
-        emit errorMessage("The saved file size, is not a perfect square, our program is will open files with canvas size which are perfect squares.");
-        return;
-    }
-    //*********end*************//
-
-    //************checks if it numberOfFrames is an int ************//
-    double numOfFramesToInt = jsonFromLoadFile["numberOfFrames"].toDouble()/std::floor(jsonFromLoadFile["numberOfFrames"].toDouble());
-
-    if(numOfFramesToInt != 1)
-    {
-        emit errorMessage("The saved file size, is not a valid file.");
-        return;
-    }
-    numberOfFrames = jsonFromLoadFile["numberOfFrames"].toDouble();
-    //*************end****//
-
-    //finishes the setup of the canvas
-
-    // ****************** reading the json info from frames and color for each pixel and saving it to color list *******
-    QJsonObject framesObj = jsonFromLoadFile["frames"].toObject();
-    while(frameCount < numberOfFrames)
-    {
-        bool hasFrame = framesObj.contains("Frame"+ QString::number(frameCount));
-        bool isFrameArray = framesObj["Frame" + QString::number(frameCount)].isArray();
-
-        if(!hasFrame || !isFrameArray)
-        {
-            emit errorMessage(("The saved file, is not a valid File."));
-            return;
-        }
-
-        QJsonArray rowArray = framesObj["Frame" + QString::number(frameCount)].toArray();
-        for(QJsonValue row: rowArray)
-        {
-            QJsonArray pixelArray = row.toArray();
-            for(QJsonValue pixelValue : pixelArray)
-            {
-                QJsonArray colorArray = pixelValue.toArray();
-                QColor color;
-
-                //indexcounter to set RGBA values in color
-                int cIndex =0;
-                for(QJsonValue colorVal : colorArray)
-                {
-                    //check if colorValues are int and inbetween 0 to 255
-                    double colorValuesDbl = colorVal.toDouble();///std::floor(colorVal.toDouble());
-                    int colorValuesInt = colorVal.toInt();
-                    if(colorValuesDbl != colorValuesInt || colorValuesInt > 255 || colorValuesInt < 0)
-                    {
-                        emit errorMessage(("The saved file, is not a valid File."));
-                        return;
-                    }
-                    if(cIndex == 0)
-                        color.setRed(colorValuesInt);
-                    else if(cIndex ==1)
-                        color.setGreen(colorValuesInt);
-                    else if(cIndex ==2)
-                        color.setBlue(colorValuesInt);
-                    else
-                        color.setAlpha(colorValuesInt);
-                    cIndex++;
-                }
-                colorList.append(color);
-            }
-        }
-        frameCount++;
-    }
-    //********************end*****************************
 
     //emptys our current qlist<Qimage> list in model, if it isn't empty already.
     if(!frames.isEmpty())
@@ -913,6 +820,36 @@ void model::read(QString fileName){
     }
 
     //This is where we update the view, such as : frames, canvassize, framescombobox
+    addPixelColorToFrames(numberOfFrames, colorList);
+
+    //sets up undo
+    undoStack.push(frames);
+
+    //update the labels in the view :
+    emit updateFrameNumberLabel(1, frames.size());
+    emit updateFrameNumberCombo(1,frames.size());
+
+    //should we make this a helper method? (same method was used in drawCanvas method)
+    //Create a Pixmap to return to view
+    QPixmap currentPic;
+    //Convert QImage to QPixmap
+    currentPic.convertFromImage(frames[0]);
+    //Return the pixmap of our QImage
+    emit setCanvas(currentPic);
+
+    emit startButtons();
+    emit updateCanvasComboBox(canvasSize);
+
+    //enables the next button and swapdown button, if they have more than one frames.
+    if(frames.size() > 1)
+    {
+        emit enableNextButton();
+        emit enableSwapDown();
+
+    }
+
+}
+void model::addPixelColorToFrames(int numberOfFrames, QList<QColor> colorList){
     int frameCounter = 0;
     int colorCounter = 0;
     while(frameCounter < numberOfFrames)
@@ -934,30 +871,102 @@ void model::read(QString fileName){
         frameCounter++;
         emit updateFrameNumberCombo(frameCounter, frames.size());
     }
+}
+bool model::loadInfoFromJson(QJsonObject &jsonFromLoadFile, QList<QColor>& colorList, int& imageSize, int& zoom, SelectedTool & tool, int& numberOfFrames) const{
+    int frameCount = 0; //starting number of frames
 
-    //sets up undo
-    undoStack.push(frames);
+    //Json fields checks if they are in the saved file, becomes true if that field exists.
+    bool hasHeight = jsonFromLoadFile.contains("height");
+    bool hasWidth = jsonFromLoadFile.contains("width");
+    bool hasNumberOfFrames = jsonFromLoadFile.contains("numberOfFrames");
+    bool hasFrames = jsonFromLoadFile.contains("frames");
 
-    //update the labels in the view :
-    emit updateFrameNumberLabel(1, frames.size());
-    emit updateFrameNumberCombo(1,frames.size());
+    bool isHeightDbl = jsonFromLoadFile["height"].isDouble();
+    bool isWidthDbl = jsonFromLoadFile["width"].isDouble();
+    bool isNumberOfFramesDbl = jsonFromLoadFile["numberOfFrames"].isDouble();
+    bool isFramesAnObj = jsonFromLoadFile["frames"].isObject();
 
-    //should we make this a helper method? (same method was used in drawCanvas method)
-    //Create a Pixmap to return to view
-    QPixmap currentPic;
-    //Convert QImage to QPixmap
-    currentPic.convertFromImage(frames[0]);
-    //Return the pixmap of our QImage
-    emit setCanvas(currentPic);
-
-    emit startButtons();
-
-    //enables the next button and swapdown button, if they have more than one frames.
-    if(frames.size() > 1)
+    //if the Json doesn't have these fields it is not a valid file.
+    if(!hasHeight || !hasWidth || !hasNumberOfFrames || !hasFrames || !isHeightDbl || !isWidthDbl || !isNumberOfFramesDbl || !isFramesAnObj)
     {
-        emit enableNextButton();
-        emit enableSwapDown();
-
+        return true;
     }
+    //*********Checks if height and width are int ***************///
+    //Conversion from double to int, it is an int if the outcome is equal to 1.
+    double heightToInt = jsonFromLoadFile["height"].toDouble()/std::floor(jsonFromLoadFile["height"].toDouble());
+    double widthToInt = jsonFromLoadFile["width"].toDouble()/std::floor(jsonFromLoadFile["width"].toDouble());
+    //Image height and width
+    double height = jsonFromLoadFile["height"].toDouble();
+    double width = jsonFromLoadFile["width"].toDouble();
 
+    //checks if height and width have int values and if it is a perfect square
+    if(heightToInt != 1.0 || widthToInt != 1.0 || height != width)
+        return true;
+
+    //sets the canvas size and zoom size, and setsup currentTool
+    imageSize = width;
+    zoom = canvasSize;
+    tool = SelectedTool::SC_Pen;
+    //*********end*************//
+
+    //************checks if it numberOfFrames is an int ************//
+    double numOfFramesToInt = jsonFromLoadFile["numberOfFrames"].toDouble()/std::floor(jsonFromLoadFile["numberOfFrames"].toDouble());
+    if(numOfFramesToInt != 1)
+    {
+        return true;
+    }
+    numberOfFrames = jsonFromLoadFile["numberOfFrames"].toDouble();
+    //*************end****//
+
+    //finishes the setup of the canvas
+
+    // ****************** reading the json info from frames and color for each pixel and saving it to color list *******
+    QJsonObject framesObj = jsonFromLoadFile["frames"].toObject();
+    while(frameCount < numberOfFrames)
+    {
+        bool hasFrame = framesObj.contains("Frame"+ QString::number(frameCount));
+        bool isFrameArray = framesObj["Frame" + QString::number(frameCount)].isArray();
+
+        if(!hasFrame || !isFrameArray)
+        {
+            return true;
+        }
+
+        QJsonArray rowArray = framesObj["Frame" + QString::number(frameCount)].toArray();
+        for(QJsonValue row: rowArray)
+        {
+            QJsonArray pixelArray = row.toArray();
+            for(QJsonValue pixelValue : pixelArray)
+            {
+                QJsonArray colorArray = pixelValue.toArray();
+                QColor color;
+
+                //indexcounter to set RGBA values in color
+                int cIndex =0;
+                for(QJsonValue colorVal : colorArray)
+                {
+                    //check if colorValues are int and inbetween 0 to 255
+                    double colorValuesDbl = colorVal.toDouble();///std::floor(colorVal.toDouble());
+                    int colorValuesInt = colorVal.toInt();
+                    if(colorValuesDbl != colorValuesInt || colorValuesInt > 255 || colorValuesInt < 0)
+                    {
+                        return true;
+                    }
+                    if(cIndex == 0)
+                        color.setRed(colorValuesInt);
+                    else if(cIndex ==1)
+                        color.setGreen(colorValuesInt);
+                    else if(cIndex ==2)
+                        color.setBlue(colorValuesInt);
+                    else
+                        color.setAlpha(colorValuesInt);
+                    cIndex++;
+                }
+                colorList.append(color);
+            }
+        }
+        frameCount++;
+    }
+    //********************end*****************************
+    return false;
 }

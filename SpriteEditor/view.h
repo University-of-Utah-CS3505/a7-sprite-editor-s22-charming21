@@ -81,6 +81,7 @@ private slots:
      void openFile();
     void errorMessage(QString errorMsg);
      void on_actualSizeButton_clicked(QImage);
+     void updateCanvasComboBox(int);
 
      //check before closing
      void closeEvent(QCloseEvent *event);

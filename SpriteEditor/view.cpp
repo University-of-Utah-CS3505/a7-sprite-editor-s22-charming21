@@ -341,7 +341,7 @@ View::View(model& model, QWidget *parent)
     connect(this,
             &View::save,
             &model,
-            &model::save);
+            &model::saveToFile);
     // open file
     connect(ui->actionOpen,
             &QAction::triggered,
@@ -350,7 +350,11 @@ View::View(model& model, QWidget *parent)
     connect(this,
             &View::open,
             &secWindowModel,
-            &model::open);
+            &model::openFile);
+    connect(&model,
+            &model::updateCanvasComboBox,
+            this,
+            &View::updateCanvasComboBox);
     //new file
     connect(ui->actionNew,
             &QAction::triggered,
@@ -642,6 +646,41 @@ void View::enableStartButtons(){
 
 void View::on_clickMouse_released(QPoint &loc) {
 
+}
+
+void View::updateCanvasComboBox(int canvasSize){
+
+    int comboBoxIndex = 0;
+    if(canvasSize == 2)
+        comboBoxIndex = 0;
+    else if(canvasSize == 4)
+        comboBoxIndex = 1;
+    else if(canvasSize == 5)
+        comboBoxIndex = 2;
+    else if(canvasSize == 8)
+        comboBoxIndex = 3;
+    else if(canvasSize == 10)
+        comboBoxIndex = 4;
+    else if(canvasSize == 16)
+        comboBoxIndex = 5;
+    else if(canvasSize == 20)
+        comboBoxIndex = 6;
+    else if(canvasSize == 25)
+        comboBoxIndex = 7;
+    else if(canvasSize == 40)
+        comboBoxIndex = 8;
+    else if(canvasSize == 50)
+        comboBoxIndex = 9;
+    else if(canvasSize == 80)
+        comboBoxIndex = 10;
+    else if(canvasSize == 100)
+        comboBoxIndex = 11;
+    else if(canvasSize == 200)
+        comboBoxIndex = 12;
+    else if(canvasSize == 400)
+        comboBoxIndex = 13;
+
+    ui->canvasSizeComboBox->setCurrentIndex(comboBoxIndex);
 }
 
 
