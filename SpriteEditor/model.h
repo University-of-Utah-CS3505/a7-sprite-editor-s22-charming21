@@ -37,6 +37,9 @@ public:
     explicit model(QObject *parent = nullptr);
 
 private:
+
+    QStack<QList<QImage>> undoStack;
+    QStack<QList<QImage>> redoStack;
     SelectedTool currentTool;
     ShapeCreator currentShape;
     QList<QImage> frames;
@@ -51,9 +54,7 @@ private:
     int eraserSize;
     double ratio;
 
-    // redo and undo
-    QStack<QList<QImage>> undoStack;
-    QStack<QList<QImage>> redoStack;
+
     //
     int numOfPixels;
     int pixelLength;
@@ -105,8 +106,8 @@ signals:
     void enableZoomOut();
 
 public slots:
-    void addNewFrame();
-    void insertNewFrame();
+    void addFrameAfterCurr();
+    void addFrameBeforeCurr();
     void nextFrame();
     void lastFrame();
     void deleteFrame();
@@ -116,11 +117,11 @@ public slots:
     void updateFPS(int);
     void updatePenSize(int);
     void updateEraserSize(int);
-    void setStartingArea(int, int);
+
     void updatePenColor(QColor);
     void updateTool(std::string);
-    void getList(QList<QImage>);
-    void checkCurrentColor(QColor);
+
+    void checkCurrentColor();
     void clearCanvas();
     void copyFrame();
     void swapUp();
@@ -130,10 +131,9 @@ public slots:
     void undo(); //need change parameters?
     void redo(); //need change parameters?
     void selectedFrame(int);
-    void updatePixels(int,int,int = 0,int = 0);
+    void updatePixels(int,int);
     void updateToolSize(int);
     void drawOnCanvas(QPoint);
-    void updateCanvasSize();
 
     void initializeCanvasSize(int);
     void initializeShapeTool(int);

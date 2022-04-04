@@ -38,7 +38,7 @@ private slots:
     void on_bucketButton_clicked();
 
     //Mouse events
-    void on_clickMouse_released(QPoint& loc);
+
     void mouseLoc(QPoint& loc);
 
     //Update Color

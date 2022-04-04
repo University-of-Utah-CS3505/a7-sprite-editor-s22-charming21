@@ -63,12 +63,12 @@ View::View(model& model, QWidget *parent)
     connect(ui->addFrameButton,
             &QPushButton::clicked,
             &model,
-            &model::addNewFrame);
+            &model::addFrameBeforeCurr);
 
     connect(ui->insertFrameButton,
             &QPushButton::clicked,
             &model,
-            &model::insertNewFrame);
+            &model::addFrameBeforeCurr);
 
     connect(ui->nextFrameButton,
             &QPushButton::clicked,
@@ -289,10 +289,6 @@ View::View(model& model, QWidget *parent)
             this,
             &View::mouseLoc);
 
-    connect(ui->canvasLabel,
-            &Canvas::sendMouseLoc,
-            this,
-            &View::on_clickMouse_released);
     connect(this,
             &View::editCanvas,
             &model,
@@ -610,10 +606,6 @@ void View::enableStartButtons(){
     ui->zoomInButton->setEnabled(true);
 }
 
-
-void View::on_clickMouse_released(QPoint &loc) {
-
-}
 
 
 void View::on_actualSizeButton_clicked(QImage currentFrame)
