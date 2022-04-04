@@ -50,6 +50,14 @@ View::View(model& model, QWidget *parent)
     ui->framesComboBox->lineEdit()->setAlignment(Qt::AlignCenter);
     ui->toolSizeBox->setDisabled(true);
 
+    ui->shapeToolComboBox->setEditable(true);
+    ui->shapeToolComboBox->lineEdit()->setReadOnly(true);
+    ui->shapeToolComboBox->lineEdit()->setAlignment(Qt::AlignCenter);
+
+    ui->canvasSizeComboBox->setEditable(true);
+    ui->canvasSizeComboBox->lineEdit()->setReadOnly(true);
+    ui->canvasSizeComboBox->lineEdit()->setAlignment(Qt::AlignCenter);
+
     // set color label
     ui->colorLabel->setStyleSheet("background-color: black");
 
@@ -347,7 +355,7 @@ View::View(model& model, QWidget *parent)
     connect(this,
             &View::save,
             &model,
-            &model::save);
+            &model::saveToFile);
     // open file
     connect(ui->actionOpen,
             &QAction::triggered,
@@ -356,7 +364,22 @@ View::View(model& model, QWidget *parent)
     connect(this,
             &View::open,
             &secWindowModel,
-            &model::open);
+            &model::openFile);
+    connect(&model,
+            &model::updateCanvasComboBox,
+            this,
+            &View::updateCanvasComboBox);
+    //new file
+    connect(ui->actionNew,
+            &QAction::triggered,
+            this,
+            &View::newWindow);
+
+    //Warning for saving or opening file
+    connect(&model,
+            &model::errorMessage,
+            this,
+            &View::errorMessage);
 
     // mouse release for shapes
     connect(ui->canvasLabel, // mouse click
@@ -373,17 +396,25 @@ void View::displaySprite(QImage currentFrame){
 void View::closeEvent(QCloseEvent *event){
 
     if(ui->modifiedLabel->text() == "Has been modified"){
-        QMessageBox::StandardButton resBtn = QMessageBox::question(this, "Sprite Editor",
+        QMessageBox::StandardButton closeBtn = QMessageBox::warning(this, "Sprite Editor",
                                                                    tr("Are you sure you want to close the Sprite Editor? \n Your work won't be saved."),
                                                             QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
-                                                                   QMessageBox::Yes);
-        if(resBtn != QMessageBox::Yes){
+                                                                   QMessageBox::No);
+        if(closeBtn != QMessageBox::Yes){
             event->ignore();
         }
         else{
             event->accept();
         }
     }
+}
+//Pops up when there was an issue opening or saving a file locally.
+void View::errorMessage(QString message){
+
+    QMessageBox::StandardButton errorBtn = QMessageBox::warning(this, "Sprite Editor",
+                                                               message,
+                                                        QMessageBox::Cancel | QMessageBox::Ok,
+                                                               QMessageBox::Ok);
 }
 
 View::~View()
@@ -516,7 +547,7 @@ void View::updateColorWheel(QColor color){
 
 void View::saveFile()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, "Save file", "C://");
+    QString fileName = QFileDialog::getSaveFileName(this, "Save file", "C://",  tr("Sprite Sheet Project (*.ssp)"));
     emit save(fileName);
 
     //updates the text in the modified label to "no changes"
@@ -526,13 +557,22 @@ void View::saveFile()
 void View::openFile()
 {
 
-    QString fileName = QFileDialog::getOpenFileName(this, "Open file", "C://");
+    QString fileName = QFileDialog::getOpenFileName(this, "Open file", "C://", tr("Sprite Sheet Project (*.ssp)"));
     // will have to do an emit to the model
-    //secWindow->connect(this, &View::open, &test,&model::open);
-    secWindow = new View(secWindowModel);
-    secWindow->show();
+    createNewWindow();
+
     emit open(fileName);
 
+}
+
+void View::newWindow(){
+    createNewWindow();
+}
+
+//helpermethod creates the new window
+void View::createNewWindow(){
+    secWindow = new View(secWindowModel);
+    secWindow->show();
 }
 
 
@@ -616,11 +656,47 @@ void View::enableStartButtons(){
     ui->copyButton->setEnabled(true);
     ui->ClearButton->setEnabled(true);
     ui->zoomInButton->setEnabled(true);
+    ui->actionSave->setEnabled(true);
 }
 
 
 void View::on_clickMouse_released(QPoint &loc) {
 
+}
+
+void View::updateCanvasComboBox(int canvasSize){
+
+    int comboBoxIndex = 0;
+    if(canvasSize == 2)
+        comboBoxIndex = 0;
+    else if(canvasSize == 4)
+        comboBoxIndex = 1;
+    else if(canvasSize == 5)
+        comboBoxIndex = 2;
+    else if(canvasSize == 8)
+        comboBoxIndex = 3;
+    else if(canvasSize == 10)
+        comboBoxIndex = 4;
+    else if(canvasSize == 16)
+        comboBoxIndex = 5;
+    else if(canvasSize == 20)
+        comboBoxIndex = 6;
+    else if(canvasSize == 25)
+        comboBoxIndex = 7;
+    else if(canvasSize == 40)
+        comboBoxIndex = 8;
+    else if(canvasSize == 50)
+        comboBoxIndex = 9;
+    else if(canvasSize == 80)
+        comboBoxIndex = 10;
+    else if(canvasSize == 100)
+        comboBoxIndex = 11;
+    else if(canvasSize == 200)
+        comboBoxIndex = 12;
+    else if(canvasSize == 400)
+        comboBoxIndex = 13;
+
+    ui->canvasSizeComboBox->setCurrentIndex(comboBoxIndex);
 }
 
 

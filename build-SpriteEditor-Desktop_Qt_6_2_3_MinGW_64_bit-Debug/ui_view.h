@@ -33,6 +33,7 @@ class Ui_View
 public:
     QAction *actionSave;
     QAction *actionOpen;
+    QAction *actionNew;
     QWidget *centralwidget;
     Canvas *canvasLabel;
     QWidget *verticalLayoutWidget_2;
@@ -90,8 +91,11 @@ public:
         View->resize(800, 631);
         actionSave = new QAction(View);
         actionSave->setObjectName(QString::fromUtf8("actionSave"));
+        actionSave->setEnabled(false);
         actionOpen = new QAction(View);
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
+        actionNew = new QAction(View);
+        actionNew->setObjectName(QString::fromUtf8("actionNew"));
         centralwidget = new QWidget(View);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         canvasLabel = new Canvas(centralwidget);
@@ -130,7 +134,7 @@ public:
 
         verticalLayoutWidget_4 = new QWidget(centralwidget);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
-        verticalLayoutWidget_4->setGeometry(QRect(20, 120, 151, 294));
+        verticalLayoutWidget_4->setGeometry(QRect(20, 120, 151, 281));
         toolBarAndFrame = new QVBoxLayout(verticalLayoutWidget_4);
         toolBarAndFrame->setObjectName(QString::fromUtf8("toolBarAndFrame"));
         toolBarAndFrame->setContentsMargins(0, 0, 0, 0);
@@ -202,7 +206,7 @@ public:
         posLabel->setAlignment(Qt::AlignCenter);
         verticalLayoutWidget = new QWidget(centralwidget);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(20, 20, 151, 54));
+        verticalLayoutWidget->setGeometry(QRect(20, 20, 151, 51));
         verticalLayout = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -237,7 +241,7 @@ public:
         frameNumberLabel->setAlignment(Qt::AlignCenter);
         horizontalLayoutWidget = new QWidget(centralwidget);
         horizontalLayoutWidget->setObjectName(QString::fromUtf8("horizontalLayoutWidget"));
-        horizontalLayoutWidget->setGeometry(QRect(40, 470, 721, 97));
+        horizontalLayoutWidget->setGeometry(QRect(40, 470, 721, 88));
         horizontalLayout_2 = new QHBoxLayout(horizontalLayoutWidget);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
@@ -349,7 +353,7 @@ public:
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 24));
+        menubar->setGeometry(QRect(0, 0, 800, 22));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuAbout = new QMenu(menubar);
@@ -366,6 +370,7 @@ public:
         menubar->addAction(menuHelp_me->menuAction());
         menuFile->addAction(actionSave);
         menuFile->addAction(actionOpen);
+        menuFile->addAction(actionNew);
 
         retranslateUi(View);
 
@@ -377,6 +382,7 @@ public:
         View->setWindowTitle(QCoreApplication::translate("View", "View", nullptr));
         actionSave->setText(QCoreApplication::translate("View", "Save", nullptr));
         actionOpen->setText(QCoreApplication::translate("View", "Open", nullptr));
+        actionNew->setText(QCoreApplication::translate("View", "New", nullptr));
         canvasLabel->setText(QCoreApplication::translate("View", "CANVAS", nullptr));
         actualSizeLabel->setText(QCoreApplication::translate("View", "Actual Size Preview", nullptr));
         previewButton->setText(QCoreApplication::translate("View", "Preview", nullptr));

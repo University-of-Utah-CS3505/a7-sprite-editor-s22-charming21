@@ -141,7 +141,7 @@ void model::initializeShapeTool(int toolIndex)
 
 
 
-// Add a new frame to the position next to the current frame
+// Add a new frame after the current frame
 void model::addNewFrame(){
     QImage frame(canvasSize, canvasSize, QImage::Format_ARGB32);
     frame.fill(Qt::white);
@@ -152,6 +152,7 @@ void model::addNewFrame(){
 
     emit updateFrameNumberCombo(currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
+
     emit enableDeleteButton();
     emit enableLastButton();
     emit enableSwapUp();
@@ -164,12 +165,11 @@ void model::addNewFrame(){
         emit disableNextButton();
     }
 
-    //frames[currentFrame-1].fill(Qt::white);
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
     emit setCanvas(map);
 }
 
-// insert a new frame to the position before current frame
+// insert a new frame before current frame
 void model::insertNewFrame(){
     QImage frame(canvasSize, canvasSize, QImage::Format_ARGB32);
     frame.fill(Qt::white);
@@ -193,6 +193,7 @@ void model::insertNewFrame(){
     emit setCanvas(map);
 }
 
+// move to the next frame
 void model::nextFrame(){
     emit updateFrameNumberCombo(++currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
@@ -209,6 +210,7 @@ void model::nextFrame(){
      emit setCanvas(map);
 }
 
+// move to the previous frame
 void model::lastFrame(){
     emit updateFrameNumberCombo(--currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
@@ -225,6 +227,7 @@ void model::lastFrame(){
     emit setCanvas(map);
 }
 
+// delete the current frame
 void model::deleteFrame(){
     frames.removeAt(currentFrame - 1);
 
@@ -246,13 +249,14 @@ void model::deleteFrame(){
     emit enableUndo();
     undoStack.push(frames);
 
-    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-    emit setCanvas(map);
-
     emit updateFrameNumberCombo(currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
+
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
+    emit setCanvas(map);
 }
 
+// swap the current frame with the frame above it
 void model::swapUp(){
     frames.swapItemsAt(currentFrame - 1, currentFrame - 2);
     currentFrame--;
@@ -275,6 +279,7 @@ void model::swapUp(){
     emit setCanvas(map);
 }
 
+// swap the current frame with the frame below it
 void model::swapDown(){
     frames.swapItemsAt(currentFrame - 1, currentFrame);
     currentFrame++;
@@ -297,31 +302,35 @@ void model::swapDown(){
     emit setCanvas(map);
 }
 
+// clear all contents on the current frame
 void model::clearCanvas(){
     QImage frame(canvasSize, canvasSize, QImage::Format_ARGB32);
     frame.fill(Qt::white);
     frames.replace(currentFrame - 1, frame);
 
-    emit enableUndo();
     undoStack.push(frames);
+    emit enableUndo();
 
     QPixmap map = QPixmap::fromImage(frame);
     emit setCanvas(map); 
 }
 
+// copy the current frame and insert it to the next position
 void model::copyFrame(){
     QImage frame = QImage(frames.at(currentFrame - 1));
     frames.insert(currentFrame++, frame);
 
     emit updateFrameNumberCombo(currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
+
     emit enableDeleteButton();
     emit enableSwapUp();
     emit enableLastButton();
-    emit enableUndo();
-    undoStack.push(frames);
 
-    //frames[currentFrame-1].fill(Qt::white);
+    undoStack.push(frames);
+    emit enableUndo();
+
+
     QPixmap map = QPixmap::fromImage(frame);
     emit setCanvas(map);
 }
@@ -426,14 +435,14 @@ void model::getList(QList<QImage>){
     emit sendList(frames);
 }
 
-//need change parameters?
+// undo the last action
 void model::undo(){
     redoStack.push(undoStack.pop());
     emit enableRedo();
+
     if(undoStack.size() == 1){
         emit disableUndo();
     }
-
 
     QList<QImage> previousFrames = undoStack.at(undoStack.size() - 1);
 
@@ -441,7 +450,7 @@ void model::undo(){
         currentFrame++;
     }
 
-    if(frames.size() > previousFrames.size() && currentFrame == previousFrames.size() + 1){
+    if(frames.size() > previousFrames.size() && currentFrame == frames.size()){
         currentFrame--;
     }
 
@@ -474,15 +483,20 @@ void model::undo(){
         emit disableSwapDown();
     }
 
-    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
     emit updateFrameNumberLabel(currentFrame, frames.size());
     emit updateFrameNumberCombo(currentFrame, frames.size());
+
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
     emit setCanvas(map);
 }
 
-//need change parameters?
+// redo the last action
 void model::redo(){
     QList<QImage> previousFrame = redoStack.pop();
+
+    if(redoStack.size() == 0){
+        emit disableRedo();
+    }
 
     if(previousFrame.size() > frames.size()){
         currentFrame++;
@@ -492,7 +506,6 @@ void model::redo(){
     frames = previousFrame;
 
     undoStack.push(frames);
-
     emit enableUndo();
 
 
@@ -514,9 +527,6 @@ void model::redo(){
         emit enableDeleteButton();
     }
 
-    if(redoStack.size() == 0){
-        emit disableRedo();
-    }
 
     if(currentFrame > 1){
         emit enableLastButton();
@@ -528,13 +538,16 @@ void model::redo(){
 
     emit updateFrameNumberLabel(currentFrame, frames.size());
     emit updateFrameNumberCombo(currentFrame, frames.size());
+
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
     emit setCanvas(map);
 }
 
 void model::saveFrameToStack(){
     emit enableUndo();
-    undoStack.push(frames);
+    if(currentTool != SelectedTool::SC_ShapeCreator){
+        undoStack.push(frames);
+    }
 }
 
 void model::mouseRelease(QPoint &loc)
@@ -551,6 +564,9 @@ void model::mouseRelease(QPoint &loc)
                                 (int) (startEndLoc[1].y()/ratio) + zoomIndex);
                  }
         break;
+    }
+    if(currentTool == SelectedTool::SC_ShapeCreator){
+        undoStack.push(frames);
     }
 }
 
@@ -668,6 +684,7 @@ void model::updatePixelsByShapeCreator(int initialX, int initialY, int endX, int
             break;
 
     }
+
     startEndLoc.clear();
     QPixmap currentPic;
     //Convert QImage to QPixmap
@@ -744,25 +761,43 @@ void model::updateActualLabel(){
         currentIndex = 0;
 }
 
-//save file
-void model::save(QString fileName){//QJsonObject &json) const{ //change parameters
+//saves our drawings/frames to a .ssp file
+void model::saveToFile(QString fileName){
+
+    QJsonObject spriteSheetProject;
+
+    //creates json fields
+    spriteSheetProject["height"] = canvasSize;
+    spriteSheetProject["width"] = canvasSize;
+    spriteSheetProject["numberOfFrames"] = frames.size();
+
+    //creates a frame object and adds it to the spriteSheetProject json.
+    QJsonObject framesObj;
+    saveFramesInfoToJson(framesObj);
+    spriteSheetProject["frames"] = framesObj;
+
+    //create the document and add it to the file
+    QJsonDocument doc(spriteSheetProject);
+    QFile jsonFile(fileName + ".ssp");
+    if(!jsonFile.open(QFile::WriteOnly))
+    {
+        emit errorMessage("We were not able to save your file, please try again.");
+    }
+    jsonFile.write(doc.toJson());
+
     //Since the file is beening saved, we change this to false
     isChanged = false;
+}
 
-    QJsonObject json;
-
-    int n = 0;
-    json["height"] = canvasSize;
-    json["width"] = canvasSize;
-    json["numberOfFrames"] = frames.size();
+void model::saveFramesInfoToJson(QJsonObject& framesObj) const{
 
     //*******Important******//
     // x and y coordinate are switched, x is columns and y is rows, to fix this
-    // i will have rowNum go in the Y in the forloo for pixel when we get pixelcolor
-    // and pixelNum will go in the X in the forloop for pixe when we get pixelcolor.
+    // i will have rowNum go in the Y in the forloop for pixel when we get pixelcolor
+    // and pixelNum will go in the X in the forloop for pixel when we get pixelcolor.
     //I'm doing this so it can fit the requirements in Q6 //
     //*******Important*******//
-    QJsonObject framesObj;
+    int numOfFramesCount = 0;
     for(QImage a : frames)
     {
         QJsonArray frame;
@@ -777,124 +812,98 @@ void model::save(QString fileName){//QJsonObject &json) const{ //change paramete
                 pixelColor.append(a.pixelColor(pixelNum,rowNum).green());
                 pixelColor.append(a.pixelColor(pixelNum,rowNum).blue());
                 pixelColor.append(a.pixelColor(pixelNum,rowNum).alpha());
+                //add the color to our pixelColor array
                 row.append(pixelColor);
             }
+            //add the row to our frame Array
             frame.append(row);
         }
-        QString frameName = "Frame" + QString::number(n);
+        QString frameName = "Frame" + QString::number(numOfFramesCount);
+        //create the frame'n' (n = a int) field name and adds that array to the framesObj
         framesObj[frameName] = frame;
-        n++;
+        numOfFramesCount++;
     }
-
-    json["frames"] = framesObj;
-    QJsonDocument doc(json);
-
-    QFile jsonFile(fileName + ".ssp");
-    jsonFile.open(QFile::WriteOnly);
-    jsonFile.write(doc.toJson());
 }
 
-void model::open(QString fileName){
+void model::openFile(QString fileName){
     read(fileName);
 }
 
-//Read/Open file
+//Read and Opens the file on the application.
 void model::read(QString fileName){
-
 
     //opening the file and saving the information to a QByteArray
     QJsonDocument doc;
     QByteArray saveData;
     QFile loadFile(fileName);
     QList<QColor> colorList;
+    int numberOfFrames = 0;
     if(loadFile.open(QIODevice::ReadOnly))
     {
         saveData = loadFile.readAll();
     }
     else
-        qWarning("Couldn't open save File");
+    {
+        emit errorMessage("We were not able to open the saved file. \n Please try again.");
+        return;
+    }
 
     //convert the information to a QJsonDocument, and open it with QJsonObject
     QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
     QJsonObject jsonFromLoadFile = loadDoc.object();
 
-    int frameCount = 0; //starting number of frames
-    int numberOfFrames = 0;
-    if(jsonFromLoadFile.contains("height") && jsonFromLoadFile["height"].isDouble() && jsonFromLoadFile.contains("width") && jsonFromLoadFile["width"].isDouble())
+    if(loadInfoFromJson(jsonFromLoadFile,colorList,canvasSize,zoomSize,currentTool, numberOfFrames))
     {
-        double height = jsonFromLoadFile["height"].toDouble();
-        double width = jsonFromLoadFile["width"].toDouble();
-        if(height == width)
-        {
-            canvasSize = width;
-        }
-        else
-        {
-            qWarning("File size is not valid, needs to be a perfect square"); //TODO, I need to stop the upload if the canvas size isn't a perfect square.
-        }
-
-    }
-    if(jsonFromLoadFile.contains("numberOfFrames") && jsonFromLoadFile["numberOfFrames"].isDouble())
-    {
-        numberOfFrames = jsonFromLoadFile["numberOfFrames"].toDouble();
+        emit errorMessage("This is not a valid File");
     }
 
-    //Select a tool and initialize frame
-    currentTool = SelectedTool::Undefined;
-    initializeFrame();
-
-    if(jsonFromLoadFile.contains("frames") && jsonFromLoadFile["frames"].isObject())
-    {
-        QJsonObject frame = jsonFromLoadFile["frames"].toObject();
-        while(frameCount < numberOfFrames)
-        {
-            if(frame.contains("Frame"+ QString::number(frameCount)) && frame["Frame" + QString::number(frameCount)].isArray())
-            {
-                QJsonArray rowArray = frame["Frame" + QString::number(frameCount)].toArray();
-                for(QJsonValue value: rowArray)
-                {
-                    QJsonArray pixelArray = value.toArray();
-                    for(QJsonValue valueP : pixelArray)
-                    {
-                        QJsonArray colorArray = valueP.toArray();
-                        QColor color;
-                        int cIndex =0;
-                        for(QJsonValue colorVal : colorArray)
-                        {
-                            int colorValues = colorVal.toDouble();
-                            if(cIndex == 0)
-                                color.setRed(colorValues);
-                            else if(cIndex ==1)
-                                color.setGreen(colorValues);
-                            else if(cIndex ==2)
-                                color.setBlue(colorValues);
-                            else
-                                color.setAlpha(colorValues);
-                            cIndex++;
-                        }
-                        colorList.append(color);
-                    }
-                }
-                frameCount++;
-            }
-        }
-    }
-
-    //emptys our current qlist<Qimage> list in model
+    //emptys our current qlist<Qimage> list in model, if it isn't empty already.
     if(!frames.isEmpty())
     {
         QList<QImage> empty;
         frames = empty;
     }
 
-    //This is where we add everything to the model, such as : frames, canvassize
+    //This is where we update the view, such as : frames, canvassize, framescombobox
+    addPixelColorToFrames(numberOfFrames, colorList);
+
+    //sets up undo
+    undoStack.push(frames);
+
+    //update the labels in the view :
+    emit updateFrameNumberLabel(1, frames.size());
+    emit updateFrameNumberCombo(1,frames.size());
+
+    //should we make this a helper method? (same method was used in drawCanvas method)
+    //Create a Pixmap to return to view
+    QPixmap currentPic;
+    //Convert QImage to QPixmap
+    currentPic.convertFromImage(frames[0]);
+    //Return the pixmap of our QImage
+    emit setCanvas(currentPic);
+
+    emit startButtons();
+    emit updateCanvasComboBox(canvasSize);
+
+    //enables the next button and swapdown button, if they have more than one frames.
+    if(frames.size() > 1)
+    {
+        emit enableNextButton();
+        emit enableSwapDown();
+
+    }
+
+}
+void model::addPixelColorToFrames(int numberOfFrames, QList<QColor> colorList){
     int frameCounter = 0;
     int colorCounter = 0;
     while(frameCounter < numberOfFrames)
     {
+        //create a blank canvas
         frames.append(QImage(canvasSize,canvasSize,QImage::Format_ARGB32));
         frames[frameCounter].fill(Qt::white);
 
+        //sets the value of each pixel in the canvas/image
         for(int y=0; y < canvasSize; y++)
         {
             for(int x=0; x <canvasSize; x++)
@@ -907,26 +916,102 @@ void model::read(QString fileName){
         frameCounter++;
         emit updateFrameNumberCombo(frameCounter, frames.size());
     }
+}
+bool model::loadInfoFromJson(QJsonObject &jsonFromLoadFile, QList<QColor>& colorList, int& imageSize, int& zoom, SelectedTool & tool, int& numberOfFrames) const{
+    int frameCount = 0; //starting number of frames
 
-    undoStack.push(frames);
-    //update in the view :
-    emit updateFrameNumberLabel(1, frames.size());
-    emit updateFrameNumberCombo(1,frames.size());
+    //Json fields checks if they are in the saved file, becomes true if that field exists.
+    bool hasHeight = jsonFromLoadFile.contains("height");
+    bool hasWidth = jsonFromLoadFile.contains("width");
+    bool hasNumberOfFrames = jsonFromLoadFile.contains("numberOfFrames");
+    bool hasFrames = jsonFromLoadFile.contains("frames");
 
-    //should we make this a helper method? (same method was used in drawCanvas method)
-    //Create a Pixmap to return to view
-    QPixmap currentPic;
-    //Convert QImage to QPixmap
-    currentPic.convertFromImage(frames[0]);
-    //Return the pixmap of our QImage
-    emit setCanvas(currentPic);
+    bool isHeightDbl = jsonFromLoadFile["height"].isDouble();
+    bool isWidthDbl = jsonFromLoadFile["width"].isDouble();
+    bool isNumberOfFramesDbl = jsonFromLoadFile["numberOfFrames"].isDouble();
+    bool isFramesAnObj = jsonFromLoadFile["frames"].isObject();
 
-    //enables the next button and swapdown button
-    if(frames.size() > 1)
+    //if the Json doesn't have these fields it is not a valid file.
+    if(!hasHeight || !hasWidth || !hasNumberOfFrames || !hasFrames || !isHeightDbl || !isWidthDbl || !isNumberOfFramesDbl || !isFramesAnObj)
     {
-        emit enableNextButton();
-        emit enableSwapDown();
-
+        return true;
     }
+    //*********Checks if height and width are int ***************///
+    //Conversion from double to int, it is an int if the outcome is equal to 1.
+    double heightToInt = jsonFromLoadFile["height"].toDouble()/std::floor(jsonFromLoadFile["height"].toDouble());
+    double widthToInt = jsonFromLoadFile["width"].toDouble()/std::floor(jsonFromLoadFile["width"].toDouble());
+    //Image height and width
+    double height = jsonFromLoadFile["height"].toDouble();
+    double width = jsonFromLoadFile["width"].toDouble();
 
+    //checks if height and width have int values and if it is a perfect square
+    if(heightToInt != 1.0 || widthToInt != 1.0 || height != width)
+        return true;
+
+    //sets the canvas size and zoom size, and setsup currentTool
+    imageSize = width;
+    zoom = canvasSize;
+    tool = SelectedTool::SC_Pen;
+    //*********end*************//
+
+    //************checks if it numberOfFrames is an int ************//
+    double numOfFramesToInt = jsonFromLoadFile["numberOfFrames"].toDouble()/std::floor(jsonFromLoadFile["numberOfFrames"].toDouble());
+    if(numOfFramesToInt != 1)
+    {
+        return true;
+    }
+    numberOfFrames = jsonFromLoadFile["numberOfFrames"].toDouble();
+    //*************end****//
+
+    //finishes the setup of the canvas
+
+    // ****************** reading the json info from frames and color for each pixel and saving it to color list *******
+    QJsonObject framesObj = jsonFromLoadFile["frames"].toObject();
+    while(frameCount < numberOfFrames)
+    {
+        bool hasFrame = framesObj.contains("Frame"+ QString::number(frameCount));
+        bool isFrameArray = framesObj["Frame" + QString::number(frameCount)].isArray();
+
+        if(!hasFrame || !isFrameArray)
+        {
+            return true;
+        }
+
+        QJsonArray rowArray = framesObj["Frame" + QString::number(frameCount)].toArray();
+        for(QJsonValue row: rowArray)
+        {
+            QJsonArray pixelArray = row.toArray();
+            for(QJsonValue pixelValue : pixelArray)
+            {
+                QJsonArray colorArray = pixelValue.toArray();
+                QColor color;
+
+                //indexcounter to set RGBA values in color
+                int cIndex =0;
+                for(QJsonValue colorVal : colorArray)
+                {
+                    //check if colorValues are int and inbetween 0 to 255
+                    double colorValuesDbl = colorVal.toDouble();///std::floor(colorVal.toDouble());
+                    int colorValuesInt = colorVal.toInt();
+                    if(colorValuesDbl != colorValuesInt || colorValuesInt > 255 || colorValuesInt < 0)
+                    {
+                        return true;
+                    }
+                    if(cIndex == 0)
+                        color.setRed(colorValuesInt);
+                    else if(cIndex ==1)
+                        color.setGreen(colorValuesInt);
+                    else if(cIndex ==2)
+                        color.setBlue(colorValuesInt);
+                    else
+                        color.setAlpha(colorValuesInt);
+                    cIndex++;
+                }
+                colorList.append(color);
+            }
+        }
+        frameCount++;
+    }
+    //********************end*****************************
+    return false;
 }

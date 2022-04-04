@@ -67,8 +67,15 @@ private:
     void updatePixelsByBucketFiller(int, int);
     void updatePixelsByShapeCreator(int, int, int, int);
 
-    //Read/Open file //still in testing phase, need to work on.
+    //Save file helper methods
+    void saveFramesInfoToJson(QJsonObject& jsonObj) const;
+
+    //Read file helper method
     void read(QString fileName);
+    bool loadInfoFromJson(QJsonObject& jsonObj, QList<QColor>& colorList, int& imageSize, int& zoom, SelectedTool & tool, int& numberOfFrames) const;
+    void addPixelColorToFrames(int numberOfFrames, QList<QColor> colorList);
+
+
     void initializeFrame();
 
 signals:
@@ -98,6 +105,7 @@ signals:
     void editPenSize(int);
 
     void showSprite(QImage);
+    void updateCanvasComboBox(int);
 
     //zoom
     void toZoomIn(QPixmap, int, int);
@@ -105,6 +113,9 @@ signals:
     void disableZoom(std::string);
     void enableZoomIn();
     void enableZoomOut();
+
+    //upload and save warning message
+    void errorMessage(QString errorMsg);
 
 public slots:
     void addNewFrame();
@@ -147,9 +158,9 @@ public slots:
 
 
     //Save file
-    void save(QString fileName);
+    void saveToFile(QString fileName);
 
-    void open(QString fileName);
+    void openFile(QString fileName);
 
     void saveFrameToStack();
 
