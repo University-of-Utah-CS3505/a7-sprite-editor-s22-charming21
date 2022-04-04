@@ -15,6 +15,8 @@ model::model(QObject *parent)
     eraserSize = 1;
     currentIndex = 0; //for keeping track of our current index in the list when displaying a sprite.
     canvasSize = 0; //Initialize with 0
+    currentTool == SelectedTool::Undefined;
+
 }
 
 
@@ -78,9 +80,24 @@ void model::initializeCanvasSize(int index){
         break;
     }
 
+    initializeFrame();
+}
+
+
+void model::initializeFrame(){
+
+    //Set the canvas Size
+    if(canvasSize == 0){
+        //Default Values
+        canvasSize = 20;
+    }
+    zoomSize = canvasSize;
+    //Set the tool
+    if(currentTool == SelectedTool::Undefined)
+        currentTool = SelectedTool::SC_Pen;
+
     //set up default values
     frames.append(QImage (canvasSize, canvasSize, QImage::Format_ARGB32));
-    currentTool = SelectedTool::SC_Pen;
 
     //Make the first inage to have a white background
     frames[currentFrame-1].fill(Qt::white);
@@ -88,6 +105,7 @@ void model::initializeCanvasSize(int index){
     emit startButtons();
 
 }
+
 
 void model::initializeShapeTool(int index)
 {
@@ -500,7 +518,6 @@ void model::mouseRelease(QPoint &loc)
     }
     switch(currentTool){
         case SelectedTool::SC_ShapeCreator: // might need to delete
-                std::cout << "shape tool: " << startEndLoc.size() << std::endl;
                 if(startEndLoc.size() ==2 ){
                         updatePixelsByShapeCreator((int) (startEndLoc[0].x()/ratio) + zoomIndex,
                                 (int) (startEndLoc[0].y()/ratio) + zoomIndex,
@@ -546,12 +563,13 @@ void model::updateToolSize(int size){
         updateEraserSize(size);
     else if(currentTool == SelectedTool::SC_Pen)
         updatePenSize(size);
+    else if(currentTool == SelectedTool::SC_ShapeCreator)
+        updatePenSize(size);
 }
 
 void model::updatePixels(int initialX, int initialY, int endX, int endY){
     switch(currentTool){
         case SelectedTool::SC_Pen:
-            std::cout << "hit pen " << std::endl;
             updatePixelsByPen(initialX,initialY);
             break;
         case SelectedTool::SC_Eraser:
@@ -607,21 +625,15 @@ void model::updatePixelsByShapeCreator(int initialX, int initialY, int endX, int
 
     switch(currentShape){
         case ShapeCreator::SC_Line:
-            std::cout << "shoudl draw line " << std::endl;
             Painter.drawLine(initialX, initialY, endX, endY);
-            //Painter.drawRect(initialX,initialY,endX-initialX,endY-initialY);
-            //startEndLoc.clear();
-
             Painter.end();
             break;
         case ShapeCreator::SC_Ciecle:
-            //Painter.drawEllipse(initialX, initialY, initialX-endX, initialY-endY);
             Painter.drawEllipse(initialX,initialY,endX-initialX,endY-initialY);
             Painter.end();
             break;
         case ShapeCreator::SC_Rectangle:
             Painter.drawRect(initialX,initialY,endX-initialX,endY-initialY);
-            //Painter.drawRect(initialX, initialY, initialX-endX, initialY-endY);
             Painter.end();
             break;
         default:
@@ -658,16 +670,7 @@ void model::drawOnCanvas(QPoint pixelPoint){
 
     //Check it it has been initialized with a size
     if(canvasSize == 0){
-        //Default Values
-        canvasSize = 20;
-        zoomSize = 20;
-        // default values to be determined        
-        frames.append(QImage (canvasSize, canvasSize, QImage::Format_ARGB32));
-        currentTool = SelectedTool::SC_Pen;
-        //Make the first inage to have a white background
-        frames[currentFrame-1].fill(Qt::white);
-        undoStack.push(frames);
-        emit startButtons();
+        initializeFrame();
     }
 
     //Get the position to paint
@@ -679,8 +682,7 @@ void model::drawOnCanvas(QPoint pixelPoint){
          startEndLoc.insert(0,pixelPoint);
      }
 
-       updatePixels(x,y);
-
+     updatePixels(x,y);
 
     //Create a Pixmap to return to view
     QPixmap currentPic;
