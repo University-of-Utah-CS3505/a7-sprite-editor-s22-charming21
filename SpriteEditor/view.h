@@ -79,11 +79,15 @@ private slots:
      //Save and Load
      void saveFile();
      void openFile();
-
+    void errorMessage(QString errorMsg);
      void on_actualSizeButton_clicked(QImage);
+     void updateCanvasComboBox(int);
 
      //check before closing
      void closeEvent(QCloseEvent *event);
+
+     //new Window open
+     void newWindow();
 
 private:
     Ui::View *ui;
@@ -96,5 +100,7 @@ private:
     //second Window
     model secWindowModel;
     View *secWindow;
+
+    void createNewWindow();
 };
 #endif // VIEW_H
