@@ -15,6 +15,6 @@ canvaspreview::~canvaspreview()
 
 void canvaspreview::updateCanvas(QImage & currentFrame)
 {
-    ui->label->setPixmap(QPixmap::fromImage(currentFrame).scaled(ui->label->width(),
-                                                                            ui->label->height()));
+    //Changed to look actual size
+    ui->label->setPixmap(QPixmap::fromImage(currentFrame));
 }

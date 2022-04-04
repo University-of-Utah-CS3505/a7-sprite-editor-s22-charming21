@@ -17,6 +17,7 @@
 
 //We add enum (jinwen)
 enum class SelectedTool{
+    Undefined,
     SC_Pen,
     SC_Eraser,
     SC_Bucket,
@@ -65,12 +66,14 @@ private:
     void updatePixelsByBucketFiller(int, int);
     void updatePixelsByShapeCreator(int, int, int, int);
 
+
 //    //gon
 //    void updatePixelsByPen2(int, int, int, int);
 //    //
 
     //Read/Open file //still in testing phase, need to work on.
     void read(QString fileName);
+    void initializeFrame();
 
 signals:
 

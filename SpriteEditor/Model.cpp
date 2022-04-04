@@ -15,6 +15,8 @@ model::model(QObject *parent)
     eraserSize = 1;
     currentIndex = 0; //for keeping track of our current index in the list when displaying a sprite.
     canvasSize = 0; //Initialize with 0
+    currentTool == SelectedTool::Undefined;
+
 }
 
 
@@ -78,9 +80,24 @@ void model::initializeCanvasSize(int index){
         break;
     }
 
+    initializeFrame();
+}
+
+
+void model::initializeFrame(){
+
+    //Set the canvas Size
+    if(canvasSize == 0){
+        //Default Values
+        canvasSize = 20;
+    }
+    zoomSize = canvasSize;
+    //Set the tool
+    if(currentTool == SelectedTool::Undefined)
+        currentTool = SelectedTool::SC_Pen;
+
     //set up default values
     frames.append(QImage (canvasSize, canvasSize, QImage::Format_ARGB32));
-    currentTool = SelectedTool::SC_Pen;
 
     //Make the first inage to have a white background
     frames[currentFrame-1].fill(Qt::white);
@@ -88,6 +105,7 @@ void model::initializeCanvasSize(int index){
     emit startButtons();
 
 }
+
 
 void model::initializeShapeTool(int index)
 {
@@ -658,16 +676,7 @@ void model::drawOnCanvas(QPoint pixelPoint){
 
     //Check it it has been initialized with a size
     if(canvasSize == 0){
-        //Default Values
-        canvasSize = 20;
-        zoomSize = 20;
-        // default values to be determined        
-        frames.append(QImage (canvasSize, canvasSize, QImage::Format_ARGB32));
-        currentTool = SelectedTool::SC_Pen;
-        //Make the first inage to have a white background
-        frames[currentFrame-1].fill(Qt::white);
-        undoStack.push(frames);
-        emit startButtons();
+        initializeFrame();
     }
 
     //Get the position to paint
@@ -679,8 +688,7 @@ void model::drawOnCanvas(QPoint pixelPoint){
          startEndLoc.insert(0,pixelPoint);
      }
 
-       updatePixels(x,y);
-
+     updatePixels(x,y);
 
     //Create a Pixmap to return to view
     QPixmap currentPic;
@@ -809,15 +817,9 @@ void model::read(QString fileName){
         numberOfFrames = jsonFromLoadFile["numberOfFrames"].toDouble();
     }
 
-    //sets up the canvas (might be repetivite, double check later)
-    frames.append(QImage (canvasSize, canvasSize, QImage::Format_ARGB32));
-    currentTool = SelectedTool::SC_Pen;
-    zoomSize =canvasSize;
-    //Make the first inage to have a white background
-    frames[currentFrame-1].fill(Qt::white);
-
-    emit startButtons();
-    //finishes the setup of the canvas
+    //Select a tool and initialize frame
+    currentTool = SelectedTool::Undefined;
+    initializeFrame();
 
     if(jsonFromLoadFile.contains("frames") && jsonFromLoadFile["frames"].isObject())
     {
