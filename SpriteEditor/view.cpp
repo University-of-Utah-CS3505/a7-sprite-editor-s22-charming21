@@ -44,10 +44,11 @@ View::View(model& model, QWidget *parent)
     // Set height and width
     canvasLabelSize = ui->canvasLabel->height();
 
-    // set frame combo box alliment
+    // set frame combo box alliment & functionalities
     ui->framesComboBox->setEditable(true);
     ui->framesComboBox->lineEdit()->setReadOnly(true);
     ui->framesComboBox->lineEdit()->setAlignment(Qt::AlignCenter);
+    ui->toolSizeBox->setDisabled(true);
 
     // set color label
     ui->colorLabel->setStyleSheet("background-color: black");
@@ -58,6 +59,11 @@ View::View(model& model, QWidget *parent)
             &View::setTool,
             &model,
             &model::updateTool);//UpdateTools
+
+    connect(&model,
+            &model::editPenSize,
+            ui->toolSizeBox,
+            &QSpinBox::setValue);
 
     //Frames
     connect(ui->addFrameButton,
@@ -536,10 +542,12 @@ void View::openFile()
 void View::on_penButton_clicked()
 {
     emit setTool("pen");
+    ui->toolSizeBox->setDisabled(false);
 }
 void View::on_eraserButton_clicked()
 {
     emit setTool("eraser");
+    ui->toolSizeBox->setDisabled(false);
 }
 void View::on_bucketButton_clicked()
 {
@@ -622,5 +630,11 @@ void View::on_actualSizeButton_clicked(QImage currentFrame)
 
     canvasPreview.show();
 
+}
+
+
+void View::on_shapeToolComboBox_activated()
+{
+    ui->toolSizeBox->setDisabled(false);
 }
 

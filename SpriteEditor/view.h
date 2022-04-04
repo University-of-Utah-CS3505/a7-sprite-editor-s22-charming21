@@ -85,6 +85,8 @@ private slots:
      //check before closing
      void closeEvent(QCloseEvent *event);
 
+     void on_shapeToolComboBox_activated();
+
 private:
     Ui::View *ui;
 

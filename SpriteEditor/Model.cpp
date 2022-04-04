@@ -1,5 +1,6 @@
 #include "model.h"
 #include "qtimer.h"
+#include <iostream>
 
 model::model(QObject *parent)
     : QObject{parent}
@@ -13,6 +14,7 @@ model::model(QObject *parent)
     currentFrame = 1;
     penSize = 1;
     eraserSize = 1;
+    shapeSize = 1;
     currentIndex = 0; //for keeping track of our current index in the list when displaying a sprite.
     canvasSize = 0; //Initialize with 0
     currentTool == SelectedTool::Undefined;
@@ -107,20 +109,33 @@ void model::initializeFrame(){
 }
 
 
-void model::initializeShapeTool(int index)
+/**
+ * @brief model::initializeShapeTool
+ * Method that updates the seleted tool to be Shape.  Hass
+ * three options and is updated accordingly based on how it's
+ * forated in it's combobox in the view.
+ * @param toolIndex
+ */
+void model::initializeShapeTool(int toolIndex)
 {
+    // set pen size
+
     currentTool = SelectedTool::SC_ShapeCreator;
-    switch(index){
+    switch(toolIndex){
     case 0:
         currentShape = ShapeCreator::SC_Line;
+        emit editPenSize(shapeSize);
         break;
     case 1:
         currentShape = ShapeCreator::SC_Ciecle;
+        emit editPenSize(shapeSize);
         break;
     case 2:
         currentShape = ShapeCreator::SC_Rectangle;
+        emit editPenSize(shapeSize);
         break;
     }
+
 
 }
 
@@ -367,7 +382,9 @@ void model::updatePenSize(int size){
 void model::updateEraserSize(int size){
     eraserSize = size;   
 }
-
+void model::updateShapeSize(int size){
+    shapeSize = size;
+}
 void model::setStartingArea(int, int){
     //TODO:
 }
@@ -384,14 +401,23 @@ void model::updatePenColor(QColor color){
 //updates our current tool we are using
 void model::updateTool(std::string tool){
     //Should we do a switch case? if we do, we have to change parameters (bri)
-    if(tool == "pen")
+    if(tool == "pen"){
         currentTool = SelectedTool::SC_Pen;
-    else if(tool == "eraser")
+        emit editPenSize(penSize);
+
+    }
+    else if(tool == "eraser"){
         currentTool = SelectedTool::SC_Eraser;
+        emit editPenSize(eraserSize);
+
+    }
     else if(tool == "bucket")
         currentTool = SelectedTool::SC_Bucket;
-    else if(tool == "shapeCreator")
+    else if(tool == "shapeCreator"){
         currentTool = SelectedTool::SC_ShapeCreator;
+        emit editPenSize(shapeSize);
+
+    }
 }
 
 //Don't need the QList as Parameter??
@@ -559,12 +585,14 @@ void model::selectedFrame(int index){
 void model::updateToolSize(int size){
 
     //change to a switch case if we add more brushes
-    if(currentTool == SelectedTool::SC_Eraser)
+    if(currentTool == SelectedTool::SC_Eraser){
+        std::cout << " updatetoolSize: " << size << std::endl;
         updateEraserSize(size);
+    }
     else if(currentTool == SelectedTool::SC_Pen)
         updatePenSize(size);
     else if(currentTool == SelectedTool::SC_ShapeCreator)
-        updatePenSize(size);
+        updateShapeSize(size);
 }
 
 void model::updatePixels(int initialX, int initialY, int endX, int endY){
@@ -620,7 +648,7 @@ void model::updatePixelsByShapeCreator(int initialX, int initialY, int endX, int
     QImage* AFrame = &frames[currentFrame -1];
     QPainter Painter(AFrame);
     QPen Pen(penColor);
-    Pen.setWidth(penSize);
+    Pen.setWidth(shapeSize);
     Painter.setPen(Pen);
 
     switch(currentShape){
