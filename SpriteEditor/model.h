@@ -106,6 +106,9 @@ signals:
     void enableZoomIn();
     void enableZoomOut();
 
+    //upload and save warning message
+    void errorMessage(QString errorMsg);
+
 public slots:
     void addNewFrame();
     void insertNewFrame();
