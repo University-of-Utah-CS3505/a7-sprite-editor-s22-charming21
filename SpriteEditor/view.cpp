@@ -49,6 +49,14 @@ View::View(model& model, QWidget *parent)
     ui->framesComboBox->lineEdit()->setReadOnly(true);
     ui->framesComboBox->lineEdit()->setAlignment(Qt::AlignCenter);
 
+    ui->shapeToolComboBox->setEditable(true);
+    ui->shapeToolComboBox->lineEdit()->setReadOnly(true);
+    ui->shapeToolComboBox->lineEdit()->setAlignment(Qt::AlignCenter);
+
+    ui->canvasSizeComboBox->setEditable(true);
+    ui->canvasSizeComboBox->lineEdit()->setReadOnly(true);
+    ui->canvasSizeComboBox->lineEdit()->setAlignment(Qt::AlignCenter);
+
     // set color label
     ui->colorLabel->setStyleSheet("background-color: black");
 

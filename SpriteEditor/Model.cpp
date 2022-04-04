@@ -126,7 +126,7 @@ void model::initializeShapeTool(int index)
 
 
 
-// Add a new frame to the position next to the current frame
+// Add a new frame after the current frame
 void model::addNewFrame(){
     QImage frame(canvasSize, canvasSize, QImage::Format_ARGB32);
     frame.fill(Qt::white);
@@ -137,6 +137,7 @@ void model::addNewFrame(){
 
     emit updateFrameNumberCombo(currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
+
     emit enableDeleteButton();
     emit enableLastButton();
     emit enableSwapUp();
@@ -149,12 +150,11 @@ void model::addNewFrame(){
         emit disableNextButton();
     }
 
-    //frames[currentFrame-1].fill(Qt::white);
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
     emit setCanvas(map);
 }
 
-// insert a new frame to the position before current frame
+// insert a new frame before current frame
 void model::insertNewFrame(){
     QImage frame(canvasSize, canvasSize, QImage::Format_ARGB32);
     frame.fill(Qt::white);
@@ -178,6 +178,7 @@ void model::insertNewFrame(){
     emit setCanvas(map);
 }
 
+// move to the next frame
 void model::nextFrame(){
     emit updateFrameNumberCombo(++currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
@@ -194,6 +195,7 @@ void model::nextFrame(){
      emit setCanvas(map);
 }
 
+// move to the previous frame
 void model::lastFrame(){
     emit updateFrameNumberCombo(--currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
@@ -210,6 +212,7 @@ void model::lastFrame(){
     emit setCanvas(map);
 }
 
+// delete the current frame
 void model::deleteFrame(){
     frames.removeAt(currentFrame - 1);
 
@@ -231,13 +234,14 @@ void model::deleteFrame(){
     emit enableUndo();
     undoStack.push(frames);
 
-    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
-    emit setCanvas(map);
-
     emit updateFrameNumberCombo(currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
+
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
+    emit setCanvas(map);
 }
 
+// swap the current frame with the frame above it
 void model::swapUp(){
     frames.swapItemsAt(currentFrame - 1, currentFrame - 2);
     currentFrame--;
@@ -260,6 +264,7 @@ void model::swapUp(){
     emit setCanvas(map);
 }
 
+// swap the current frame with the frame below it
 void model::swapDown(){
     frames.swapItemsAt(currentFrame - 1, currentFrame);
     currentFrame++;
@@ -282,31 +287,35 @@ void model::swapDown(){
     emit setCanvas(map);
 }
 
+// clear all contents on the current frame
 void model::clearCanvas(){
     QImage frame(canvasSize, canvasSize, QImage::Format_ARGB32);
     frame.fill(Qt::white);
     frames.replace(currentFrame - 1, frame);
 
-    emit enableUndo();
     undoStack.push(frames);
+    emit enableUndo();
 
     QPixmap map = QPixmap::fromImage(frame);
     emit setCanvas(map); 
 }
 
+// copy the current frame and insert it to the next position
 void model::copyFrame(){
     QImage frame = QImage(frames.at(currentFrame - 1));
     frames.insert(currentFrame++, frame);
 
     emit updateFrameNumberCombo(currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
+
     emit enableDeleteButton();
     emit enableSwapUp();
     emit enableLastButton();
-    emit enableUndo();
-    undoStack.push(frames);
 
-    //frames[currentFrame-1].fill(Qt::white);
+    undoStack.push(frames);
+    emit enableUndo();
+
+
     QPixmap map = QPixmap::fromImage(frame);
     emit setCanvas(map);
 }
@@ -400,14 +409,14 @@ void model::getList(QList<QImage>){
     emit sendList(frames);
 }
 
-//need change parameters?
+// undo the last action
 void model::undo(){
     redoStack.push(undoStack.pop());
     emit enableRedo();
+
     if(undoStack.size() == 1){
         emit disableUndo();
     }
-
 
     QList<QImage> previousFrames = undoStack.at(undoStack.size() - 1);
 
@@ -415,7 +424,7 @@ void model::undo(){
         currentFrame++;
     }
 
-    if(frames.size() > previousFrames.size() && currentFrame == previousFrames.size() + 1){
+    if(frames.size() > previousFrames.size() && currentFrame == frames.size()){
         currentFrame--;
     }
 
@@ -448,15 +457,20 @@ void model::undo(){
         emit disableSwapDown();
     }
 
-    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
     emit updateFrameNumberLabel(currentFrame, frames.size());
     emit updateFrameNumberCombo(currentFrame, frames.size());
+
+    QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
     emit setCanvas(map);
 }
 
-//need change parameters?
+// redo the last action
 void model::redo(){
     QList<QImage> previousFrame = redoStack.pop();
+
+    if(redoStack.size() == 0){
+        emit disableRedo();
+    }
 
     if(previousFrame.size() > frames.size()){
         currentFrame++;
@@ -466,7 +480,6 @@ void model::redo(){
     frames = previousFrame;
 
     undoStack.push(frames);
-
     emit enableUndo();
 
 
@@ -488,9 +501,6 @@ void model::redo(){
         emit enableDeleteButton();
     }
 
-    if(redoStack.size() == 0){
-        emit disableRedo();
-    }
 
     if(currentFrame > 1){
         emit enableLastButton();
@@ -502,13 +512,16 @@ void model::redo(){
 
     emit updateFrameNumberLabel(currentFrame, frames.size());
     emit updateFrameNumberCombo(currentFrame, frames.size());
+
     QPixmap map = QPixmap::fromImage(frames.at(currentFrame - 1));
     emit setCanvas(map);
 }
 
 void model::saveFrameToStack(){
     emit enableUndo();
-    undoStack.push(frames);
+    if(currentTool != SelectedTool::SC_ShapeCreator){
+        undoStack.push(frames);
+    }
 }
 
 void model::mouseRelease(QPoint &loc)
@@ -525,6 +538,9 @@ void model::mouseRelease(QPoint &loc)
                                 (int) (startEndLoc[1].y()/ratio) + zoomIndex);
                  }
         break;
+    }
+    if(currentTool == SelectedTool::SC_ShapeCreator){
+        undoStack.push(frames);
     }
 }
 
@@ -640,6 +656,7 @@ void model::updatePixelsByShapeCreator(int initialX, int initialY, int endX, int
             break;
 
     }
+
     startEndLoc.clear();
     QPixmap currentPic;
     //Convert QImage to QPixmap
