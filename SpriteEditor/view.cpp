@@ -15,6 +15,16 @@ View::View(model& model, QWidget *parent)
     initCanvasSizesComboBox();
     initShapeToolComboBox();
 
+    //Set Style For the main window
+    setStyleSheet(QString("QMainWindow {background: rgb(32,42,68);}"));
+    ui->canvasSizeLabel->setStyleSheet("color:white");
+    ui->frameNumberLabel->setStyleSheet("color:white");
+    ui->currentFrameLabel->setStyleSheet("color:white");
+    ui->posLabel->setStyleSheet("color:white");
+    ui->actualSizeLabel->setStyleSheet("color:white");
+    ui->modifiedLabel->setStyleSheet("color:white");
+
+
     // Set icons
     ui->penButton->setIcon(QIcon(":/new/UI_Icons/Tool_Pen.png"));
     ui->eraserButton->setIcon(QIcon(":/new/UI_Icons/Tool_Eraser.png"));

@@ -343,8 +343,7 @@ void model::updateFPS(int fps){
 }
 
 void model::updatePenSize(int size){
-    //penSize = size;
-    penSize += size;
+    penSize = size;
 }
 
 void model::updateEraserSize(int size){

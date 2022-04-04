@@ -40,45 +40,43 @@ public:
     QLabel *actualSizeLabel;
     QPushButton *previewButton;
     QSlider *playBackSpeedSlider;
-    QPushButton *colorButton;
-    QHBoxLayout *horizontalLayout_3;
-    QPushButton *increaseCanvasButton;
-    QPushButton *pushButton;
-    QLabel *colorLabel;
     QWidget *verticalLayoutWidget_4;
     QVBoxLayout *toolBarAndFrame;
-    QVBoxLayout *toolBarVerticalLayout;
-    QHBoxLayout *penAndEraser;
     QPushButton *penButton;
     QPushButton *eraserButton;
-    QHBoxLayout *bucketAndShape;
     QPushButton *bucketButton;
     QComboBox *shapeToolComboBox;
     QSpinBox *toolSizeBox;
-    QVBoxLayout *frameLayout;
-    QComboBox *framesComboBox;
-    QLabel *frameNumberLabel;
-    QPushButton *lastFrameButton;
-    QPushButton *nextFrameButton;
-    QPushButton *addFrameButton;
-    QPushButton *insertFrameButton;
-    QPushButton *swapUpButton;
-    QPushButton *swapDownButton;
-    QPushButton *copyButton;
-    QPushButton *ClearButton;
-    QPushButton *deleteFrameButton;
-    QLabel *posLabel;
-    QWidget *horizontalLayoutWidget;
-    QHBoxLayout *horizontalLayout;
     QPushButton *zoomInButton;
     QPushButton *zoomOutButton;
     QPushButton *undoButton;
     QPushButton *redoButton;
+    QLabel *posLabel;
     QWidget *verticalLayoutWidget;
     QVBoxLayout *verticalLayout;
     QLabel *canvasSizeLabel;
     QComboBox *canvasSizeComboBox;
     QLabel *modifiedLabel;
+    QLabel *frameNumberLabel;
+    QWidget *horizontalLayoutWidget;
+    QHBoxLayout *horizontalLayout_2;
+    QVBoxLayout *verticalLayout_11;
+    QComboBox *framesComboBox;
+    QPushButton *lastFrameButton;
+    QPushButton *nextFrameButton;
+    QVBoxLayout *verticalLayout_8;
+    QPushButton *insertFrameButton;
+    QPushButton *addFrameButton;
+    QVBoxLayout *verticalLayout_7;
+    QPushButton *swapUpButton;
+    QPushButton *swapDownButton;
+    QVBoxLayout *verticalLayout_10;
+    QPushButton *copyButton;
+    QPushButton *ClearButton;
+    QPushButton *deleteFrameButton;
+    QLabel *colorLabel;
+    QPushButton *colorButton;
+    QLabel *currentFrameLabel;
     QMenuBar *menubar;
     QMenu *menuFile;
     QMenu *menuAbout;
@@ -89,7 +87,7 @@ public:
     {
         if (View->objectName().isEmpty())
             View->setObjectName(QString::fromUtf8("View"));
-        View->resize(800, 658);
+        View->resize(800, 631);
         actionSave = new QAction(View);
         actionSave->setObjectName(QString::fromUtf8("actionSave"));
         actionOpen = new QAction(View);
@@ -103,17 +101,22 @@ public:
         canvasLabel->setAlignment(Qt::AlignCenter);
         verticalLayoutWidget_2 = new QWidget(centralwidget);
         verticalLayoutWidget_2->setObjectName(QString::fromUtf8("verticalLayoutWidget_2"));
-        verticalLayoutWidget_2->setGeometry(QRect(640, 21, 170, 261));
+        verticalLayoutWidget_2->setGeometry(QRect(610, 20, 171, 221));
         previewLayout = new QVBoxLayout(verticalLayoutWidget_2);
         previewLayout->setObjectName(QString::fromUtf8("previewLayout"));
         previewLayout->setContentsMargins(0, 0, 0, 0);
         actualSizeLabel = new QLabel(verticalLayoutWidget_2);
         actualSizeLabel->setObjectName(QString::fromUtf8("actualSizeLabel"));
+        QFont font;
+        font.setBold(true);
+        actualSizeLabel->setFont(font);
+        actualSizeLabel->setAlignment(Qt::AlignCenter);
 
         previewLayout->addWidget(actualSizeLabel);
 
         previewButton = new QPushButton(verticalLayoutWidget_2);
         previewButton->setObjectName(QString::fromUtf8("previewButton"));
+        previewButton->setFont(font);
 
         previewLayout->addWidget(previewButton);
 
@@ -125,212 +128,228 @@ public:
 
         previewLayout->addWidget(playBackSpeedSlider);
 
-        colorButton = new QPushButton(verticalLayoutWidget_2);
-        colorButton->setObjectName(QString::fromUtf8("colorButton"));
-
-        previewLayout->addWidget(colorButton);
-
-        horizontalLayout_3 = new QHBoxLayout();
-        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
-        increaseCanvasButton = new QPushButton(verticalLayoutWidget_2);
-        increaseCanvasButton->setObjectName(QString::fromUtf8("increaseCanvasButton"));
-
-        horizontalLayout_3->addWidget(increaseCanvasButton);
-
-        pushButton = new QPushButton(verticalLayoutWidget_2);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
-
-        horizontalLayout_3->addWidget(pushButton);
-
-
-        previewLayout->addLayout(horizontalLayout_3);
-
-        colorLabel = new QLabel(verticalLayoutWidget_2);
-        colorLabel->setObjectName(QString::fromUtf8("colorLabel"));
-        colorLabel->setMaximumSize(QSize(162, 16));
-        colorLabel->setStyleSheet(QString::fromUtf8(""));
-
-        previewLayout->addWidget(colorLabel);
-
         verticalLayoutWidget_4 = new QWidget(centralwidget);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
-        verticalLayoutWidget_4->setGeometry(QRect(0, 110, 181, 487));
+        verticalLayoutWidget_4->setGeometry(QRect(20, 120, 151, 281));
         toolBarAndFrame = new QVBoxLayout(verticalLayoutWidget_4);
         toolBarAndFrame->setObjectName(QString::fromUtf8("toolBarAndFrame"));
         toolBarAndFrame->setContentsMargins(0, 0, 0, 0);
-        toolBarVerticalLayout = new QVBoxLayout();
-        toolBarVerticalLayout->setObjectName(QString::fromUtf8("toolBarVerticalLayout"));
-        penAndEraser = new QHBoxLayout();
-        penAndEraser->setObjectName(QString::fromUtf8("penAndEraser"));
         penButton = new QPushButton(verticalLayoutWidget_4);
         penButton->setObjectName(QString::fromUtf8("penButton"));
+        penButton->setFont(font);
 
-        penAndEraser->addWidget(penButton);
+        toolBarAndFrame->addWidget(penButton);
 
         eraserButton = new QPushButton(verticalLayoutWidget_4);
         eraserButton->setObjectName(QString::fromUtf8("eraserButton"));
+        eraserButton->setFont(font);
 
-        penAndEraser->addWidget(eraserButton);
+        toolBarAndFrame->addWidget(eraserButton);
 
-
-        toolBarVerticalLayout->addLayout(penAndEraser);
-
-        bucketAndShape = new QHBoxLayout();
-        bucketAndShape->setObjectName(QString::fromUtf8("bucketAndShape"));
         bucketButton = new QPushButton(verticalLayoutWidget_4);
         bucketButton->setObjectName(QString::fromUtf8("bucketButton"));
+        bucketButton->setFont(font);
 
-        bucketAndShape->addWidget(bucketButton);
+        toolBarAndFrame->addWidget(bucketButton);
 
         shapeToolComboBox = new QComboBox(verticalLayoutWidget_4);
         shapeToolComboBox->setObjectName(QString::fromUtf8("shapeToolComboBox"));
+        shapeToolComboBox->setFont(font);
 
-        bucketAndShape->addWidget(shapeToolComboBox);
-
-
-        toolBarVerticalLayout->addLayout(bucketAndShape);
+        toolBarAndFrame->addWidget(shapeToolComboBox);
 
         toolSizeBox = new QSpinBox(verticalLayoutWidget_4);
         toolSizeBox->setObjectName(QString::fromUtf8("toolSizeBox"));
+        toolSizeBox->setFont(font);
         toolSizeBox->setAlignment(Qt::AlignCenter);
         toolSizeBox->setMinimum(1);
         toolSizeBox->setMaximum(10);
 
-        toolBarVerticalLayout->addWidget(toolSizeBox);
+        toolBarAndFrame->addWidget(toolSizeBox);
 
-        frameLayout = new QVBoxLayout();
-        frameLayout->setObjectName(QString::fromUtf8("frameLayout"));
-        framesComboBox = new QComboBox(verticalLayoutWidget_4);
-        framesComboBox->addItem(QString());
-        framesComboBox->setObjectName(QString::fromUtf8("framesComboBox"));
-        framesComboBox->setLayoutDirection(Qt::LeftToRight);
-        framesComboBox->setStyleSheet(QString::fromUtf8(""));
+        zoomInButton = new QPushButton(verticalLayoutWidget_4);
+        zoomInButton->setObjectName(QString::fromUtf8("zoomInButton"));
+        zoomInButton->setEnabled(false);
+        zoomInButton->setFont(font);
 
-        frameLayout->addWidget(framesComboBox);
+        toolBarAndFrame->addWidget(zoomInButton);
 
-        frameNumberLabel = new QLabel(verticalLayoutWidget_4);
-        frameNumberLabel->setObjectName(QString::fromUtf8("frameNumberLabel"));
-        frameNumberLabel->setMaximumSize(QSize(162, 16));
-        frameNumberLabel->setAlignment(Qt::AlignCenter);
+        zoomOutButton = new QPushButton(verticalLayoutWidget_4);
+        zoomOutButton->setObjectName(QString::fromUtf8("zoomOutButton"));
+        zoomOutButton->setEnabled(false);
+        zoomOutButton->setFont(font);
 
-        frameLayout->addWidget(frameNumberLabel);
+        toolBarAndFrame->addWidget(zoomOutButton);
 
-        lastFrameButton = new QPushButton(verticalLayoutWidget_4);
-        lastFrameButton->setObjectName(QString::fromUtf8("lastFrameButton"));
-        lastFrameButton->setEnabled(false);
+        undoButton = new QPushButton(verticalLayoutWidget_4);
+        undoButton->setObjectName(QString::fromUtf8("undoButton"));
+        undoButton->setEnabled(false);
+        undoButton->setFont(font);
 
-        frameLayout->addWidget(lastFrameButton);
+        toolBarAndFrame->addWidget(undoButton);
 
-        nextFrameButton = new QPushButton(verticalLayoutWidget_4);
-        nextFrameButton->setObjectName(QString::fromUtf8("nextFrameButton"));
-        nextFrameButton->setEnabled(false);
+        redoButton = new QPushButton(verticalLayoutWidget_4);
+        redoButton->setObjectName(QString::fromUtf8("redoButton"));
+        redoButton->setEnabled(false);
+        redoButton->setFont(font);
 
-        frameLayout->addWidget(nextFrameButton);
-
-        addFrameButton = new QPushButton(verticalLayoutWidget_4);
-        addFrameButton->setObjectName(QString::fromUtf8("addFrameButton"));
-        addFrameButton->setEnabled(false);
-
-        frameLayout->addWidget(addFrameButton);
-
-        insertFrameButton = new QPushButton(verticalLayoutWidget_4);
-        insertFrameButton->setObjectName(QString::fromUtf8("insertFrameButton"));
-        insertFrameButton->setEnabled(false);
-
-        frameLayout->addWidget(insertFrameButton);
-
-        swapUpButton = new QPushButton(verticalLayoutWidget_4);
-        swapUpButton->setObjectName(QString::fromUtf8("swapUpButton"));
-        swapUpButton->setEnabled(false);
-
-        frameLayout->addWidget(swapUpButton);
-
-        swapDownButton = new QPushButton(verticalLayoutWidget_4);
-        swapDownButton->setObjectName(QString::fromUtf8("swapDownButton"));
-        swapDownButton->setEnabled(false);
-
-        frameLayout->addWidget(swapDownButton);
-
-        copyButton = new QPushButton(verticalLayoutWidget_4);
-        copyButton->setObjectName(QString::fromUtf8("copyButton"));
-        copyButton->setEnabled(false);
-
-        frameLayout->addWidget(copyButton);
-
-        ClearButton = new QPushButton(verticalLayoutWidget_4);
-        ClearButton->setObjectName(QString::fromUtf8("ClearButton"));
-        ClearButton->setEnabled(false);
-
-        frameLayout->addWidget(ClearButton);
-
-        deleteFrameButton = new QPushButton(verticalLayoutWidget_4);
-        deleteFrameButton->setObjectName(QString::fromUtf8("deleteFrameButton"));
-        deleteFrameButton->setEnabled(false);
-
-        frameLayout->addWidget(deleteFrameButton);
-
-
-        toolBarVerticalLayout->addLayout(frameLayout);
-
-
-        toolBarAndFrame->addLayout(toolBarVerticalLayout);
+        toolBarAndFrame->addWidget(redoButton);
 
         posLabel = new QLabel(centralwidget);
         posLabel->setObjectName(QString::fromUtf8("posLabel"));
-        posLabel->setGeometry(QRect(640, 350, 91, 19));
-        horizontalLayoutWidget = new QWidget(centralwidget);
-        horizontalLayoutWidget->setObjectName(QString::fromUtf8("horizontalLayoutWidget"));
-        horizontalLayoutWidget->setGeometry(QRect(200, 470, 411, 61));
-        horizontalLayout = new QHBoxLayout(horizontalLayoutWidget);
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        zoomInButton = new QPushButton(horizontalLayoutWidget);
-        zoomInButton->setObjectName(QString::fromUtf8("zoomInButton"));
-        zoomInButton->setEnabled(false);
-
-        horizontalLayout->addWidget(zoomInButton);
-
-        zoomOutButton = new QPushButton(horizontalLayoutWidget);
-        zoomOutButton->setObjectName(QString::fromUtf8("zoomOutButton"));
-        zoomOutButton->setEnabled(false);
-
-        horizontalLayout->addWidget(zoomOutButton);
-
-        undoButton = new QPushButton(horizontalLayoutWidget);
-        undoButton->setObjectName(QString::fromUtf8("undoButton"));
-        undoButton->setEnabled(false);
-
-        horizontalLayout->addWidget(undoButton);
-
-        redoButton = new QPushButton(horizontalLayoutWidget);
-        redoButton->setObjectName(QString::fromUtf8("redoButton"));
-        redoButton->setEnabled(false);
-
-        horizontalLayout->addWidget(redoButton);
-
+        posLabel->setGeometry(QRect(610, 350, 171, 20));
+        posLabel->setFont(font);
+        posLabel->setAlignment(Qt::AlignCenter);
         verticalLayoutWidget = new QWidget(centralwidget);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(0, 20, 181, 80));
+        verticalLayoutWidget->setGeometry(QRect(20, 20, 151, 51));
         verticalLayout = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
         canvasSizeLabel = new QLabel(verticalLayoutWidget);
         canvasSizeLabel->setObjectName(QString::fromUtf8("canvasSizeLabel"));
+        canvasSizeLabel->setFont(font);
+        canvasSizeLabel->setAlignment(Qt::AlignCenter);
 
         verticalLayout->addWidget(canvasSizeLabel);
 
         canvasSizeComboBox = new QComboBox(verticalLayoutWidget);
         canvasSizeComboBox->setObjectName(QString::fromUtf8("canvasSizeComboBox"));
+        canvasSizeComboBox->setFont(font);
 
         verticalLayout->addWidget(canvasSizeComboBox);
 
         modifiedLabel = new QLabel(centralwidget);
         modifiedLabel->setObjectName(QString::fromUtf8("modifiedLabel"));
-        modifiedLabel->setGeometry(QRect(210, 560, 271, 16));
+        modifiedLabel->setGeometry(QRect(620, 380, 151, 20));
+        QFont font1;
+        font1.setBold(true);
+        font1.setItalic(false);
+        font1.setUnderline(false);
+        font1.setStrikeOut(false);
+        modifiedLabel->setFont(font1);
+        modifiedLabel->setAlignment(Qt::AlignCenter);
+        frameNumberLabel = new QLabel(centralwidget);
+        frameNumberLabel->setObjectName(QString::fromUtf8("frameNumberLabel"));
+        frameNumberLabel->setGeometry(QRect(410, 430, 121, 16));
+        frameNumberLabel->setMaximumSize(QSize(162, 16));
+        frameNumberLabel->setFont(font);
+        frameNumberLabel->setAlignment(Qt::AlignCenter);
+        horizontalLayoutWidget = new QWidget(centralwidget);
+        horizontalLayoutWidget->setObjectName(QString::fromUtf8("horizontalLayoutWidget"));
+        horizontalLayoutWidget->setGeometry(QRect(40, 470, 721, 80));
+        horizontalLayout_2 = new QHBoxLayout(horizontalLayoutWidget);
+        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
+        verticalLayout_11 = new QVBoxLayout();
+        verticalLayout_11->setObjectName(QString::fromUtf8("verticalLayout_11"));
+        framesComboBox = new QComboBox(horizontalLayoutWidget);
+        framesComboBox->addItem(QString());
+        framesComboBox->setObjectName(QString::fromUtf8("framesComboBox"));
+        framesComboBox->setFont(font);
+        framesComboBox->setLayoutDirection(Qt::LeftToRight);
+        framesComboBox->setStyleSheet(QString::fromUtf8(""));
+
+        verticalLayout_11->addWidget(framesComboBox);
+
+        lastFrameButton = new QPushButton(horizontalLayoutWidget);
+        lastFrameButton->setObjectName(QString::fromUtf8("lastFrameButton"));
+        lastFrameButton->setEnabled(false);
+        lastFrameButton->setFont(font);
+
+        verticalLayout_11->addWidget(lastFrameButton);
+
+        nextFrameButton = new QPushButton(horizontalLayoutWidget);
+        nextFrameButton->setObjectName(QString::fromUtf8("nextFrameButton"));
+        nextFrameButton->setEnabled(false);
+        nextFrameButton->setFont(font);
+
+        verticalLayout_11->addWidget(nextFrameButton);
+
+
+        horizontalLayout_2->addLayout(verticalLayout_11);
+
+        verticalLayout_8 = new QVBoxLayout();
+        verticalLayout_8->setObjectName(QString::fromUtf8("verticalLayout_8"));
+        insertFrameButton = new QPushButton(horizontalLayoutWidget);
+        insertFrameButton->setObjectName(QString::fromUtf8("insertFrameButton"));
+        insertFrameButton->setEnabled(false);
+        insertFrameButton->setFont(font);
+
+        verticalLayout_8->addWidget(insertFrameButton);
+
+        addFrameButton = new QPushButton(horizontalLayoutWidget);
+        addFrameButton->setObjectName(QString::fromUtf8("addFrameButton"));
+        addFrameButton->setEnabled(false);
+        addFrameButton->setFont(font);
+
+        verticalLayout_8->addWidget(addFrameButton);
+
+
+        horizontalLayout_2->addLayout(verticalLayout_8);
+
+        verticalLayout_7 = new QVBoxLayout();
+        verticalLayout_7->setObjectName(QString::fromUtf8("verticalLayout_7"));
+        swapUpButton = new QPushButton(horizontalLayoutWidget);
+        swapUpButton->setObjectName(QString::fromUtf8("swapUpButton"));
+        swapUpButton->setEnabled(false);
+        swapUpButton->setFont(font);
+
+        verticalLayout_7->addWidget(swapUpButton);
+
+        swapDownButton = new QPushButton(horizontalLayoutWidget);
+        swapDownButton->setObjectName(QString::fromUtf8("swapDownButton"));
+        swapDownButton->setEnabled(false);
+        swapDownButton->setFont(font);
+
+        verticalLayout_7->addWidget(swapDownButton);
+
+
+        horizontalLayout_2->addLayout(verticalLayout_7);
+
+        verticalLayout_10 = new QVBoxLayout();
+        verticalLayout_10->setObjectName(QString::fromUtf8("verticalLayout_10"));
+        copyButton = new QPushButton(horizontalLayoutWidget);
+        copyButton->setObjectName(QString::fromUtf8("copyButton"));
+        copyButton->setEnabled(false);
+        copyButton->setFont(font);
+
+        verticalLayout_10->addWidget(copyButton);
+
+        ClearButton = new QPushButton(horizontalLayoutWidget);
+        ClearButton->setObjectName(QString::fromUtf8("ClearButton"));
+        ClearButton->setEnabled(false);
+        ClearButton->setFont(font);
+
+        verticalLayout_10->addWidget(ClearButton);
+
+        deleteFrameButton = new QPushButton(horizontalLayoutWidget);
+        deleteFrameButton->setObjectName(QString::fromUtf8("deleteFrameButton"));
+        deleteFrameButton->setEnabled(false);
+        deleteFrameButton->setFont(font);
+
+        verticalLayout_10->addWidget(deleteFrameButton);
+
+
+        horizontalLayout_2->addLayout(verticalLayout_10);
+
+        colorLabel = new QLabel(centralwidget);
+        colorLabel->setObjectName(QString::fromUtf8("colorLabel"));
+        colorLabel->setGeometry(QRect(610, 310, 162, 16));
+        colorLabel->setMaximumSize(QSize(162, 16));
+        colorLabel->setStyleSheet(QString::fromUtf8(""));
+        colorButton = new QPushButton(centralwidget);
+        colorButton->setObjectName(QString::fromUtf8("colorButton"));
+        colorButton->setGeometry(QRect(610, 250, 171, 51));
+        colorButton->setFont(font);
+        currentFrameLabel = new QLabel(centralwidget);
+        currentFrameLabel->setObjectName(QString::fromUtf8("currentFrameLabel"));
+        currentFrameLabel->setGeometry(QRect(280, 430, 111, 20));
+        currentFrameLabel->setFont(font);
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 22));
+        menubar->setGeometry(QRect(0, 0, 800, 17));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuAbout = new QMenu(menubar);
@@ -361,32 +380,31 @@ public:
         canvasLabel->setText(QCoreApplication::translate("View", "CANVAS", nullptr));
         actualSizeLabel->setText(QCoreApplication::translate("View", "Actual Size Preview", nullptr));
         previewButton->setText(QCoreApplication::translate("View", "Preview", nullptr));
-        colorButton->setText(QCoreApplication::translate("View", "Choose Color", nullptr));
-        increaseCanvasButton->setText(QCoreApplication::translate("View", "+", nullptr));
-        pushButton->setText(QCoreApplication::translate("View", "-", nullptr));
-        colorLabel->setText(QString());
         penButton->setText(QCoreApplication::translate("View", "Pen", nullptr));
         eraserButton->setText(QCoreApplication::translate("View", "Eraser", nullptr));
         bucketButton->setText(QCoreApplication::translate("View", "Bucket", nullptr));
-        framesComboBox->setItemText(0, QCoreApplication::translate("View", "1", nullptr));
-
-        frameNumberLabel->setText(QCoreApplication::translate("View", "1/1", nullptr));
-        lastFrameButton->setText(QCoreApplication::translate("View", "Previous Frame", nullptr));
-        nextFrameButton->setText(QCoreApplication::translate("View", "Next Frame", nullptr));
-        addFrameButton->setText(QCoreApplication::translate("View", "Insert After", nullptr));
-        insertFrameButton->setText(QCoreApplication::translate("View", "Insert Before", nullptr));
-        swapUpButton->setText(QCoreApplication::translate("View", "Swap(up)", nullptr));
-        swapDownButton->setText(QCoreApplication::translate("View", "Swap(down)", nullptr));
-        copyButton->setText(QCoreApplication::translate("View", "Copy", nullptr));
-        ClearButton->setText(QCoreApplication::translate("View", "Clear", nullptr));
-        deleteFrameButton->setText(QCoreApplication::translate("View", "Delete Frame", nullptr));
-        posLabel->setText(QString());
         zoomInButton->setText(QCoreApplication::translate("View", "Zoom In", nullptr));
         zoomOutButton->setText(QCoreApplication::translate("View", "Zoom Out", nullptr));
         undoButton->setText(QCoreApplication::translate("View", "Undo", nullptr));
         redoButton->setText(QCoreApplication::translate("View", "Redo", nullptr));
+        posLabel->setText(QString());
         canvasSizeLabel->setText(QCoreApplication::translate("View", "Canvas Size ", nullptr));
         modifiedLabel->setText(QCoreApplication::translate("View", "No Changes", nullptr));
+        frameNumberLabel->setText(QCoreApplication::translate("View", "1/1", nullptr));
+        framesComboBox->setItemText(0, QCoreApplication::translate("View", "1", nullptr));
+
+        lastFrameButton->setText(QCoreApplication::translate("View", "Move (up)", nullptr));
+        nextFrameButton->setText(QCoreApplication::translate("View", "Move (down)", nullptr));
+        insertFrameButton->setText(QCoreApplication::translate("View", "Add (above)", nullptr));
+        addFrameButton->setText(QCoreApplication::translate("View", "Add (below)", nullptr));
+        swapUpButton->setText(QCoreApplication::translate("View", "Swap (up)", nullptr));
+        swapDownButton->setText(QCoreApplication::translate("View", "Swap (down)", nullptr));
+        copyButton->setText(QCoreApplication::translate("View", "Copy", nullptr));
+        ClearButton->setText(QCoreApplication::translate("View", "Clear", nullptr));
+        deleteFrameButton->setText(QCoreApplication::translate("View", "Delete", nullptr));
+        colorLabel->setText(QString());
+        colorButton->setText(QCoreApplication::translate("View", "Choose Color", nullptr));
+        currentFrameLabel->setText(QCoreApplication::translate("View", "Current Frame", nullptr));
         menuFile->setTitle(QCoreApplication::translate("View", "File", nullptr));
         menuAbout->setTitle(QCoreApplication::translate("View", "About", nullptr));
         menuHelp_me->setTitle(QCoreApplication::translate("View", "Help me", nullptr));
