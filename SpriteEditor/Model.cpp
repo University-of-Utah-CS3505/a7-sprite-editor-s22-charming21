@@ -518,7 +518,6 @@ void model::mouseRelease(QPoint &loc)
     }
     switch(currentTool){
         case SelectedTool::SC_ShapeCreator: // might need to delete
-                std::cout << "shape tool: " << startEndLoc.size() << std::endl;
                 if(startEndLoc.size() ==2 ){
                         updatePixelsByShapeCreator((int) (startEndLoc[0].x()/ratio) + zoomIndex,
                                 (int) (startEndLoc[0].y()/ratio) + zoomIndex,
@@ -564,12 +563,13 @@ void model::updateToolSize(int size){
         updateEraserSize(size);
     else if(currentTool == SelectedTool::SC_Pen)
         updatePenSize(size);
+    else if(currentTool == SelectedTool::SC_ShapeCreator)
+        updatePenSize(size);
 }
 
 void model::updatePixels(int initialX, int initialY, int endX, int endY){
     switch(currentTool){
         case SelectedTool::SC_Pen:
-            std::cout << "hit pen " << std::endl;
             updatePixelsByPen(initialX,initialY);
             break;
         case SelectedTool::SC_Eraser:
@@ -625,21 +625,15 @@ void model::updatePixelsByShapeCreator(int initialX, int initialY, int endX, int
 
     switch(currentShape){
         case ShapeCreator::SC_Line:
-            std::cout << "shoudl draw line " << std::endl;
             Painter.drawLine(initialX, initialY, endX, endY);
-            //Painter.drawRect(initialX,initialY,endX-initialX,endY-initialY);
-            //startEndLoc.clear();
-
             Painter.end();
             break;
         case ShapeCreator::SC_Ciecle:
-            //Painter.drawEllipse(initialX, initialY, initialX-endX, initialY-endY);
             Painter.drawEllipse(initialX,initialY,endX-initialX,endY-initialY);
             Painter.end();
             break;
         case ShapeCreator::SC_Rectangle:
             Painter.drawRect(initialX,initialY,endX-initialX,endY-initialY);
-            //Painter.drawRect(initialX, initialY, initialX-endX, initialY-endY);
             Painter.end();
             break;
         default:

@@ -49,7 +49,7 @@ public:
         pushButton->setGeometry(QRect(200, 560, 80, 27));
         boxSizeLabel = new QLabel(canvaspreview);
         boxSizeLabel->setObjectName(QString::fromUtf8("boxSizeLabel"));
-        boxSizeLabel->setGeometry(QRect(120, 70, 241, 51));
+        boxSizeLabel->setGeometry(QRect(140, 70, 241, 51));
         actualSizeLabel = new QLabel(canvaspreview);
         actualSizeLabel->setObjectName(QString::fromUtf8("actualSizeLabel"));
         actualSizeLabel->setGeometry(QRect(240, 520, 131, 19));
