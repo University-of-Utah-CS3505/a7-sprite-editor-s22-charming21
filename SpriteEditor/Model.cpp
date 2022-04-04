@@ -5,11 +5,9 @@
 model::model(QObject *parent)
     : QObject{parent}
 {
-
     penColor.setRgb(0, 0, 0, 255);
-
     zoomIndex = 0;
-    ratio = 400/20; //change to have it initialized
+    ratio = 400/20;
     framesPerSec = 1;
     currentFrame = 1;
     penSize = 1;
@@ -21,64 +19,55 @@ model::model(QObject *parent)
 
 }
 
-
+/**
+ * @brief model::initializeCanvasSize
+ * It initialize the canvas size (# of pixels) based on what the user had
+ * choosen.
+ * @param index
+ */
 void model::initializeCanvasSize(int index){
     switch(index){
     case 0:
         canvasSize = 2;
-        zoomSize = 2;
         break;
     case 1:
         canvasSize = 4;
-        zoomSize = 4;
         break;
     case 2:
         canvasSize = 5;
-        zoomSize = 5;
         break;
     case 3:
         canvasSize = 8;
-        zoomSize = 8;
         break;
     case 4:
         canvasSize = 10;
-        zoomSize = 10;
         break;
     case 5:
         canvasSize = 16;
-        zoomSize = 16;
         break;
     case 6:
         canvasSize = 20;
-        zoomSize = 20;
         break;
     case 7:
         canvasSize = 25;
-        zoomSize = 25;
         break;
     case 8:
         canvasSize = 40;
-        zoomSize = 40;
         break;
     case 9:
         canvasSize = 50;
-        zoomSize = 50;
         break;
     case 10:
         canvasSize = 80;
-        zoomSize = 80;
         break;
     case 11:
         canvasSize = 100;
-        zoomSize = 100;
         break;
     case 12:
         canvasSize = 200;
-        zoomSize = 200;
         break;
     case 13:
         canvasSize = 400;
-        zoomSize = 400;
         break;
     }
 
@@ -86,6 +75,13 @@ void model::initializeCanvasSize(int index){
 }
 
 
+/**
+ * @brief model::initializeFrame
+ * It initialize all the necesary things for the user to start drawing in
+ * the canvas, such as size, tool, and teh creation of a new frame added to our
+ * QList
+ * @param n/a
+ */
 void model::initializeFrame(){
 
     //Set the canvas Size
@@ -105,7 +101,6 @@ void model::initializeFrame(){
     frames[currentFrame-1].fill(Qt::white);
     undoStack.push(frames);
     emit startButtons();
-
 }
 
 
@@ -141,8 +136,12 @@ void model::initializeShapeTool(int toolIndex)
 
 
 
-// Add a new frame after the current frame
-void model::addNewFrame(){
+/**
+ * @brief model::initializeShapeTool
+ * Add a new frame to the next position to the current frame
+ * @param index
+ */
+void model::addFrameAfterCurr(){
     QImage frame(canvasSize, canvasSize, QImage::Format_ARGB32);
     frame.fill(Qt::white);
     frames.insert(currentFrame, frame);
@@ -169,8 +168,15 @@ void model::addNewFrame(){
     emit setCanvas(map);
 }
 
-// insert a new frame before current frame
-void model::insertNewFrame(){
+
+
+/**
+ * @brief model::addFrameBeforeCurr
+ * Add a new frame to to the position before current frame
+ * @param index
+ */
+void model::addFrameBeforeCurr(){
+
     QImage frame(canvasSize, canvasSize, QImage::Format_ARGB32);
     frame.fill(Qt::white);
     frames.insert(currentFrame - 1, frame);
@@ -193,7 +199,13 @@ void model::insertNewFrame(){
     emit setCanvas(map);
 }
 
-// move to the next frame
+
+
+/**
+ * @brief model::nextFrame
+ * It changes the current frame to the frame after.
+ * @param n/a
+ */
 void model::nextFrame(){
     emit updateFrameNumberCombo(++currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
@@ -210,7 +222,12 @@ void model::nextFrame(){
      emit setCanvas(map);
 }
 
-// move to the previous frame
+
+/**
+ * @brief model::lastFrame
+ * It changes the current frame to the frame before.
+ * @param n/a
+ */
 void model::lastFrame(){
     emit updateFrameNumberCombo(--currentFrame, frames.size());
     emit updateFrameNumberLabel(currentFrame, frames.size());
@@ -227,7 +244,12 @@ void model::lastFrame(){
     emit setCanvas(map);
 }
 
-// delete the current frame
+
+/**
+ * @brief model::deleteFrame
+ * It deletes the current frame.
+ * @param n/a
+ */
 void model::deleteFrame(){
     frames.removeAt(currentFrame - 1);
 
@@ -256,7 +278,12 @@ void model::deleteFrame(){
     emit setCanvas(map);
 }
 
-// swap the current frame with the frame above it
+
+/**
+ * @brief model::swapUp
+ * It swaps our current frame with the previous frame.
+ * @param n/a
+ */
 void model::swapUp(){
     frames.swapItemsAt(currentFrame - 1, currentFrame - 2);
     currentFrame--;
@@ -279,7 +306,12 @@ void model::swapUp(){
     emit setCanvas(map);
 }
 
-// swap the current frame with the frame below it
+
+/**
+ * @brief model::swapDown
+ * It swaps our current with the frame after.
+ * @param n/a
+ */
 void model::swapDown(){
     frames.swapItemsAt(currentFrame - 1, currentFrame);
     currentFrame++;
@@ -302,7 +334,14 @@ void model::swapDown(){
     emit setCanvas(map);
 }
 
-// clear all contents on the current frame
+
+
+/**
+ * @brief model::clearCanvas
+ * It removes all the changes done to our current frame, and
+ * it initializes it with a white frame.
+ * @param n/a
+ */
 void model::clearCanvas(){
     QImage frame(canvasSize, canvasSize, QImage::Format_ARGB32);
     frame.fill(Qt::white);
@@ -315,7 +354,13 @@ void model::clearCanvas(){
     emit setCanvas(map); 
 }
 
-// copy the current frame and insert it to the next position
+
+
+/**
+ * @brief model::copyFrame
+ * Copy the current frame and insert it to the next position
+ * @param n/a
+ */
 void model::copyFrame(){
     QImage frame = QImage(frames.at(currentFrame - 1));
     frames.insert(currentFrame++, frame);
@@ -335,9 +380,13 @@ void model::copyFrame(){
     emit setCanvas(map);
 }
 
-//Need to implement the change of pixels to edit
-//This method increases the size of the image, and sends it back to the
-//view  to be displayed in the canvas
+
+/**
+ * @brief model::zoomIn
+ * It icreases the size of the image, and sends it back to the
+ * view  to be displayed in the canvas
+ * @param n/a
+ */
 void model::zoomIn(){
 
     //Check if it is within bounds
@@ -355,10 +404,15 @@ void model::zoomIn(){
     }
     else
         emit disableZoom("zoomIn");
-
 }
 
 
+/**
+ * @brief model::zoomOut
+ * It decreases the size of the image, and sends it back to the
+ * view  to be displayed in the canvas
+ * @param n/a
+ */
 void model::zoomOut(){
 
     //Check if is within bounds
@@ -375,39 +429,68 @@ void model::zoomOut(){
     }
     else
         emit disableZoom("zoomOut");
-
 }
 
 
-
+/**
+ * @brief model::updateFPS
+ * It updates our frames per second for the preview.
+ * @param fps
+ */
 void model::updateFPS(int fps){
     framesPerSec = fps;
 }
 
+
+/**
+ * @brief model::updatePenSize
+ * It updates the size of the pen
+ * @param size
+ */
 void model::updatePenSize(int size){
     penSize = size;
 }
 
+
+/**
+ * @brief model::updateEraserSize
+ * It updates the size of the eraser
+ * @param size
+ */
 void model::updateEraserSize(int size){
     eraserSize = size;   
 }
 void model::updateShapeSize(int size){
     shapeSize = size;
 }
-void model::setStartingArea(int, int){
-    //TODO:
-}
 
-void model::checkCurrentColor(QColor){
+/**
+ * @brief model::checkCurrentColor
+ * It sends to the view the current color being used
+ * @param n/a
+ */
+void model::checkCurrentColor(){
     emit sendCurrentColor(penColor);
 }
 
+
+/**
+ * @brief model::updatePenColor
+ * It updates the currend color based on the given color,
+ * then it updates the view.
+ * @param color
+ */
 void model::updatePenColor(QColor color){
     penColor = color;
     emit setColorLabel(penColor);
 }
 
-//updates our current tool we are using
+
+/**
+ * @brief model::updatePenColor
+ * It updates our current tool we are using
+ * @param size
+ */
 void model::updateTool(std::string tool){
     //Should we do a switch case? if we do, we have to change parameters (bri)
     if(tool == "pen"){
@@ -429,13 +512,13 @@ void model::updateTool(std::string tool){
     }
 }
 
-//Don't need the QList as Parameter??
-void model::getList(QList<QImage>){
-    //TODO:
-    emit sendList(frames);
-}
 
-// undo the last action
+
+/**
+ * @brief model::undo
+ * It will undo the last action
+ * @param n/a
+ */
 void model::undo(){
     redoStack.push(undoStack.pop());
     emit enableRedo();
@@ -490,7 +573,14 @@ void model::undo(){
     emit setCanvas(map);
 }
 
-// redo the last action
+
+
+
+/**
+ * @brief model::undo
+ * It will redo the last action
+ * @param n/a
+ */
 void model::redo(){
     QList<QImage> previousFrame = redoStack.pop();
 
@@ -543,6 +633,14 @@ void model::redo(){
     emit setCanvas(map);
 }
 
+
+
+/**
+ * @brief model::saveFrameToStack
+ * It saves the changes from the mouse release event to the frame
+ * and stores it into the stack.
+ * @param n/a
+ */
 void model::saveFrameToStack(){
     emit enableUndo();
     if(currentTool != SelectedTool::SC_ShapeCreator){
@@ -550,6 +648,15 @@ void model::saveFrameToStack(){
     }
 }
 
+
+
+
+/**
+ * @brief model::mouseRelease
+ * It will change out current frame pixels
+ * in the location selected by the user.
+ * @param loc
+ */
 void model::mouseRelease(QPoint &loc)
 {
     if(startEndLoc.size() ==1 ){
@@ -570,7 +677,16 @@ void model::mouseRelease(QPoint &loc)
     }
 }
 
-//Frame that we are currently in
+
+
+
+/**
+ * @brief model::selectedFrame
+ * It updates the frame we are currently in
+ * based on the given index, and it communicates to the view
+ * informatio to display that frame. *
+ * @param index
+ */
 void model::selectedFrame(int index){
     currentFrame = index + 1;
 
@@ -597,7 +713,14 @@ void model::selectedFrame(int index){
     }
 }
 
-//updates the toolsize, we first check our selected tool
+
+
+
+/**
+ * @brief model::updateToolSize
+ * updates the toolsize, based on the given size
+ * @param size
+ */
 void model::updateToolSize(int size){
 
     //change to a switch case if we add more brushes
@@ -611,7 +734,13 @@ void model::updateToolSize(int size){
         updateShapeSize(size);
 }
 
-void model::updatePixels(int initialX, int initialY, int endX, int endY){
+
+/**
+ * @brief model::updatePixels
+ * updates the toolsize, based on the given size
+ * @param initialX, initialY
+ */
+void model::updatePixels(int initialX, int initialY){
     switch(currentTool){
         case SelectedTool::SC_Pen:
             updatePixelsByPen(initialX,initialY);
@@ -622,20 +751,19 @@ void model::updatePixels(int initialX, int initialY, int endX, int endY){
         case SelectedTool::SC_Bucket:
             updatePixelsByBucketFiller(initialX, initialY);
             break;
-//        case SelectedTool::SC_ShapeCreator: // might need to delete
-//            if(startEndLoc.size() == 2){
-//                std::cout << "hit" << std::endl;
-
-//                std::cout << startEndLoc.size() << std::endl;
-
-//            updatePixelsByShapeCreator(initialX, initialY, endX, endY);
-//            break;
-          //  }
         default:
             break;
     }
 }
 
+
+
+/**
+ * @brief model::updatePixelsByPen
+ * It changes the pixels of the current frame based on the
+ * given x and y positions, the current size of the pen, and the current color.
+ * @param x, y
+ */
 void model::updatePixelsByPen(int x, int y){
     QImage* AFrame = &frames[currentFrame -1];
     QPainter Painter(AFrame);
@@ -648,6 +776,13 @@ void model::updatePixelsByPen(int x, int y){
 
 }
 
+
+/**
+ * @brief model::updatePixelsByEraser
+ * It changes to white the pixels of the current frame based on the
+ * given x and y positions, and the current size of the eraser.
+ * @param x, y
+ */
 void model::updatePixelsByEraser(int x, int y){
     QImage* AFrame = &frames[currentFrame -1];
     QPainter Painter(AFrame);
@@ -659,6 +794,14 @@ void model::updatePixelsByEraser(int x, int y){
     Painter.end();
 }
 
+
+/**
+ * @brief model::updatePixelsByPen
+ * It changes the pixels of the current frame based on the
+ * given x and y positions, the current size of the pen,
+ * the current color, and the current shape being used.
+ * @param initialX, initialY, endX, endY
+ */
 void model::updatePixelsByShapeCreator(int initialX, int initialY, int endX, int endY){
     // Set pen specs for shape creator
     QImage* AFrame = &frames[currentFrame -1];
@@ -693,6 +836,14 @@ void model::updatePixelsByShapeCreator(int initialX, int initialY, int endX, int
     emit setCanvas(currentPic);
 }
 
+
+
+/**
+ * @brief model::updatePixelsByBucketFiller
+ * It changes the backgound color of our current frame based on the
+ * the current color selected by the user.
+ * @param x, y
+ */
 void model::updatePixelsByBucketFiller(int x, int y){
     QColor colorToBeChanged = (frames[currentFrame -1]).pixelColor(x,y);
 
@@ -709,6 +860,15 @@ void model::updatePixelsByBucketFiller(int x, int y){
 
 //This method obtains where the current position of the mouse is in our canvas
 //then it optains the ratio
+
+/**
+ * @brief model::drawOnCanvas
+ * This method obtains where the current position of the mouse
+ * is in our canvas and then optains the ratio such that we get the
+ * positions of our x and y positions of our frame and
+ * then we fraw on it utilizing a helper method.
+ * @param pixelPoint
+ */
 void model::drawOnCanvas(QPoint pixelPoint){
     //if there have been any changes on the canvas
     isChanged = true;
@@ -738,11 +898,13 @@ void model::drawOnCanvas(QPoint pixelPoint){
 }
 
 
-void model::updateCanvasSize()
-{
-    canvasSize += 1;
-}
 
+/**
+ * @brief model::previewOfFrames
+ * Utilizing QTimer, this method iterates trough the list sending the frames
+ * to the view in a time designated by how many frames per second the user had defined.
+ * @param n/a
+ */
 void model::previewOfFrames(){
     int time = 2000/framesPerSec;
 
@@ -752,6 +914,13 @@ void model::previewOfFrames(){
     }
 }
 
+
+/**
+ * @brief model::updateActualLabel
+ * Helper method fir the previewIfFrames method.
+ * It sends our current frame, and it updates our current frame.
+ * @param n/a
+ */
 void model::updateActualLabel(){
 
     emit showSprite(frames[currentIndex]);

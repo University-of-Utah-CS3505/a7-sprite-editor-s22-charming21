@@ -77,12 +77,12 @@ View::View(model& model, QWidget *parent)
     connect(ui->addFrameButton,
             &QPushButton::clicked,
             &model,
-            &model::addNewFrame);
+            &model::addFrameBeforeCurr);
 
     connect(ui->insertFrameButton,
             &QPushButton::clicked,
             &model,
-            &model::insertNewFrame);
+            &model::addFrameBeforeCurr);
 
     connect(ui->nextFrameButton,
             &QPushButton::clicked,
@@ -303,10 +303,6 @@ View::View(model& model, QWidget *parent)
             this,
             &View::mouseLoc);
 
-    connect(ui->canvasLabel,
-            &Canvas::sendMouseLoc,
-            this,
-            &View::on_clickMouse_released);
     connect(this,
             &View::editCanvas,
             &model,
@@ -660,9 +656,6 @@ void View::enableStartButtons(){
 }
 
 
-void View::on_clickMouse_released(QPoint &loc) {
-
-}
 
 void View::updateCanvasComboBox(int canvasSize){
 
@@ -699,6 +692,7 @@ void View::updateCanvasComboBox(int canvasSize){
     ui->canvasSizeComboBox->setCurrentIndex(comboBoxIndex);
 }
 
+>>>>>>> 80c5b2b05f0bbaaa141d29e39ef3e263ce29a7c9
 
 void View::on_actualSizeButton_clicked(QImage currentFrame)
 {
