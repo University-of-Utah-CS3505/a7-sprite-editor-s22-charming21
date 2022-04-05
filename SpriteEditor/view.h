@@ -43,6 +43,7 @@ private slots:
     void on_penButton_clicked();
     void on_eraserButton_clicked();
     void on_bucketButton_clicked();
+    void on_shapeToolComboBox_activated();
 
     //Mouse events
     void mouseLoc(QPoint& loc);

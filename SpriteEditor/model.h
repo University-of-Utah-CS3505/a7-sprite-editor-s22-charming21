@@ -52,6 +52,7 @@ private:
     int currentFrame;
     int penSize;
     int eraserSize;
+    int shapeSize;
     double ratio;
 
 
@@ -102,6 +103,7 @@ signals:
     void disableRedo();
     void startButtons();
     void setCanvas(QPixmap);
+    void editPenSize(int);
 
     void showSprite(QImage);
     void updateCanvasComboBox(int);
@@ -128,7 +130,8 @@ public slots:
     void updateFPS(int);
     void updatePenSize(int);
     void updateEraserSize(int);
-
+    void updateShapeSize(int);
+    //void setStartingArea(int, int);
     void updatePenColor(QColor);
     void updateTool(std::string);
 
