@@ -131,7 +131,7 @@ public slots:
     void updatePenSize(int);
     void updateEraserSize(int);
     void updateShapeSize(int);
-    void setStartingArea(int, int);
+    //void setStartingArea(int, int);
     void updatePenColor(QColor);
     void updateTool(std::string);
 
