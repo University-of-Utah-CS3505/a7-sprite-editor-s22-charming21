@@ -9,6 +9,7 @@ Canvas::Canvas(QWidget* parent) :QLabel(parent)
 {
 }
 
+
 /**
  * @brief Canvas::mouseMoveEvent
  * Keeps track of all mouse drag movements within the Canvas QLabel.  Then emits a

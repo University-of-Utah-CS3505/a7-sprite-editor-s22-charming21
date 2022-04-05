@@ -92,7 +92,7 @@ View::View(model& model, QWidget *parent)
     connect(ui->lastFrameButton,
             &QPushButton::clicked,
             &model,
-            &model::lastFrame);
+            &model::previousFrame);
 
     connect(&model,
             &model::disableNextButton,
@@ -201,7 +201,7 @@ View::View(model& model, QWidget *parent)
             this,
             &View::disableUndoButton);
     connect(&model,
-            &model::startButtons,
+            &model::enableStartButtons,
             this,
             &View::enableStartButtons);
 
