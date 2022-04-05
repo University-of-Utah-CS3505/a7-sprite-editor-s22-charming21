@@ -692,7 +692,7 @@ void View::updateCanvasComboBox(int canvasSize){
     ui->canvasSizeComboBox->setCurrentIndex(comboBoxIndex);
 }
 
->>>>>>> 80c5b2b05f0bbaaa141d29e39ef3e263ce29a7c9
+//>>>>>>> 80c5b2b05f0bbaaa141d29e39ef3e263ce29a7c9
 
 void View::on_actualSizeButton_clicked(QImage currentFrame)
 {
