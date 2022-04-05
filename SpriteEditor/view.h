@@ -32,13 +32,19 @@ signals:
 
 
 private slots:
+    //Canvas
+    void updateCanvas(QPixmap);
+
+    //Frame
+    void updateFramesBox(int, int);
+    void updateFramesLabel(int, int);
+
     //Tool selection
     void on_penButton_clicked();
     void on_eraserButton_clicked();
     void on_bucketButton_clicked();
 
     //Mouse events
-
     void mouseLoc(QPoint& loc);
 
     //Update Color
@@ -65,42 +71,38 @@ private slots:
     void zoomCanvas(QPixmap, int, int);
     void disableZoomButtons(std::string);
     void enableZoomInButton();
-    void enableZoomOutButton();
+    void enableZoomOutButton();    
 
-    //Canvas
-    void updateCanvas(QPixmap);
 
-    //Frame
-    void updateFramesBox(int, int);
-    void updateFramesLabel(int, int);
-    void displaySprite(QImage);
-    void enableStartButtons();
-
-     //Save and Load
-     void saveFile();
-     void openFile();
+    //Save and Load
+    void saveFile();
+    void openFile();
     void errorMessage(QString errorMsg);
-     void on_actualSizeButton_clicked(QImage);
-     void updateCanvasComboBox(int);
+    void updateCanvasComboBox(int);
 
-     //check before closing
-     void closeEvent(QCloseEvent *event);
+    //Check before closing
+    void closeEvent(QCloseEvent *event);
 
-     //new Window open
-     void newWindow();
+    //New Window open
+    void newWindow();
+
+    //Preview
+    void displaySprite(QImage);
+    void on_actualSizeButton_clicked(QImage);
+    void enableStartButtons();
 
 private:
     Ui::View *ui;
-
     int canvasLabelSize;
-    void initCanvasSizesComboBox();
-    void initShapeToolComboBox();
     canvaspreview canvasPreview;
 
-    //second Window
+//    //Second Window
     model secWindowModel;
     View *secWindow;
 
+    //Helper Methods
     void createNewWindow();
+    void initCanvasSizesComboBox();
+    void initShapeToolComboBox();
 };
 #endif // VIEW_H
