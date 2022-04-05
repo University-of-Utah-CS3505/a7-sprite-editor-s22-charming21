@@ -82,7 +82,6 @@ public:
     QMenuBar *menubar;
     QMenu *menuFile;
     QMenu *menuAbout;
-    QMenu *menuHelp_me;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *View)
@@ -358,13 +357,11 @@ public:
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 22));
+        menubar->setGeometry(QRect(0, 0, 800, 24));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuAbout = new QMenu(menubar);
         menuAbout->setObjectName(QString::fromUtf8("menuAbout"));
-        menuHelp_me = new QMenu(menubar);
-        menuHelp_me->setObjectName(QString::fromUtf8("menuHelp_me"));
         View->setMenuBar(menubar);
         statusbar = new QStatusBar(View);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -372,7 +369,6 @@ public:
 
         menubar->addAction(menuFile->menuAction());
         menubar->addAction(menuAbout->menuAction());
-        menubar->addAction(menuHelp_me->menuAction());
         menuFile->addAction(actionSave);
         menuFile->addAction(actionOpen);
         menuFile->addAction(actionNew);
@@ -419,7 +415,6 @@ public:
         toolLabel->setText(QCoreApplication::translate("View", "Current Tool: Pen", nullptr));
         menuFile->setTitle(QCoreApplication::translate("View", "File", nullptr));
         menuAbout->setTitle(QCoreApplication::translate("View", "About", nullptr));
-        menuHelp_me->setTitle(QCoreApplication::translate("View", "Help me", nullptr));
     } // retranslateUi
 
 };

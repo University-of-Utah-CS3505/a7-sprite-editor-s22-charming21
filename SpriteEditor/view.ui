@@ -594,7 +594,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -610,14 +610,8 @@
      <string>About</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuHelp_me">
-    <property name="title">
-     <string>Help me</string>
-    </property>
-   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuAbout"/>
-   <addaction name="menuHelp_me"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionSave">
