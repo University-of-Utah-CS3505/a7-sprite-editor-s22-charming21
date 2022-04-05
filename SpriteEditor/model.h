@@ -5,6 +5,13 @@
 #include <QColor>
 #include <QPen>
 #include <QImage>
+/**
+ * Team: BAGJL
+ * Students: Brittney Morales, Adriana Salazar, Xing Liu, Jinwen Lei, Gonzalo Tello
+ * Course: CS3505
+ * Date: April 5, 2022
+ *
+ **/
 #include <QPainter>
 #include <QPixmap>
 #include <iostream>

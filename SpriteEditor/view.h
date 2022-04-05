@@ -1,3 +1,10 @@
+/**
+ * Team: BAGJL
+ * Students: Brittney Morales, Adriana Salazar, Xing Liu, Jinwen Lei, Gonzalo Tello
+ * Course: CS3505
+ * Date: April 5, 2022
+ *
+ **/
 #ifndef VIEW_H
 #define VIEW_H
 
