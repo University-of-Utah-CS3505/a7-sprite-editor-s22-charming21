@@ -205,16 +205,6 @@ View::View(model& model, QWidget *parent)
             this,
             &View::updateColorWheel);
 
-    //Open a Project
-//    connect(ui->actionOpen,
-//            &QAction::triggered,
-//            &model,
-//            &model::openProject); //create slot in model
-//    connect(&model,
-//            &model::sendList,
-//            this,
-//            &View::setUpProject); //create method in view
-
         //Zoom in/out,
         connect(ui->zoomInButton,
                 &QPushButton::clicked,
@@ -314,14 +304,6 @@ View::View(model& model, QWidget *parent)
             &model,
             &model::copyFrame);
 
-    // gon
-    // connections for increasing and decreasing canvas button and pen size
-//    connect(ui->increaseCanvasButton,
-//            &QPushButton::clicked,
-//            this,
-//            &View::pushCanvasSizeIncrease);
-
-
     //Preview actual canvas
     connect(ui->previewButton,
             &QPushButton::clicked,
@@ -412,7 +394,11 @@ View::~View()
     delete ui;
 }
 //methods for view
-
+/**
+ * @brief View::pushColorButton
+ * Opens Color Dialog, and returns (TODO:: still working on this )
+ * @param currentColor
+ */
 void View::pushColorButton(QColor currentColor){
 
     QColor newColor = QColorDialog::getColor(currentColor, nullptr, QString(), {QColorDialog::DontUseNativeDialog, QColorDialog::ShowAlphaChannel});
@@ -534,7 +520,10 @@ void View::updateColorWheel(QColor color){
     ui->colorLabel->setStyleSheet(style.arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()));
 }
 
-
+/**
+ * @brief View::saveFile
+ * Opens the file dialog and only allows user to save as .ssp file, and updates the view to no changes.
+ */
 void View::saveFile()
 {
     QString fileName = QFileDialog::getSaveFileName(this, "Save file", "C://",  tr("Sprite Sheet Project (*.ssp)"));
@@ -543,7 +532,10 @@ void View::saveFile()
     //updates the text in the modified label to "no changes"
     ui->modifiedLabel->setText("No Changes");
 }
-
+/**
+ * @brief View::openFile
+ * Opens the file dialog and only allows user to open .ssp file extensions and opens it in a new window.
+ */
 void View::openFile()
 {
 
@@ -554,12 +546,18 @@ void View::openFile()
     emit open(fileName);
 
 }
-
+/**
+ * @brief View::newWindow
+ * creates a new window
+ */
 void View::newWindow(){
     createNewWindow();
 }
 
-//helpermethod creates the new window
+/**
+ * @brief View::createNewWindow
+ * creates a new window. This is a helper method.
+ */
 void View::createNewWindow(){
     secWindow = new View(secWindowModel);
     secWindow->show();
@@ -648,7 +646,12 @@ void View::enableStartButtons(){
 }
 
 
-
+/**
+ * @brief View::updateCanvasComboBox
+ * updates the Canvas Size combobox in the view to be what our current canvasSize
+ * @param canvasSize
+ * canvasSize is from the model
+ */
 void View::updateCanvasComboBox(int canvasSize){
 
     int comboBoxIndex = 0;
@@ -683,8 +686,6 @@ void View::updateCanvasComboBox(int canvasSize){
 
     ui->canvasSizeComboBox->setCurrentIndex(comboBoxIndex);
 }
-
->>>>>>> 80c5b2b05f0bbaaa141d29e39ef3e263ce29a7c9
 
 void View::on_actualSizeButton_clicked(QImage currentFrame)
 {
