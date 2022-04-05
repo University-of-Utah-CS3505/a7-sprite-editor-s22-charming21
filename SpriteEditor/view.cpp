@@ -211,56 +211,46 @@ View::View(model& model, QWidget *parent)
             this,
             &View::updateColorWheel);
 
-    //Open a Project
-//    connect(ui->actionOpen,
-//            &QAction::triggered,
-//            &model,
-//            &model::openProject); //create slot in model
-//    connect(&model,
-//            &model::sendList,
-//            this,
-//            &View::setUpProject); //create method in view
+    //Zoom in/out,
+    connect(ui->zoomInButton,
+            &QPushButton::clicked,
+            &model,
+            &model::zoomIn);
+    connect(ui->zoomOutButton,
+            &QPushButton::clicked,
+            &model,
+            &model::zoomOut);
+    connect(&model,
+            &model::toZoomIn,
+            this,
+            &View::zoomCanvas);
+    connect(&model,
+            &model::toZoomOut,
+            this,
+            &View::zoomCanvas);
+    connect(&model,
+            &model::enableZoomIn,
+            this,
+            &View::enableZoomInButton);
+    connect(&model,
+            &model::enableZoomOut,
+            this,
+            &View::enableZoomOutButton);
 
-        //Zoom in/out,
-        connect(ui->zoomInButton,
-                &QPushButton::clicked,
-                &model,
-                &model::zoomIn);
-        connect(ui->zoomOutButton,
-                &QPushButton::clicked,
-                &model,
-                &model::zoomOut);
-        connect(&model,
-                &model::toZoomIn,
-                this,
-                &View::zoomCanvas);
-        connect(&model,
-                &model::toZoomOut,
-                this,
-                &View::zoomCanvas);
-        connect(&model,
-                &model::enableZoomIn,
-                this,
-                &View::enableZoomInButton);
-        connect(&model,
-                &model::enableZoomOut,
-                this,
-                &View::enableZoomOutButton);
+    //Redo and Undo
+    connect(ui->redoButton,
+            &QPushButton::clicked,
+            &model,
+            &model::redo);
+    connect(ui->undoButton,
+            &QPushButton::clicked,
+            &model,
+            &model::undo);
 
-        //Redo and Undo
-        connect(ui->redoButton,
-                &QPushButton::clicked,
-                &model,
-                &model::redo);
-        connect(ui->undoButton,
-                &QPushButton::clicked,
-                &model,
-                &model::undo);
-
-        connect(ui->canvasLabel, // mouse click
-                &Canvas::saveToStack,
-                &model,
-                &model::saveFrameToStack);
+    connect(ui->canvasLabel, // mouse click
+            &Canvas::saveToStack,
+            &model,
+            &model::saveFrameToStack);
 
 
     //ColorUpdate
@@ -320,14 +310,6 @@ View::View(model& model, QWidget *parent)
             &model,
             &model::copyFrame);
 
-    // gon
-    // connections for increasing and decreasing canvas button and pen size
-//    connect(ui->increaseCanvasButton,
-//            &QPushButton::clicked,
-//            this,
-//            &View::pushCanvasSizeIncrease);
-
-
     //Preview actual canvas
     connect(ui->previewButton,
             &QPushButton::clicked,
@@ -384,41 +366,120 @@ View::View(model& model, QWidget *parent)
             &model::mouseRelease);
 }
 
-void View::displaySprite(QImage currentFrame){
-    ui->actualSizeLabel->setPixmap(QPixmap::fromImage(currentFrame).scaled(ui->actualSizeLabel->width(),
-                                                                            ui->actualSizeLabel->height()));
-}
-
-void View::closeEvent(QCloseEvent *event){
-
-    if(ui->modifiedLabel->text() == "Has been modified"){
-        QMessageBox::StandardButton closeBtn = QMessageBox::warning(this, "Sprite Editor",
-                                                                   tr("Are you sure you want to close the Sprite Editor? \n Your work won't be saved."),
-                                                            QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
-                                                                   QMessageBox::No);
-        if(closeBtn != QMessageBox::Yes){
-            event->ignore();
-        }
-        else{
-            event->accept();
-        }
-    }
-}
-//Pops up when there was an issue opening or saving a file locally.
-void View::errorMessage(QString message){
-
-    QMessageBox::StandardButton errorBtn = QMessageBox::warning(this, "Sprite Editor",
-                                                               message,
-                                                        QMessageBox::Cancel | QMessageBox::Ok,
-                                                               QMessageBox::Ok);
-}
-
+/********************View's Methods *****************************/
+/**
+ * @brief View::~View
+ * destructor
+ */
 View::~View()
 {
     delete ui;
 }
-//methods for view
+/*************Canvas Updates **********************/
+/**
+ * @brief View::updateCanvas
+ * Update's the canvas by outputing the QPixmap that
+ * was tranformed into QImage and edited in model
+ * @param currentPic
+ */
+void View::updateCanvas(QPixmap currentPic){
 
+    //display our QPixmap into our canvas size
+    ui->canvasLabel->setPixmap(currentPic.scaled(canvasLabelSize, canvasLabelSize));
+    //display on actualsize label
+    ui->actualSizeLabel->setPixmap(currentPic.scaled(ui->actualSizeLabel->width(),
+                                                     ui->actualSizeLabel->height()));
+    //Disable cobo box to set up size
+    if(ui->canvasSizeComboBox->isEnabled()){
+        ui->canvasSizeComboBox->setEnabled(false);
+    }
+
+    //updates the modified label
+    ui->modifiedLabel->setText("Has been modified");
+}
+
+/***********Frame Updates **************/
+/**
+ * @brief View::updateFramesBox
+ * Updates the combobox for the frames, when deleting or adding frames to the View.
+ * @param page
+ * Current Frame index
+ * @param size
+ * Total number of frames.
+ */
+void View::updateFramesBox(int page, int size){
+    if(size > ui->framesComboBox->count()){
+        ui->framesComboBox->addItem(QString::number(size));
+    }
+
+    if(size < ui->framesComboBox->count()){
+        ui->framesComboBox->removeItem(ui->framesComboBox->count() - 1);
+    }
+
+    ui->framesComboBox->setCurrentText(QString::number(page));
+    ui->framesComboBox->setCurrentIndex(page - 1);
+}
+
+/**
+ * @brief View::updateFramesLabel
+ * Updates the FramesLabel, current postion out of the total number of frames.
+ * @param page
+ * current index
+ * @param size
+ * total number of frames.
+ */
+void View::updateFramesLabel(int page, int size){
+    QString str = QString::number(page);
+    str.append("/");
+    str.append(QString::number(size));
+
+    ui->frameNumberLabel->setText(str);
+}
+
+/***** Tool Selection ****/
+/**
+ * @brief View::on_penButton_clicked
+ *  Updates the current tool to pen, and sends it to the model.
+ */
+void View::on_penButton_clicked()
+{
+    emit setTool("pen");
+}
+
+/**
+ * @brief View::on_eraserButton_clicked
+ * Updates the current tool to eraser, and sends it to the model.
+ */
+void View::on_eraserButton_clicked()
+{
+    emit setTool("eraser");
+}
+
+/**
+ * @brief View::on_bucketButton_clicked
+ * Updates the current tool to bucket, and sends it to the model.
+ */
+void View::on_bucketButton_clicked()
+{
+    emit setTool("bucket");
+}
+
+/**
+ * @brief View::on_shapeToolComboBox_activated
+ * TODO:
+ */
+void View::on_shapeToolComboBox_activated()
+{
+    ui->toolSizeBox->setDisabled(false);
+}
+
+/************** Updates Color ***********/
+/**
+ * @brief View::pushColorButton
+ * Opens Color Dialog, and returns the color selected, and sets that color to our tool in the model.
+ * @param currentColor
+ * currentColor we have from the model
+ */
 void View::pushColorButton(QColor currentColor){
 
     QColor newColor = QColorDialog::getColor(currentColor, nullptr, QString(), {QColorDialog::DontUseNativeDialog, QColorDialog::ShowAlphaChannel});
@@ -429,6 +490,18 @@ void View::pushColorButton(QColor currentColor){
     }
 }
 
+/**
+ * @brief View::updateColorWheel
+ * Displays the color selected in the colorLabel.
+ * @param color
+ */
+void View::updateColorWheel(QColor color){
+    QString style = "background: rgba(%1, %2, %3, %4);";
+
+    ui->colorLabel->setStyleSheet(style.arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()));
+}
+
+/******* Enable and Disable Control Buttons *********/
 void View::disableDeleteButton(){
     ui->deleteFrameButton->setEnabled(false);
 }
@@ -485,7 +558,6 @@ void View::disableSwapDownButton(){
     ui->swapDownButton->setEnabled(false);
 }
 
-
 void View::mouseLoc(QPoint &loc) // can delete later
 {
     ui->posLabel->setText("x: " + QString::number(loc.x()) + " y: " + QString::number(loc.y()));
@@ -493,105 +565,18 @@ void View::mouseLoc(QPoint &loc) // can delete later
     emit editCanvas(loc);
 }
 
+/********************** Zoom Updates **************/
 
-//Update the canvas by outputing the QPixmap that
-//was tranformed into QImage and edited in model
-void View::updateCanvas(QPixmap currentPic){
-
-    //display our QPixmap into our canvas size
-    ui->canvasLabel->setPixmap(currentPic.scaled(canvasLabelSize, canvasLabelSize));
-    //display on actualsize label
-    ui->actualSizeLabel->setPixmap(currentPic.scaled(ui->actualSizeLabel->width(),
-                                                     ui->actualSizeLabel->height()));
-    //Disable cobo box to set up size
-    if(ui->canvasSizeComboBox->isEnabled()){
-        ui->canvasSizeComboBox->setEnabled(false);
-    }
-
-    //updates the modified label
-    ui->modifiedLabel->setText("Has been modified");
-
-}
-
-void View::updateFramesBox(int page, int size){
-    if(size > ui->framesComboBox->count()){
-        ui->framesComboBox->addItem(QString::number(size));
-    }
-
-    if(size < ui->framesComboBox->count()){
-        ui->framesComboBox->removeItem(ui->framesComboBox->count() - 1);
-    }
-
-    ui->framesComboBox->setCurrentText(QString::number(page));
-    ui->framesComboBox->setCurrentIndex(page - 1);
-}
-
-void View::updateFramesLabel(int page, int size){
-    QString str = QString::number(page);
-    str.append("/");
-    str.append(QString::number(size));
-
-    ui->frameNumberLabel->setText(str);
-}
-
-void View::updateColorWheel(QColor color){
-    QString style = "background: rgba(%1, %2, %3, %4);";
-
-    ui->colorLabel->setStyleSheet(style.arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()));
-}
-
-
-void View::saveFile()
-{
-    QString fileName = QFileDialog::getSaveFileName(this, "Save file", "C://",  tr("Sprite Sheet Project (*.ssp)"));
-    emit save(fileName);
-
-    //updates the text in the modified label to "no changes"
-    ui->modifiedLabel->setText("No Changes");
-}
-
-void View::openFile()
-{
-
-    QString fileName = QFileDialog::getOpenFileName(this, "Open file", "C://", tr("Sprite Sheet Project (*.ssp)"));
-    // will have to do an emit to the model
-    createNewWindow();
-
-    emit open(fileName);
-
-}
-
-void View::newWindow(){
-    createNewWindow();
-}
-
-//helpermethod creates the new window
-void View::createNewWindow(){
-    secWindow = new View(secWindowModel);
-    secWindow->show();
-}
-
-
-
-//This is to update the current tool, and let know
-//the model which tool we are using
-void View::on_penButton_clicked()
-{
-    emit setTool("pen");
-    ui->toolSizeBox->setDisabled(false);
-}
-void View::on_eraserButton_clicked()
-{
-    emit setTool("eraser");
-    ui->toolSizeBox->setDisabled(false);
-}
-void View::on_bucketButton_clicked()
-{
-    emit setTool("bucket");
-}
-
-
-//Displays the image with the given ratio to increase the size
+/**
+ * @brief View::zoomCanvas
+ * Displays the image with the given ratio to increase the size
+ * @param currentPic
+ * currentFrame
+ * @param canvasSize
+ * canvas current Size
+ * @param zoomIndex
+ * zoom current index
+ */
 void View::zoomCanvas(QPixmap currentPic, int canvasSize, int zoomIndex){
     int ratio = ui->canvasLabel->height()/canvasSize;
 
@@ -608,9 +593,12 @@ void View::enableZoomOutButton(){
     ui->zoomOutButton->setEnabled(true);
 }
 
-
-//It disables the buttons when in the model we notice that
-//zooming  in is out of bounds.
+/**
+ * @brief View::disableZoomButtons
+ * It disables the buttons when in the model when
+ * zooming is out of bounds.
+ * @param zoomType
+ */
 void View::disableZoomButtons(std::string zoomType){
     if(zoomType == "zoomIn")
         ui->zoomInButton->setEnabled(false);
@@ -618,45 +606,51 @@ void View::disableZoomButtons(std::string zoomType){
         ui->zoomOutButton->setEnabled(false);
 }
 
+/**************** Save and Load ********************/
+/**
+ * @brief View::saveFile
+ * Opens the file dialog and only allows user to save as .ssp file, and updates the view to no changes.
+ */
+void View::saveFile()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, "Save file", "C://",  tr("Sprite Sheet Project (*.ssp)"));
+    emit save(fileName);
 
-
-void View::initCanvasSizesComboBox(){
-    ui->canvasSizeComboBox->addItem("2 x 2");
-    ui->canvasSizeComboBox->addItem("4 x 4");
-    ui->canvasSizeComboBox->addItem("5 x 5");
-    ui->canvasSizeComboBox->addItem("8 x 8");
-    ui->canvasSizeComboBox->addItem("10 x 10");
-    ui->canvasSizeComboBox->addItem("16 x 16");
-    ui->canvasSizeComboBox->addItem("20 x 20");
-    ui->canvasSizeComboBox->addItem("25 x 25");
-    ui->canvasSizeComboBox->addItem("40 x 40");
-    ui->canvasSizeComboBox->addItem("50 x 50");
-    ui->canvasSizeComboBox->addItem("80 x 80");
-    ui->canvasSizeComboBox->addItem("100 x 100");
-    ui->canvasSizeComboBox->addItem("200 x 200");
-    ui->canvasSizeComboBox->addItem("400 x 400");
-
-    ui->canvasSizeComboBox->setCurrentIndex(6);
+    //updates the text in the modified label to "no changes"
+    ui->modifiedLabel->setText("No Changes");
 }
 
-void View::initShapeToolComboBox(){
-    ui->shapeToolComboBox->addItem("Line");
-    ui->shapeToolComboBox->addItem("Ellipse");
-    ui->shapeToolComboBox->addItem("Rectangle");
-
+/**
+ * @brief View::openFile
+ * Opens the file dialog and only allows user to open .ssp file extensions and opens it in a new window.
+ */
+void View::openFile()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "Open file", "C://", tr("Sprite Sheet Project (*.ssp)"));
+    createNewWindow();
+    emit open(fileName);
 }
 
-void View::enableStartButtons(){
-    ui->insertFrameButton->setEnabled(true);
-    ui->addFrameButton->setEnabled(true);
-    ui->copyButton->setEnabled(true);
-    ui->ClearButton->setEnabled(true);
-    ui->zoomInButton->setEnabled(true);
-    ui->actionSave->setEnabled(true);
+/**
+ * @brief View::errorMessage
+ * Opens a warning message box, and displays passed message from model.
+ * The message is an issue related to opening or saving a file locally.
+ * @param message
+ */
+void View::errorMessage(QString message){
+
+    QMessageBox::StandardButton errorBtn = QMessageBox::warning(this, "Sprite Editor",
+                                                                message,
+                                                                QMessageBox::Cancel | QMessageBox::Ok,
+                                                                QMessageBox::Ok);
 }
 
-
-
+/**
+ * @brief View::updateCanvasComboBox
+ * updates the Canvas Size combobox in the view to be what our current canvasSize
+ * @param canvasSize
+ * canvasSize is from the model
+ */
 void View::updateCanvasComboBox(int canvasSize){
 
     int comboBoxIndex = 0;
@@ -692,19 +686,106 @@ void View::updateCanvasComboBox(int canvasSize){
     ui->canvasSizeComboBox->setCurrentIndex(comboBoxIndex);
 }
 
-//>>>>>>> 80c5b2b05f0bbaaa141d29e39ef3e263ce29a7c9
+/******************* Checks before closing application **********/
+/**
+ * @brief View::closeEvent
+ * Opens a warning message, letting the user know the file wasn't saved and giving them the choice to exit out or cancel the action.
+ * @param event
+ */
+void View::closeEvent(QCloseEvent *event){
 
+    if(ui->modifiedLabel->text() == "Has been modified"){
+        QMessageBox::StandardButton closeBtn = QMessageBox::warning(this, "Sprite Editor",
+                                                                    tr("Are you sure you want to close the Sprite Editor? \n Your work won't be saved."),
+                                                                    QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
+                                                                    QMessageBox::No);
+        if(closeBtn != QMessageBox::Yes){
+            event->ignore();
+        }
+        else{
+            event->accept();
+        }
+    }
+}
+
+/********* Preview **************/
+/**
+ * @brief View::displaySprite
+ * Displays the animation of all the frames in one cycle, in the actualSizeLabel.
+ * @param currentFrame
+ */
+void View::displaySprite(QImage currentFrame){
+    ui->actualSizeLabel->setPixmap(QPixmap::fromImage(currentFrame).scaled(ui->actualSizeLabel->width(),
+                                                                           ui->actualSizeLabel->height()));
+}
+
+/**
+ * @brief View::on_actualSizeButton_clicked
+ * Previews the animation of the sprite on the CanvasPreview window.
+ * @param currentFrame
+ */
 void View::on_actualSizeButton_clicked(QImage currentFrame)
 {
     canvasPreview.updateCanvas(currentFrame);
-
     canvasPreview.show();
-
 }
 
-
-void View::on_shapeToolComboBox_activated()
-{
-    ui->toolSizeBox->setDisabled(false);
+/**
+ * @brief View::enableStartButtons
+ * Enables buttons for the user once deciding on the canvasSize.
+ */
+void View::enableStartButtons(){
+    ui->insertFrameButton->setEnabled(true);
+    ui->addFrameButton->setEnabled(true);
+    ui->copyButton->setEnabled(true);
+    ui->ClearButton->setEnabled(true);
+    ui->zoomInButton->setEnabled(true);
+    ui->actionSave->setEnabled(true);
 }
+
+/****************** New Window *************/
+/**
+ * @brief View::newWindow
+ * creates a new window
+ */
+void View::newWindow(){
+    createNewWindow();
+}
+
+/****************** Helper Method's *****************/
+
+void View::initCanvasSizesComboBox(){
+    ui->canvasSizeComboBox->addItem("2 x 2");
+    ui->canvasSizeComboBox->addItem("4 x 4");
+    ui->canvasSizeComboBox->addItem("5 x 5");
+    ui->canvasSizeComboBox->addItem("8 x 8");
+    ui->canvasSizeComboBox->addItem("10 x 10");
+    ui->canvasSizeComboBox->addItem("16 x 16");
+    ui->canvasSizeComboBox->addItem("20 x 20");
+    ui->canvasSizeComboBox->addItem("25 x 25");
+    ui->canvasSizeComboBox->addItem("40 x 40");
+    ui->canvasSizeComboBox->addItem("50 x 50");
+    ui->canvasSizeComboBox->addItem("80 x 80");
+    ui->canvasSizeComboBox->addItem("100 x 100");
+    ui->canvasSizeComboBox->addItem("200 x 200");
+    ui->canvasSizeComboBox->addItem("400 x 400");
+
+    ui->canvasSizeComboBox->setCurrentIndex(6);
+}
+
+void View::initShapeToolComboBox(){
+    ui->shapeToolComboBox->addItem("Line");
+    ui->shapeToolComboBox->addItem("Ellipse");
+    ui->shapeToolComboBox->addItem("Rectangle");
+}
+
+/**
+ * @brief View::createNewWindow
+ * creates a new window. This is a helper method.
+ */
+void View::createNewWindow(){
+    secWindow = new View(secWindowModel);
+    secWindow->show();
+}
+
 
