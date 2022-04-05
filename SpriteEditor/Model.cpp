@@ -407,6 +407,7 @@ void model::updatePixelsByEraser(int x, int y){
     Painter.setPen(Pen);
     Painter.drawPoint(x,y);
     Painter.end();
+    startEndLoc.clear();
 }
 
 /**

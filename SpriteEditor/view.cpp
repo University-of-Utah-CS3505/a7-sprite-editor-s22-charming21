@@ -23,6 +23,7 @@ View::View(model& model, QWidget *parent)
     ui->posLabel->setStyleSheet("color:white");
     ui->actualSizeLabel->setStyleSheet("color:white");
     ui->modifiedLabel->setStyleSheet("color:white");
+    ui->toolLabel->setStyleSheet("color:white");
 
 
     // Set icons
@@ -458,6 +459,8 @@ void View::updateFramesLabel(int page, int size){
  */
 void View::on_penButton_clicked()
 {
+    QString str = QString("Current Tool: Pen");
+    ui->toolLabel->setText(str);
     emit setTool("pen");
 }
 
@@ -467,6 +470,8 @@ void View::on_penButton_clicked()
  */
 void View::on_eraserButton_clicked()
 {
+    QString str = QString("Current Tool: Eraser");
+    ui->toolLabel->setText(str);
     emit setTool("eraser");
 }
 
@@ -476,6 +481,8 @@ void View::on_eraserButton_clicked()
  */
 void View::on_bucketButton_clicked()
 {
+    QString str = QString("Current Tool: Bucket");
+    ui->toolLabel->setText(str);
     emit setTool("bucket");
 }
 
@@ -486,6 +493,8 @@ void View::on_bucketButton_clicked()
 void View::on_shapeToolComboBox_activated()
 {
     ui->toolSizeBox->setDisabled(false);
+    QString str = QString("Current Tool: Shape");
+    ui->toolLabel->setText(str);
 }
 
 /************** Updates Color ***********/
