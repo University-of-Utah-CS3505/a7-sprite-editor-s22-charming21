@@ -334,7 +334,7 @@
       <x>40</x>
       <y>470</y>
       <width>721</width>
-      <height>88</height>
+      <height>97</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -576,7 +576,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

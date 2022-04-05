@@ -48,7 +48,7 @@ View::View(model& model, QWidget *parent)
     ui->framesComboBox->setEditable(true);
     ui->framesComboBox->lineEdit()->setReadOnly(true);
     ui->framesComboBox->lineEdit()->setAlignment(Qt::AlignCenter);
-    ui->toolSizeBox->setDisabled(true);
+    //ui->toolSizeBox->setDisabled(true);
 
     ui->shapeToolComboBox->setEditable(true);
     ui->shapeToolComboBox->lineEdit()->setReadOnly(true);
@@ -352,6 +352,21 @@ View::View(model& model, QWidget *parent)
             &QAction::triggered,
             this,
             &View::newWindow);
+
+    // about menu
+    connect(ui->menuAbout,
+            &QMenu::aboutToShow,
+            this,
+            &View::showAbout);
+
+    //showHelpMe
+    connect(ui->menuHelp_me,
+            &QMenu::aboutToShow,
+            this,
+            &View::showHelpMe);
+    // help me menu
+
+
 
     //Warning for saving or opening file
     connect(&model,
@@ -750,6 +765,33 @@ void View::enableStartButtons(){
  */
 void View::newWindow(){
     createNewWindow();
+}
+
+/****************** About Menu *****************/
+
+/**
+ * @brief View::showAbout
+ */
+void View::showAbout(){
+    QMessageBox::about(this, tr("About BAGJIL Sprite Editor"),
+            tr("<p>This is the  <b>BAGJIL</b> Sprite Editor. "
+               "It allows the user to draw, open or create a sprite, play"
+               " the animation of what they created, and save their work.  "
+               "Our goal for this sprite editor was to make a tool that "
+               "contains unique features, is user-friendly, and it is visually "
+               "appealing. </p><p> Coded by: <b>Adriana Salazar, Britney Morales, "
+               "Xing Liu, Jinwen Lei, Gonzalo Tello</b></p>"));
+}
+
+void View::showHelpMe()
+{
+    QMessageBox::about(this, tr("About BAGJIL Sprite Editor"),
+            tr("<p>INSTRUCTION GUIDE TO USING THE BAGJIL SPRITE EDITOR </p>"
+               "<p> <b> Left: </b> Canvas Size | Drawing tools | Pen Size "
+               "| Zoom In/out | Undo/Redo </p> "
+               "<p> Canvas Size:  Sets the size of your drawing sprite canvas. 	"
+               "Min:  20 x 20 – Max:  400 x 400</p>"
+               "<p> Drawing Tools: </p>"));
 }
 
 /****************** Helper Method's *****************/
