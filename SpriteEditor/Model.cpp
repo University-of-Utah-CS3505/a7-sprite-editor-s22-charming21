@@ -1,6 +1,5 @@
 #include "model.h"
 #include "qtimer.h"
-#include <iostream>
 
 model::model(QObject *parent)
     : QObject{parent}
@@ -154,7 +153,7 @@ void model::zoomIn(){
 
         QPixmap currentPic;
         //Convert QImage to QPixmap
-        currentPic.convertFromImage(frames[currentFrame-1]); //maybe resize?
+        currentPic.convertFromImage(frames[currentFrame-1]);
         //Return the pixmap of our QImage with the scaled version
         emit toZoomIn(currentPic, zoomSize, zoomIndex);
         emit enableZoomOut();
@@ -479,7 +478,6 @@ void model::updateToolSize(int size){
 
     //change to a switch case if we add more brushes
     if(currentTool == SelectedTool::SC_Eraser){
-        std::cout << " updatetoolSize: " << size << std::endl;
         updateEraserSize(size);
     }
     else if(currentTool == SelectedTool::SC_Pen)
@@ -543,7 +541,6 @@ void model::checkCurrentColor(){
  * @param size
  */
 void model::updateTool(std::string tool){
-    //Should we do a switch case? if we do, we have to change parameters (bri)
     if(tool == "pen"){
         currentTool = SelectedTool::SC_Pen;
         emit editPenSize(penSize);
@@ -1042,7 +1039,6 @@ void model::read(QString fileName){
     emit updateFrameNumberLabel(1, frames.size());
     emit updateFrameNumberCombo(1,frames.size());
 
-    //should we make this a helper method? (same method was used in drawCanvas method)
     //Create a Pixmap to return to view
     QPixmap currentPic;
     //Convert QImage to QPixmap

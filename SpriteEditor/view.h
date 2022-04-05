@@ -90,9 +90,6 @@ private slots:
     //about menu open
     void showAbout();
 
-    //help me menu open
-    void showHelpMe();
-
     //Preview
     void displaySprite(QImage);
     void on_actualSizeButton_clicked(QImage);

@@ -78,6 +78,7 @@ public:
     QLabel *colorLabel;
     QPushButton *colorButton;
     QLabel *currentFrameLabel;
+    QLabel *toolLabel;
     QMenuBar *menubar;
     QMenu *menuFile;
     QMenu *menuAbout;
@@ -134,7 +135,7 @@ public:
 
         verticalLayoutWidget_4 = new QWidget(centralwidget);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
-        verticalLayoutWidget_4->setGeometry(QRect(20, 120, 151, 294));
+        verticalLayoutWidget_4->setGeometry(QRect(20, 120, 151, 307));
         toolBarAndFrame = new QVBoxLayout(verticalLayoutWidget_4);
         toolBarAndFrame->setObjectName(QString::fromUtf8("toolBarAndFrame"));
         toolBarAndFrame->setContentsMargins(0, 0, 0, 0);
@@ -206,7 +207,7 @@ public:
         posLabel->setAlignment(Qt::AlignCenter);
         verticalLayoutWidget = new QWidget(centralwidget);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(20, 20, 151, 54));
+        verticalLayoutWidget->setGeometry(QRect(20, 20, 151, 55));
         verticalLayout = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -241,7 +242,7 @@ public:
         frameNumberLabel->setAlignment(Qt::AlignCenter);
         horizontalLayoutWidget = new QWidget(centralwidget);
         horizontalLayoutWidget->setObjectName(QString::fromUtf8("horizontalLayoutWidget"));
-        horizontalLayoutWidget->setGeometry(QRect(40, 470, 721, 97));
+        horizontalLayoutWidget->setGeometry(QRect(40, 470, 721, 106));
         horizontalLayout_2 = new QHBoxLayout(horizontalLayoutWidget);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
@@ -350,10 +351,14 @@ public:
         currentFrameLabel->setObjectName(QString::fromUtf8("currentFrameLabel"));
         currentFrameLabel->setGeometry(QRect(280, 430, 111, 20));
         currentFrameLabel->setFont(font);
+        toolLabel = new QLabel(centralwidget);
+        toolLabel->setObjectName(QString::fromUtf8("toolLabel"));
+        toolLabel->setGeometry(QRect(30, 430, 141, 20));
+        toolLabel->setFont(font);
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 24));
+        menubar->setGeometry(QRect(0, 0, 800, 22));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuAbout = new QMenu(menubar);
@@ -411,6 +416,7 @@ public:
         colorLabel->setText(QString());
         colorButton->setText(QCoreApplication::translate("View", "Choose Color", nullptr));
         currentFrameLabel->setText(QCoreApplication::translate("View", "Current Frame", nullptr));
+        toolLabel->setText(QCoreApplication::translate("View", "Current Tool: Pen", nullptr));
         menuFile->setTitle(QCoreApplication::translate("View", "File", nullptr));
         menuAbout->setTitle(QCoreApplication::translate("View", "About", nullptr));
         menuHelp_me->setTitle(QCoreApplication::translate("View", "Help me", nullptr));

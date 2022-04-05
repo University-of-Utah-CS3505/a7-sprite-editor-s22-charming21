@@ -4,8 +4,6 @@
 #include <QPixmap>
 #include <QFileDialog>
 
-#include <iostream> // delete later
-
 View::View(model& model, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::View)
@@ -30,7 +28,6 @@ View::View(model& model, QWidget *parent)
     ui->penButton->setIcon(QIcon(":/new/UI_Icons/Tool_Pen.png"));
     ui->eraserButton->setIcon(QIcon(":/new/UI_Icons/Tool_Eraser.png"));
     ui->bucketButton->setIcon(QIcon(":/new/UI_Icons/Tool_Bucket.png"));
-    //ui->shapeButton->setIcon(QIcon(":/new/UI_Icons/Tool_ShapeCreator.png"));
     ui->undoButton->setIcon(QIcon(":/new/UI_Icons/Button_Undo.png"));
     ui->redoButton->setIcon(QIcon(":/new/UI_Icons/Button_Redo.png"));
     ui->zoomInButton->setIcon(QIcon(":/new/UI_Icons/Button_ZoomIn.png"));
@@ -360,15 +357,6 @@ View::View(model& model, QWidget *parent)
             this,
             &View::showAbout);
 
-    //showHelpMe
-    connect(ui->menuHelp_me,
-            &QMenu::aboutToShow,
-            this,
-            &View::showHelpMe);
-    // help me menu
-
-
-
     //Warning for saving or opening file
     connect(&model,
             &model::errorMessage,
@@ -488,11 +476,11 @@ void View::on_bucketButton_clicked()
 
 /**
  * @brief View::on_shapeToolComboBox_activated
- * TODO:
+ * Updates the current tool label to Shape in the UI when clicked on the
+ * that combobox
  */
 void View::on_shapeToolComboBox_activated()
 {
-    ui->toolSizeBox->setDisabled(false);
     QString str = QString("Current Tool: Shape");
     ui->toolLabel->setText(str);
 }
@@ -582,7 +570,7 @@ void View::disableSwapDownButton(){
     ui->swapDownButton->setEnabled(false);
 }
 
-void View::mouseLoc(QPoint &loc) // can delete later
+void View::mouseLoc(QPoint &loc)
 {
     ui->posLabel->setText("x: " + QString::number(loc.x()) + " y: " + QString::number(loc.y()));
     //send the location of out mouse to our model
@@ -790,17 +778,6 @@ void View::showAbout(){
                "contains unique features, is user-friendly, and it is visually "
                "appealing. </p><p> Coded by: <b>Adriana Salazar, Britney Morales, "
                "Xing Liu, Jinwen Lei, Gonzalo Tello</b></p>"));
-}
-
-void View::showHelpMe()
-{
-    QMessageBox::about(this, tr("About BAGJIL Sprite Editor"),
-            tr("<p>INSTRUCTION GUIDE TO USING THE BAGJIL SPRITE EDITOR </p>"
-               "<p> <b> Left: </b> Canvas Size | Drawing tools | Pen Size "
-               "| Zoom In/out | Undo/Redo </p> "
-               "<p> Canvas Size:  Sets the size of your drawing sprite canvas. 	"
-               "Min:  20 x 20 – Max:  400 x 400</p>"
-               "<p> Drawing Tools: </p>"));
 }
 
 /****************** Helper Method's *****************/
